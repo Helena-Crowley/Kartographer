@@ -1,6 +1,6 @@
 # Kartographer
 
-##Game Concept
+## Game Concept
 
 ---
 
