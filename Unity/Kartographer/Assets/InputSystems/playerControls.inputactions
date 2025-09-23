@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "playerControls",
     "maps": [
         {
@@ -880,7 +881,16 @@
                     "name": "Reset",
                     "type": "Button",
                     "id": "e7556ed9-e584-495f-88d2-a468a1a2a4d2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LookAround",
+                    "type": "Button",
+                    "id": "cb548060-fd3f-42fc-82c8-86ed771f9cc6",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1027,6 +1037,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c9f4c98b-63ab-4e89-ae12-688bfa562711",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookAround",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
