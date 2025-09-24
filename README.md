@@ -6,6 +6,6 @@ Kartographer is a co-op extraction-survival fusion game about driving and upgrad
 
 ___
 
-[Game Design Document](https://docs.google.com/document/d/14KN_Ifoyv4o1aBq00-vxLoxY2Le4OYspcUA4Ot9exIQ/edit?usp=sharing)
+- [Game Design Document](https://docs.google.com/document/d/14KN_Ifoyv4o1aBq00-vxLoxY2Le4OYspcUA4Ot9exIQ/edit?usp=sharing)
 
-[Development Timeline](https://github.com/users/Helena-Crowley/projects/1)
+- [Development Timeline](https://github.com/users/Helena-Crowley/projects/1/views/4)
