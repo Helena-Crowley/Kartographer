@@ -12,30 +12,26 @@ public class MouseLook : MonoBehaviour
     public float downverticalLookLimit = -45f;
 
     [Header("Input")]
-    public InputAction lookAction;  // Vector2 (mouse delta)
+    [SerializeField] private InputActionReference lookAction;
 
     private float cameraPitch = 0f;
 
     void OnEnable()
     {
-        lookAction.Enable();
+        lookAction.action.Enable();
     }
 
     void OnDisable()
     {
-        lookAction.Disable();
+        lookAction.action.Disable();
     }
 
     void Update()
     {
         
-        Vector2 lookInput = lookAction.ReadValue<Vector2>();
+        Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
         float mouseX = lookInput.x * mouseSensitivity;
-        float mouseY = lookInput.y * mouseSensitivity;
-
-        Debug.Log($"Mouse Input: {lookInput}, MouseX: {mouseX}, MouseY: {mouseY}");
-
-        
+        float mouseY = lookInput.y * mouseSensitivity;        
 
         // --- Horizontal rotation: rotate player ---
         transform.Rotate(Vector3.up * mouseX);

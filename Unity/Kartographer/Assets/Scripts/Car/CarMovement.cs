@@ -55,35 +55,29 @@ public class CarMovement : MonoBehaviour
     public float engineBrakingStrength = 300f;
 
     [Header("Input Systems")]
-    private PlayerControls controls;
-    private InputAction driveAction;
+    //private PlayerControls controls;
+    //private InputAction driveAction;
+    [SerializeField] private InputActionReference driveAction;
     private Vector2 inputVector;
 
     [Header("Reset Car")]
-    private InputAction resetAction;
+    [SerializeField] private InputActionReference resetAction;
     public Transform resetPoint;
 
     [Header("---TESTING----")]
     private Camera playerCamera;
     public Vector3 cameraOffset;
 
-    void Awake()
-    {
-        controls = new PlayerControls();
-    }
-
     void OnEnable()
     {
-        driveAction = controls.Car.Drive;
-        resetAction = controls.Car.Reset;
-        resetAction.performed += _ => ResetCar();
-        controls.Enable();
+        resetAction.action.performed += _ => ResetCar();
+        //driveAction.action.Enable();
     }
 
     void OnDisable()
     {
-        resetAction.performed -= _ => ResetCar();
-        controls.Disable();
+        resetAction.action.performed -= _ => ResetCar();
+        //driveAction.action.Disable();
     }
 
     private void Start()
@@ -116,7 +110,7 @@ public class CarMovement : MonoBehaviour
     private void CheckUserInput()
     {
         //x is x and y is z (vector 2 to 3)
-        inputVector = driveAction.ReadValue<Vector2>();
+        inputVector = driveAction.action.ReadValue<Vector2>();
         // forward control
         if (inputVector.y > 0)
         {

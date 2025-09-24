@@ -14,11 +14,15 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Input")]
-    public InputAction moveAction;   // Vector2
-    public InputAction runAction;    // Button
-    public InputAction jumpAction;   // Button
+    [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference runAction;
+    [SerializeField] private InputActionReference jumpAction;
 
-    private CharacterController controller;
+    //public InputAction moveAction;   // Vector2
+    //public InputAction runAction;    // Button
+    //public InputAction jumpAction;   // Button
+
+    public CharacterController controller;
     private Animator animator;
 
     private float verticalVelocity = 0f;
@@ -26,34 +30,23 @@ public class PlayerMovement : MonoBehaviour
     private bool isRunning;
     private float turnSmoothVelocity;
 
-    void OnEnable()
-    {
-        moveAction.Enable();
-        runAction.Enable();
-        jumpAction.Enable();
-    }
-
-    void OnDisable()
-    {
-        moveAction.Disable();
-        runAction.Disable();
-        jumpAction.Disable();
-    }
-
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+       
     }
 
     void Update()
     {
+        if (!moveAction.action.enabled) return;
         // --- Get Inputs ---
-        moveInput = moveAction.ReadValue<Vector2>();
-        isRunning = runAction.ReadValue<float>() > 0.5f;
-        bool jumpPressed = jumpAction.WasPressedThisFrame();
+        moveInput = moveAction.action.ReadValue<Vector2>();
+        isRunning = runAction.action.ReadValue<float>() > 0.5f;
+        bool jumpPressed = jumpAction.action.WasPressedThisFrame();
 
         // --- Movement ---
         Vector3 moveDir = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
