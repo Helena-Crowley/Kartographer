@@ -10,4 +10,4 @@ ___
 
 - [Development Timeline](https://github.com/users/Helena-Crowley/projects/1/views/4)
 
-- [Art Board (Temp)] (https://docs.google.com/drawings/d/1Wy0cIlKC2e3cyBW-VD-Q6V8-XV-B-d2-cxhqyY7yAwY/edit?usp=sharing)
+- [Art Board (Temp)](https://docs.google.com/drawings/d/1Wy0cIlKC2e3cyBW-VD-Q6V8-XV-B-d2-cxhqyY7yAwY/edit?usp=sharing)
