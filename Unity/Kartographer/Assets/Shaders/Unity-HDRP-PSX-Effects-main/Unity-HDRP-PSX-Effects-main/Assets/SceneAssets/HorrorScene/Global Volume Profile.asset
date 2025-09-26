@@ -187,7 +187,7 @@ MonoBehaviour:
     m_Value: 360
   Color:
     m_OverrideState: 1
-    m_Value: 149.8
+    m_Value: 180
 --- !u!114 &-2454364612199146791
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -276,7 +276,7 @@ MonoBehaviour:
     m_Value: 30.96
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 65.14
+    m_Value: 40.6
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
