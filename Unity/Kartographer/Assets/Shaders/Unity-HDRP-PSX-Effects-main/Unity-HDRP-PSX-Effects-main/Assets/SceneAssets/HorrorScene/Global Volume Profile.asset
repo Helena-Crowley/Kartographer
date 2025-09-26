@@ -181,10 +181,10 @@ MonoBehaviour:
   active: 1
   Width:
     m_OverrideState: 1
-    m_Value: 480
+    m_Value: 600
   Height:
     m_OverrideState: 1
-    m_Value: 240
+    m_Value: 360
   Color:
     m_OverrideState: 1
     m_Value: 149.8
