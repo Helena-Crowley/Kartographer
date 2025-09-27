@@ -1,83 +1,256 @@
+
+// using System.Linq;
+// using UnityEngine;
+
+// [RequireComponent(typeof(Rigidbody))]
+// public class GroundedFeetPhysicsReactive : MonoBehaviour
+// {
+//     [System.Serializable]
+//     public class Foot
+//     {
+//         public GameObject footTarget;
+//         public Vector3 bodyOffset;
+
+//         [HideInInspector] public Vector3 plantedPos;
+//         [HideInInspector] public float stepDistanceOffset = 0f;
+//         [HideInInspector] public bool isStepping;
+//     }
+
+//     [Header("Feet Settings")]
+//     public Foot[] feet;
+//     public LayerMask groundLayer;
+//     public float stepDistance = 2f;
+//     public float stepSpeed = 5f;
+//     public float bodyOffset = 1.5f;
+
+//     [Header("Physics Settings")]
+//     public float mass = 5f;
+//     public float pushDamping = 0.9f; // how quickly stagger slows down
+//     public float staggerMultiplier = 1f; // how strongly it reacts to hits
+
+//     private Rigidbody rb;
+//     private bool groupATurn = true;
+
+//     private Vector3 staggerVelocity = Vector3.zero;
+
+//     void Start()
+//     {
+//         rb = GetComponent<Rigidbody>();
+//         rb.mass = mass;
+//         rb.interpolation = RigidbodyInterpolation.Interpolate;
+//         rb.freezeRotation = true; // keep upright
+//         rb.useGravity = false;    // disable gravity, vertical controlled by feet
+
+//         foreach (var foot in feet)
+//         {
+//             foot.plantedPos = StepTargetCast(foot.bodyOffset);
+//             foot.footTarget.transform.position = foot.plantedPos;
+
+//             // simple front/back step offset for alternating stepping
+//             foot.stepDistanceOffset = (foot == feet[0] || foot == feet[2]) ? stepDistance * 0.5f : 0f;
+//         }
+//     }
+
+//     void FixedUpdate()
+//     {
+//         // --- Apply stagger velocity and dampen it ---
+//         Vector3 horizontalVel = new Vector3(staggerVelocity.x, 0f, staggerVelocity.z);
+//         horizontalVel *= pushDamping;
+//         staggerVelocity = horizontalVel; // decay stagger over time
+
+//         rb.linearVelocity = new Vector3(horizontalVel.x, rb.linearVelocity.y, horizontalVel.z);
+
+//         // --- Feet stepping ---
+//         foreach (var foot in feet)
+//         {
+//             Vector3 stepTarget = StepTargetCast(foot.bodyOffset);
+
+//             if (!foot.isStepping)
+//             {
+//                 float dist = Vector3.Distance(foot.plantedPos, stepTarget);
+//                 if (dist > stepDistance + foot.stepDistanceOffset)
+//                 {
+//                     if (groupATurn)
+//                         StartCoroutine(StepFoot(foot, stepTarget));
+//                     groupATurn = !groupATurn;
+//                 }
+//                 else
+//                 {
+//                     foot.footTarget.transform.position = foot.plantedPos;
+//                 }
+//             }
+//         }
+
+//         // --- Vertical body adjustment to follow feet ---
+//         float avgFeetY = feet.Average(f => f.footTarget.transform.position.y);
+//         float targetY = avgFeetY + bodyOffset;
+
+//         rb.MovePosition(new Vector3(rb.position.x, targetY, rb.position.z));
+//     }
+
+//     System.Collections.IEnumerator StepFoot(Foot foot, Vector3 newPos)
+//     {
+//         foot.isStepping = true;
+//         Vector3 startPos = foot.plantedPos;
+//         float t = 0f;
+
+//         while (t < 1f)
+//         {
+//             t += Time.deltaTime * stepSpeed;
+//             Vector3 footPos = Vector3.Lerp(startPos, newPos, t);
+//             footPos.y += Mathf.Sin(t * Mathf.PI) * 0.2f; // lift foot
+//             foot.footTarget.transform.position = footPos;
+//             yield return null;
+//         }
+
+//         foot.plantedPos = newPos;
+//         foot.isStepping = false;
+//     }
+
+//     Vector3 StepTargetCast(Vector3 offset)
+//     {
+//         RaycastHit hit;
+//         Vector3 origin = transform.position + transform.TransformDirection(offset);
+
+//         if (Physics.Raycast(origin + Vector3.up * 4f, Vector3.down, out hit, 10f, groundLayer))
+//         {
+//             Debug.DrawRay(origin, Vector3.down * hit.distance, Color.blue);
+//             return hit.point;
+//         }
+
+//         return origin; // fallback
+//     }
+
+//     void OnCollisionEnter(Collision collision)
+//     {
+//         rb.AddForce(collision.impulse * staggerMultiplier, ForceMode.Impulse);
+//     }
+// }
+
+using System.Linq;
 using UnityEngine;
 
-public class GroundedFeet : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class GroundedFeetPhysicsReactive : MonoBehaviour
 {
-    public GameObject footTarget1;
-    public GameObject footTarget2;
-    public GameObject footTarget3;
-    public GameObject footTarget4;
+    [System.Serializable]
+    public class Foot
+    {
+        public GameObject footTarget;
+        public Vector3 bodyOffset;
 
+        [HideInInspector] public Vector3 plantedPos;
+        [HideInInspector] public float stepDistanceOffset = 0f;
+        [HideInInspector] public bool isStepping;
+    }
+
+    [Header("Feet Settings")]
+    public Foot[] feet;
     public LayerMask groundLayer;
+    public float stepDistance = 2f;
+    public float stepSpeed = 5f;
+    public float bodyOffset = 1.5f;
 
-    public Vector3 bodyOffset1;
-    public Vector3 bofdyOffset2;
-    public Vector3 bodyOffset3;
-    public Vector3 bodyOffset4;
+    [Header("Physics Settings")]
+    public float mass = 5f;
+    [Range(0f,1f)] public float pushDamping = 0.9f; // how quickly stagger slows down
+    public float staggerMultiplier = 1f; // strength of reaction to hits
 
-    private Vector3 lastStep;
+    private Rigidbody rb;
+    private bool groupATurn = true;
 
-    void Update()
+    private Vector3 staggerVelocity = Vector3.zero;
+
+    void Start()
     {
-        StickFeetToGround(footTarget1, bodyOffset1);
-        StickFeetToGround(footTarget2, bofdyOffset2);
-        StickFeetToGround(footTarget3, bodyOffset3);
-        StickFeetToGround(footTarget4, bodyOffset4);
+        rb = GetComponent<Rigidbody>();
+        rb.mass = mass;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.freezeRotation = true; // keep upright
+        rb.useGravity = false;    // vertical controlled by feet
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        foreach (var foot in feet)
+        {
+            foot.plantedPos = StepTargetCast(foot.bodyOffset);
+            foot.footTarget.transform.position = foot.plantedPos;
+
+            foot.stepDistanceOffset = (foot == feet[0] || foot == feet[2]) ? stepDistance * 0.5f : 0f;
+        }
     }
 
-    void StickFeetToGround(GameObject footTarget, Vector3 stepTargetOffset)
+    void FixedUpdate()
     {
-        //lastStep = footTarget.transform.position;
-        if (CanStep(footTarget, StepTargetCast(stepTargetOffset)))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(footTarget.transform.position, Vector3.down, out hit, 10f, groundLayer))
-            {
-                Debug.DrawRay(footTarget.transform.position, Vector3.down * hit.distance, Color.red);
-                //lastStep = hit.point + Vector3.up * .1f; // Slightly above ground
-                lastStep = StepTargetCast(stepTargetOffset);
-                footTarget.transform.position = Vector3.Lerp(footTarget.transform.position, lastStep + Vector3.up * .1f, Time.deltaTime * 10f);
-            }
-            else
-            {
+        // --- Apply horizontal stagger velocity ---
+        staggerVelocity *= pushDamping; // decay over time
+        rb.linearVelocity = new Vector3(staggerVelocity.x, rb.linearVelocity.y, staggerVelocity.z);
 
-                Debug.Log("No ground detected below footTarget");
+        // --- Feet stepping ---
+        foreach (var foot in feet)
+        {
+            Vector3 stepTarget = StepTargetCast(foot.bodyOffset);
+
+            if (!foot.isStepping)
+            {
+                float dist = Vector3.Distance(foot.plantedPos, stepTarget);
+                if (dist > stepDistance + foot.stepDistanceOffset)
+                {
+                    if (groupATurn)
+                        StartCoroutine(StepFoot(foot, stepTarget));
+                    groupATurn = !groupATurn;
+                }
+                else
+                {
+                    foot.footTarget.transform.position = foot.plantedPos;
+                }
             }
         }
-        else
-        {
-            footTarget.transform.position = lastStep;
-        }
 
-            //footTarget.transform.position = lastStep + Vector3.up * 1f; // Slightly above ground
-        
+        // --- Vertical body adjustment ---
+        float avgFeetY = feet.Average(f => f.footTarget.transform.position.y);
+        float targetY = avgFeetY + bodyOffset;
+
+        rb.MovePosition(new Vector3(rb.position.x, targetY, rb.position.z));
     }
 
-    bool CanStep(GameObject footTarget, Vector3 stepTarget)
+    System.Collections.IEnumerator StepFoot(Foot foot, Vector3 newPos)
     {
-        Debug.DrawLine(footTarget.transform.position, stepTarget, Color.green);
-        Debug.Log(Vector3.Distance(footTarget.transform.position, stepTarget));
-        if (Vector3.Distance(footTarget.transform.position, stepTarget) > 3f)//1.9f)
+        foot.isStepping = true;
+        Vector3 startPos = foot.plantedPos;
+        float t = 0f;
+
+        while (t < 1f)
         {
-            return true;
+            t += Time.deltaTime * stepSpeed;
+            Vector3 footPos = Vector3.Lerp(startPos, newPos, t);
+            footPos.y += Mathf.Sin(t * Mathf.PI) * 0.2f; // lift foot
+            foot.footTarget.transform.position = footPos;
+            yield return null;
         }
-        else
-        {
-            return false;
-        }
+
+        foot.plantedPos = newPos;
+        foot.isStepping = false;
     }
 
     Vector3 StepTargetCast(Vector3 offset)
     {
         RaycastHit hit;
-        if (Physics.Raycast(offset + transform.position, Vector3.down, out hit, 10f, groundLayer))
+        Vector3 origin = transform.position + transform.TransformDirection(offset);
+
+        if (Physics.Raycast(origin + Vector3.up * 4f, Vector3.down, out hit, 10f, groundLayer))
         {
-            Debug.DrawRay(offset + transform.position, Vector3.down * hit.distance, Color.blue);
-            return hit.point + Vector3.up * 0.1f; // Slightly above ground
+            Debug.DrawRay(origin, Vector3.down * hit.distance, Color.blue);
+            return hit.point;
         }
-        else
-        {
-            Debug.Log("No ground detected below stepTargetCast");
-            return Vector3.zero;
-        }
+
+        return origin; // fallback
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Accumulate horizontal impulse into stagger velocity
+        Vector3 impulse = collision.impulse;
+        impulse.y = 0f; // ignore vertical
+        staggerVelocity += impulse * staggerMultiplier;
     }
 }
