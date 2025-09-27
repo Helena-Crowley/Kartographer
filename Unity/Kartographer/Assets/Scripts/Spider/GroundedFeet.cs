@@ -10,19 +10,23 @@ public class GroundedFeet : MonoBehaviour
     public LayerMask groundLayer;
 
     public Vector3 bodyOffset1;
+    public Vector3 bofdyOffset2;
+    public Vector3 bodyOffset3;
+    public Vector3 bodyOffset4;
 
     private Vector3 lastStep;
 
     void Update()
     {
         StickFeetToGround(footTarget1, bodyOffset1);
-        //StickFeetToGround(footTarget2, canStep2);
-        //StickFeetToGround(footTarget3, canStep3);
-        //StickFeetToGround(footTarget4, canStep4);
+        StickFeetToGround(footTarget2, bofdyOffset2);
+        StickFeetToGround(footTarget3, bodyOffset3);
+        StickFeetToGround(footTarget4, bodyOffset4);
     }
 
     void StickFeetToGround(GameObject footTarget, Vector3 stepTargetOffset)
     {
+        //lastStep = footTarget.transform.position;
         if (CanStep(footTarget, StepTargetCast(stepTargetOffset)))
         {
             RaycastHit hit;
@@ -31,6 +35,7 @@ public class GroundedFeet : MonoBehaviour
                 Debug.DrawRay(footTarget.transform.position, Vector3.down * hit.distance, Color.red);
                 //lastStep = hit.point + Vector3.up * .1f; // Slightly above ground
                 lastStep = StepTargetCast(stepTargetOffset);
+                footTarget.transform.position = Vector3.Lerp(footTarget.transform.position, lastStep + Vector3.up * .1f, Time.deltaTime * 10f);
             }
             else
             {
@@ -38,17 +43,20 @@ public class GroundedFeet : MonoBehaviour
                 Debug.Log("No ground detected below footTarget");
             }
         }
+        else
+        {
+            footTarget.transform.position = lastStep;
+        }
 
-        //footTarget.transform.position = lastStep + Vector3.up * 1f; // Slightly above ground
-        footTarget.transform.position = Vector3.Lerp(footTarget.transform.position, lastStep + Vector3.up * .1f, Time.deltaTime * 10f);
-
+            //footTarget.transform.position = lastStep + Vector3.up * 1f; // Slightly above ground
+        
     }
 
     bool CanStep(GameObject footTarget, Vector3 stepTarget)
     {
         Debug.DrawLine(footTarget.transform.position, stepTarget, Color.green);
         Debug.Log(Vector3.Distance(footTarget.transform.position, stepTarget));
-        if (Vector3.Distance(footTarget.transform.position, stepTarget) > 1.9f)
+        if (Vector3.Distance(footTarget.transform.position, stepTarget) > 3f)//1.9f)
         {
             return true;
         }
