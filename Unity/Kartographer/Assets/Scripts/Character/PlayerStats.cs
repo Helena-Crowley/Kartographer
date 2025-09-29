@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 public class PlayerStats : MonoBehaviour
 {
-    public TMPro.TMP_Text healthText;
+    public HealthBar healthBar;
     public PlayerBaseStatsSO playerBaseStats;
     private int currentHealth;
 
@@ -27,10 +27,7 @@ public class PlayerStats : MonoBehaviour
 
     private void UpdateHealthUI()
     {
-        if (healthText != null)
-        {
-            healthText.text = $"{currentHealth}/{playerBaseStats.health}";
-        }
+        healthBar.UpdateHealthBar(currentHealth);
     }
 
     private void Die()
