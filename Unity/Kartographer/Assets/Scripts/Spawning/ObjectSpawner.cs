@@ -14,15 +14,14 @@ public class ObjectSpawner : MonoBehaviour
 
     void SpawnObject(GameObject objectToSpawn, int count) // Spawn buildings at completely random points on terrain
     {
-        Debug.Log("Spawning Objects");
         // Example: Randomly find a location and raycast down
         //entire building spawnpoint (no corner ref)
-
+        Debug.Log($"Random Seed: {GameManager.Instance.randomSeed}");
+        int objectMissedCount = 0;
         for (int i = 0; i < count; i++)
         {
             float randomX = Random.Range(-500, 500);
             float randomZ = Random.Range(-200, 200);
-
             Vector3 spawnOrigin = new Vector3(randomX, 300f, randomZ);
             // Shoot ray down
             Ray ray = new Ray(spawnOrigin + Vector3.up * 500f, Vector3.down);
@@ -36,22 +35,27 @@ public class ObjectSpawner : MonoBehaviour
             }
             else
             {
-                Debug.Log($"assett {i} did not hit terrain.");
+                objectMissedCount++;
                 continue;
             }
         }
+        if (objectMissedCount > 0)
+            Debug.LogWarning($"Missed {objectMissedCount} out of {count} spawn attempts for {objectToSpawn.name}");
     }
 
-    void Update()
+    void Start()
     {
-        if (spawnAction.action.WasPressedThisFrame())
+
+        if (GameManager.Instance.randomSeed == 0)
         {
-            Debug.Log("Spawn Action Pressed");
-            for (int i = 0; i < objects.Length; i++)
-            {
-                SpawnObject(objects[i], amounts[i]);
-            }
+            GameManager.Instance.randomSeed = System.DateTime.Now.Millisecond;
         }
+        Random.InitState(GameManager.Instance.randomSeed);
+        for (int i = 0; i < objects.Length; i++)
+        {
+            SpawnObject(objects[i], amounts[i]);
+        }
+
     }
 
 
