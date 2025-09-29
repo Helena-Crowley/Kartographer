@@ -285,7 +285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &322757321
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1096,6 +1096,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spider
       objectReference: {fileID: 0}
+    - target: {fileID: 1665137851517802966, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2131983639946782490, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
       propertyPath: m_UseGravity
       value: 0
@@ -1148,6 +1152,10 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 113683423}
+    - target: {fileID: 6295323583785653778, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
+      propertyPath: stepSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6295323583785653778, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
       propertyPath: bodyOffset
       value: 1.75
