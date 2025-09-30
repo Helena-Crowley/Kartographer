@@ -11,6 +11,10 @@ public sealed class Dithering : CustomPostProcessVolumeComponent, IPostProcessCo
     public FloatParameter DitherThreshold = new FloatParameter(0f);
     public FloatParameter DitherScale = new FloatParameter(0f);
 
+    [Tooltip("Controls the opacity of the dithering effect.")]
+    public FloatParameter Opacity = new FloatParameter(1f); // default fully visible
+
+
     Material m_Material;
 
     public bool IsActive() => m_Material != null && PatternIndex.value >= 0;
@@ -36,6 +40,8 @@ public sealed class Dithering : CustomPostProcessVolumeComponent, IPostProcessCo
         m_Material.SetInt("_PatternIndex", PatternIndex.value);
         m_Material.SetFloat("_DitherThreshold", DitherThreshold.value);
         m_Material.SetFloat("_DitherScale", DitherScale.value);
+        m_Material.SetFloat("_Opacity", Opacity.value);
+
         cmd.Blit(source, destination, m_Material, 0);
 
         //Aprender diferencia entre Blit y esta funcion

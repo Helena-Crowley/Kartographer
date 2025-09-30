@@ -40,7 +40,10 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
         if (objectMissedCount > 0)
-            Debug.LogWarning($"Missed {objectMissedCount} out of {count} spawn attempts for {objectToSpawn.name}");
+        {
+            float percentMissed = objectMissedCount / (float)count * 100f;
+            Debug.LogWarning($"Missed {percentMissed:F1}% of spawn attempts for {objectToSpawn.name}");
+        }
     }
 
     void Start()

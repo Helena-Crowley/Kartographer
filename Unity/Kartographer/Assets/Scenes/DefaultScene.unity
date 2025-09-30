@@ -1984,7 +1984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
   priority: 0
-  blendDistance: 0
+  blendDistance: 127.48
   weight: 1
   sharedProfile: {fileID: 11400000, guid: ce2b98b07605e4940b70d235ed3989b1, type: 2}
 --- !u!4 &619353447
