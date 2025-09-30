@@ -11,7 +11,7 @@ public class DistanceText : MonoBehaviour
 
     void Start()
     {
-        distanceText.text = "Storm Distance\n" + (playerTransform.position.x - stormTransform.position.x).ToString("F1") + "m";
+        distanceText.text = (playerTransform.position.x - stormTransform.position.x).ToString("F1") + "m";
     }
 
     void Update()
@@ -19,7 +19,7 @@ public class DistanceText : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= updateInterval)
         {
-            distanceText.text = "Storm Distance\n" + (playerTransform.position.x - stormTransform.position.x).ToString("F1") + "m";
+            distanceText.text = (playerTransform.position.x - stormTransform.position.x).ToString("F1") + "m";
             timer = 0f;
         }
     }

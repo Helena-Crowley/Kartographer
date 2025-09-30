@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -68,6 +69,12 @@ public class CarMovement : MonoBehaviour
     private Camera playerCamera;
     public Vector3 cameraOffset;
 
+    private Vector3 lastPosition;
+    private CartStats cartStats;
+    [HideInInspector]
+    public float totaldistance = 0f;
+    public bool isCharged = true;
+
     void OnEnable()
     {
         resetAction.action.performed += _ => ResetCar();
@@ -83,15 +90,27 @@ public class CarMovement : MonoBehaviour
     private void Start()
     {
         transform.position += Vector3.up * 0.5f;
+        lastPosition = transform.position;
         // DO NOT CHANGE SUSPENSION REST DIST FORMULA
         suspensionRestDistance = carTransform.position.y - frontLeftTireMesh.position.y + tireRadius;
         springStrength = springStrength * 10000;
         springDamper = springDamper * 100;
+
+        cartStats = GetComponent<CartStats>();
     }
 
     private void Update()
     {
-        CheckUserInput();
+        if (isCharged)
+        {
+            CheckUserInput();
+        }
+        else
+        {
+            accelInput = 0f;
+            turnDirection = 0f;
+            ApplySteering(turnDirection);
+        }
     }
 
     private void FixedUpdate()
@@ -100,6 +119,27 @@ public class CarMovement : MonoBehaviour
         PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
         PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
         PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
+        if (InputManager.Instance.InCart)
+        {
+            cartStats.batteryCanvas.SetActive(true);
+            cartStats.distance = DistanceTravelled();
+            cartStats.TakeDamage();
+        }
+        else
+        {
+            cartStats.batteryCanvas.SetActive(false);
+        }
+
+
+    }
+
+    public float DistanceTravelled()
+    {
+        float distanceTravelled = Vector3.Distance(lastPosition, transform.position);
+        totaldistance += distanceTravelled;
+
+        lastPosition = transform.position;
+        return totaldistance;
     }
 
     /// <summary>
@@ -161,6 +201,7 @@ public class CarMovement : MonoBehaviour
 
         currentYRotation = 0f;
         accelInput = 0f;
+        cartStats.health = 100;
 
         Debug.Log("Car Reset: Lifted above current position.");
     }
