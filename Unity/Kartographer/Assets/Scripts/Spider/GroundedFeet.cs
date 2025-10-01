@@ -6,7 +6,7 @@ public class GroundedFeet : MonoBehaviour
     private Vector3[] groundedPosition = new Vector3[4];
     private bool[] grounded = new bool[4];
 
-    public Vector3[] bodyOffset = new Vector3[4];
+    public GameObject[] bodyOffset;
     public float stepDistance = 2f;
     private Vector3[] targetStepPosition = new Vector3[4];
 
@@ -14,20 +14,29 @@ public class GroundedFeet : MonoBehaviour
     public float stepSpeed = 0.25f;
     public Rigidbody rb;
 
+    public float bodyHeight = 2f;
+    public float bodySpeed = 5f;
+
+    private Quaternion lastRotation;
+    public GameObject target;
+    public float movementSpeed = 5f;
+    public float rotateSpeed = 10f;
+
     void Start()
     {
         for (int i = 0; i < toePositions.Length; i++)
         {
             toePositions[i].position = CastRay(toePositions[i].position) + Vector3.up * 0.5f;
-            grounded[i] = true;
-        }
-        toePositions[0].position = CastRay(transform.position + bodyOffset[0] + transform.forward * 5f) + Vector3.up * 0.5f;
-        toePositions[2].position = CastRay(transform.position + bodyOffset[2] + transform.forward * 5f) + Vector3.up * 0.5f;
-
-        for (int i = 0; i < toePositions.Length; i++)
-        {
+            //grounded[i] = true;
             groundedPosition[i] = toePositions[i].position;
+            targetStepPosition[i] = toePositions[i].position;
         }
+        // toePositions[0].position = CastRay(transform.position + bodyOffset[0].transform.position + transform.forward * 5f) + Vector3.up * 0.5f;
+        // toePositions[2].position = CastRay(transform.position + bodyOffset[2].transform.position + transform.forward * 5f) + Vector3.up * 0.5f;
+
+        lastRotation = transform.rotation;
+        grounded[0] = false;
+        grounded[2] = false;
     }
 
     void FixedUpdate()
@@ -42,19 +51,28 @@ public class GroundedFeet : MonoBehaviour
             {
                 UpdateStepPosition(i);
             }
+            if (Mathf.Abs(rb.rotation.y) - Mathf.Abs(lastRotation.y) > 0.2f)
+            {
+                UpdateStepPosition(i);
+                lastRotation = rb.rotation;
+            }
 
             //toePositions[i].position = targetStepPosition;
             toePositions[i].position = Vector3.MoveTowards(toePositions[i].position, targetStepPosition[i], stepSpeed);
-            Debug.Log(Vector3.Distance(toePositions[i].position, targetStepPosition[i]));
             if (Vector3.Distance(toePositions[i].position, targetStepPosition[i]) < 0.1f)
             {
                 grounded[i] = true;
+
                 //groundedPosition[i] = targetStepPosition[i];
             }
             groundedPosition[i] = targetStepPosition[i];
 
-
         }
+        UpdateBodyPosition();
+        FollowTarget();
+
+        //Debug.Log(Mathf.Abs(rb.rotation.y) - Mathf.Abs(lastRotation.y));
+
     }
 
     Vector3 CastRay(Vector3 origin)
@@ -76,10 +94,9 @@ public class GroundedFeet : MonoBehaviour
     void UpdateStepPosition(int i)
     {
         //if the distance btwn toe and target is big, target step updates
-        Vector3 targetPoint = CastRay(transform.position + bodyOffset[i]);
-        //Debug.DrawLine(transform.position + bodyOffset[i], targetPoint, Color.red);
+        Vector3 targetPoint = CastRay(bodyOffset[i].transform.position);
+        Debug.DrawLine(bodyOffset[i].transform.position, targetPoint, Color.red);
 
-        Debug.DrawLine(toePositions[i].position, targetPoint, Color.cyan);
 
         if (Vector3.Distance(toePositions[i].position, targetPoint) > stepDistance)
         {
@@ -87,7 +104,7 @@ public class GroundedFeet : MonoBehaviour
             {
                 forwardStepOffset = -forwardStepOffset;
             }
-            targetStepPosition[i] = targetPoint + transform.forward * forwardStepOffset + Vector3.up * 0.5f;
+            targetStepPosition[i] = CastRay(targetPoint + transform.forward * forwardStepOffset + Vector3.up * 10f);
             grounded[i] = false;
         }
         else
@@ -106,12 +123,47 @@ public class GroundedFeet : MonoBehaviour
         for (int i = 0; i < toePositions.Length; i++)
         {
             Gizmos.DrawSphere(toePositions[i].position, 0.1f);
-            Gizmos.DrawLine(transform.position + bodyOffset[i], targetStepPosition[i]);
+            Gizmos.DrawLine(bodyOffset[i].transform.position, targetStepPosition[i]);
         }
-    
-        
 
-}
+
+
+    }
+
+    private void UpdateBodyPosition()
+    {
+        Vector3 averagePosition = Vector3.zero;
+        for (int i = 0; i < toePositions.Length; i++)
+        {
+            averagePosition += toePositions[i].position;
+        }
+        averagePosition /= toePositions.Length;
+        //transform.position = new Vector3(transform.position.x, averagePosition.y + 1f, transform.position.z);
+        //rb.MovePosition(transform.position + new Vector3(transform.position.x, averagePosition.y + bodyHeight, transform.position.z) * Time.fixedDeltaTime * bodySpeed);
+        Vector3 targetPosition = new Vector3(
+        transform.position.x,
+        averagePosition.y + bodyHeight,
+        transform.position.z
+        );
+
+        Vector3 moveDirection = (targetPosition - transform.position) * bodySpeed * Time.fixedDeltaTime;
+
+        rb.MovePosition(transform.position + moveDirection);
+        //lastRotation = transform.rotation;
+    }
+
+    private void FollowTarget()
+    {
+        Vector3 newPos = Vector3.Lerp(rb.position, target.transform.position, movementSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(newPos);
+
+        Vector3 direction = (target.transform.position - rb.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+        Quaternion smoothRotation = Quaternion.Lerp(rb.rotation, lookRotation, rotateSpeed * Time.fixedDeltaTime);
+        rb.MoveRotation(smoothRotation);
+    }
+
+
 
 }
 
