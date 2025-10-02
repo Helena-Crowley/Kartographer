@@ -18,6 +18,25 @@ public class InventoryIconGenerator : MonoBehaviour
                 inventorySlots[i].color = Color.white;
             }
         }
-        
+
+    }
+
+    public int GetNextAvailableSlot()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].sprite == null) // empty slot
+                return i;
+        }
+        return -1; // no free slot
+    }
+
+    public void ClearSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= inventorySlots.Length)
+            return;
+
+        inventorySlots[slotIndex].sprite = null;
+        inventorySlots[slotIndex].color = new Color(1, 1, 1, 0); // make transparent
     }
 }

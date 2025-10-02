@@ -15,4 +15,11 @@ public class Inventory : MonoBehaviour
     {
         return items.Remove(item);
     }
+
+    public ItemData GetLastItem()
+    {
+        if (items.Count > 0)
+            return items[items.Count - 1]; // return the last added item
+        return null;
+    }
 }

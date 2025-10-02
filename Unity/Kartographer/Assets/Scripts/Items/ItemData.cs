@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public enum ItemType
+{
+    FloorItem,
+    ShelfItem,
+    TableItem,
+    OutdoorItem
+}
+
 [CreateAssetMenu(fileName = "ItemData", menuName = "Inventory/Item")]
 public class ItemData : ScriptableObject
 {
@@ -12,6 +20,7 @@ public class ItemData : ScriptableObject
     public string description;  // tooltip text
     public bool isStackable;
     public int scale = 100;
+    public ItemType itemType;
 
     [HideInInspector]
     public Vector3 defaultScale;  

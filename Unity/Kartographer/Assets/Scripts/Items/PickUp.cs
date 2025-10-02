@@ -3,51 +3,104 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
     public ItemData itemData;
-    public InventoryIconGenerator iconGenerator;
 
     void Start()
+{
+    if (itemData.prefab != null)
     {
-        if (itemData.prefab != null)
+        // Instantiate the visual mesh as a child
+        GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
+
+        // Apply scale
+        meshInstance.transform.localScale = itemData.defaultScale;
+
+        // Get Renderer
+        Renderer rend = meshInstance.GetComponent<Renderer>();
+
+        // Adjust position so it sits on the container prefab
+        if (rend != null)
         {
-            // Instantiate the mesh as a child
-            GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
-
-            // Apply scale first
-            meshInstance.transform.localScale = itemData.defaultScale;
-
-            // Get the renderer and bounds **after scaling**
-            Renderer rend = meshInstance.GetComponent<Renderer>();
-            if (rend != null)
-            {
-                // Move it up so it sits flat on the surface
-                meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
-            }
-            else
-            {
-                meshInstance.transform.localPosition = Vector3.zero; // fallback
-            }
+            meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
         }
+        else
+        {
+            meshInstance.transform.localPosition = Vector3.zero;
+        }
+
+        // Add a MeshCollider if you want the mesh itself to interact with physics
+        MeshCollider meshCol = meshInstance.GetComponent<MeshCollider>();
+        if (meshCol == null)
+            meshCol = meshInstance.AddComponent<MeshCollider>();
+
+        meshCol.sharedMesh = meshInstance.GetComponent<MeshFilter>().sharedMesh;
+        meshCol.convex = true; // Required for Rigidbody interactions
     }
+
+    // Ensure Rigidbody on the container is dynamic
+    Rigidbody rb = GetComponent<Rigidbody>();
+    if (rb != null)
+    {
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+}
+
+
+    // void Start()
+    // {
+    //     if (itemData.prefab != null)
+    //     {
+    //         // Instantiate the mesh as a child
+    //         GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
+
+    //         // Apply scale first
+    //         meshInstance.transform.localScale = itemData.defaultScale;
+
+    //         // Get the renderer and bounds after scaling
+    //         Renderer rend = meshInstance.GetComponent<Renderer>();
+    //         if (rend != null)
+    //         {
+    //             // Move it up so it sits flat on the surface
+    //             meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
+    //         }
+    //         else
+    //         {
+    //             meshInstance.transform.localPosition = Vector3.zero; // fallback
+    //         }
+    //     }
+    // }
 
     public void OnPickup(GameObject player)
     {
         Debug.Log($"{player.name} picked up {itemData.displayName}");
-        // Add to inventory system using itemData
+
         Inventory inventory = player.GetComponent<Inventory>();
+        InventoryIconGenerator iconGenerator = player.GetComponent<InventoryIconGenerator>();
+
         if (inventory != null)
         {
-            iconGenerator.GenerateIcon(itemData, 1);
             inventory.Add(itemData);
+
+            if (iconGenerator != null)
+            {
+                int slotIndex = iconGenerator.GetNextAvailableSlot();
+                if (slotIndex >= 0)
+                {
+                    iconGenerator.GenerateIcon(itemData, slotIndex);
+                }
+                else
+                {
+                    Debug.LogWarning("No available inventory slots!");
+                }
+            }
         }
         else
         {
             Debug.LogWarning("Player has no Inventory component!");
         }
-        // Disable the pickup instead of destroying it immediately
-        gameObject.SetActive(false);
 
-        // Optionally, destroy after a frame or delay
+        gameObject.SetActive(false);
         Destroy(gameObject, 0.1f);
     }
-}
 
+}

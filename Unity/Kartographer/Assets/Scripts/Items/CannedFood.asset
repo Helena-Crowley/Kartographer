@@ -19,5 +19,6 @@ MonoBehaviour:
   value: 2
   description: A can of food
   isStackable: 0
-  scale: 25
-  defaultScale: {x: 25, y: 25, z: 25}
+  scale: 15
+  itemType: 0
+  defaultScale: {x: 15, y: 15, z: 15}
