@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5989619719938756488}
   - component: {fileID: 2713529057423813219}
   - component: {fileID: 3169998937352396868}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Frying_17
   m_TagString: Untagged
   m_Icon: {fileID: 0}

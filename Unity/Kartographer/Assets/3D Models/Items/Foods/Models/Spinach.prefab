@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1720466808591540485}
   - component: {fileID: 4992572006392044391}
   - component: {fileID: 2981440436412875431}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spinach
   m_TagString: Untagged
   m_Icon: {fileID: 0}

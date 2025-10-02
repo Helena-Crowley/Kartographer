@@ -12,28 +12,21 @@ public class PlayerPickUp : MonoBehaviour
     public InventoryIconGenerator iconGenerator;
     public GameObject pickupPrefab;
 
-    void Start() => pickUpPrompt.SetActive(false);
+    public float interactDistance = 3f;
+    public LayerMask pickupLayer;
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out PickUp pickup))
-        {
-            pickUpPrompt.SetActive(true);
-            nearbyPickup = pickup;
-        }
-    }
+    private Camera playerCam;
 
-    void OnTriggerExit(Collider other)
+    void Start()
     {
-        if (other.TryGetComponent(out PickUp pickup) && pickup == nearbyPickup)
-        {
-            pickUpPrompt.SetActive(false);
-            nearbyPickup = null;
-        }
+        pickUpPrompt.SetActive(false);
+        playerCam = Camera.main;
     }
 
     void Update()
     {
+        HandleRaycast();
+
         if (nearbyPickup != null && pickUpAction.action.WasPerformedThisFrame())
         {
             pickUpPrompt.SetActive(false);
@@ -57,10 +50,48 @@ public class PlayerPickUp : MonoBehaviour
 
                 // Remove item from inventory
                 playerInventory.Remove(item);
-                iconGenerator.ClearSlot(iconGenerator.GetNextAvailableSlot() - 1);
+                int slot = iconGenerator.GetNextAvailableSlot();
+                if (slot != -1)
+                {
+                    iconGenerator.ClearSlot(slot - 1);
+                }
+                else if (slot == -1)
+                {
+                    iconGenerator.ClearSlot(iconGenerator.inventorySlots.Length - 1);
+                }
+                else
+                {
+                    Debug.LogWarning("No PickUp component found on the pickup prefab.");
+                }
             }
         }
 
 
+
+    }
+    void HandleRaycast()
+    {
+        Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
+        Debug.DrawLine(ray.origin, ray.origin + ray.direction * interactDistance, Color.red);
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, pickupLayer))
+        {
+            if (hit.collider.GetComponentInParent<PickUp>() is PickUp pickup)
+            {
+                Debug.Log($"Looking at pickup: {pickup.itemData.displayName}");
+                // Show prompt if looking at a pickup
+                if (nearbyPickup != pickup)
+                {
+                    nearbyPickup = pickup;
+                    pickUpPrompt.SetActive(true);
+                }
+                return;
+            }
+        }
+        // Nothing hit or no PickUp
+        if (nearbyPickup != null)
+        {
+            nearbyPickup = null;
+            pickUpPrompt.SetActive(false);
+        }
     }
 }

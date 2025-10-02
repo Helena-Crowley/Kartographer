@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4857949449493550072}
   - component: {fileID: 3334538227201681460}
   - component: {fileID: 3320772061328918385}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Turnip.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

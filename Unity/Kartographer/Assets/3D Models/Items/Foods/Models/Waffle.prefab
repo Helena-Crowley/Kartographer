@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5662719294471742394}
   - component: {fileID: 602703765832618579}
   - component: {fileID: 5043872784923436133}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Waffle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

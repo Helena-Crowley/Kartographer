@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7968530136225774253}
   - component: {fileID: 4874280006364665539}
   - component: {fileID: 8812519935146082246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fried_chicken_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

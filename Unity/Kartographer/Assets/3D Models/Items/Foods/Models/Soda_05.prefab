@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2009112350785174414}
   - component: {fileID: 1194193901066108796}
   - component: {fileID: 3776171321300353222}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Soda_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}

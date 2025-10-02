@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5822586977026024803}
   - component: {fileID: 6248269107291339481}
   - component: {fileID: 5059649083604828432}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Garlic
   m_TagString: Untagged
   m_Icon: {fileID: 0}

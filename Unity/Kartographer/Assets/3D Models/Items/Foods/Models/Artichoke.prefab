@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4777554214050139378}
   - component: {fileID: 4391994196268983466}
   - component: {fileID: 870325757176794950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Artichoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}

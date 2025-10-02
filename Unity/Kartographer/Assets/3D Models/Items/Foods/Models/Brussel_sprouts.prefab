@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4015487210953996056}
   - component: {fileID: 7815456032905647547}
   - component: {fileID: 8017995395732254483}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Brussel_sprouts
   m_TagString: Untagged
   m_Icon: {fileID: 0}

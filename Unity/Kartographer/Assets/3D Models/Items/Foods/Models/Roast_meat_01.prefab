@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 186377279938228895}
   - component: {fileID: 7859048794277389176}
   - component: {fileID: 8381482171029613247}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Roast_meat_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

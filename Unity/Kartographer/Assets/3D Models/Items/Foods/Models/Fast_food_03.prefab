@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1874451083254346101}
   - component: {fileID: 5575804807709779935}
   - component: {fileID: 5038461208557815575}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fast_food_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

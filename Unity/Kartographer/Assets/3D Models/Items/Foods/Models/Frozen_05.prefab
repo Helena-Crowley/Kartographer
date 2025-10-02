@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6037203627030737722}
   - component: {fileID: 2115548318729366153}
   - component: {fileID: 3167249460984428285}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Frozen_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}

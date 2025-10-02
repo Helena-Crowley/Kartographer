@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1494494548217743975}
   - component: {fileID: 6979171295177176651}
   - component: {fileID: 3166239009383538545}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mango_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

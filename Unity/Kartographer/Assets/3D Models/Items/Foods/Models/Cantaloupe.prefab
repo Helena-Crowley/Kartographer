@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5666538349160779043}
   - component: {fileID: 7280260611892357895}
   - component: {fileID: 7951656348212404204}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cantaloupe
   m_TagString: Untagged
   m_Icon: {fileID: 0}

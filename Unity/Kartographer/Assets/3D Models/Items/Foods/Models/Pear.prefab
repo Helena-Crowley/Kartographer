@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2812328551198065088}
   - component: {fileID: 4055366665691905858}
   - component: {fileID: 1923778444233340762}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pear
   m_TagString: Untagged
   m_Icon: {fileID: 0}

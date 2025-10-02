@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5599323199759793939}
   - component: {fileID: 6463986162512736847}
   - component: {fileID: 2456083844119249352}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Lettuce
   m_TagString: Untagged
   m_Icon: {fileID: 0}

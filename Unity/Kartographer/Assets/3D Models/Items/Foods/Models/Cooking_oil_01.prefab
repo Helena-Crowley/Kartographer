@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6127642910030865533}
   - component: {fileID: 2403467006141954978}
   - component: {fileID: 1257269540676570851}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cooking_oil_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

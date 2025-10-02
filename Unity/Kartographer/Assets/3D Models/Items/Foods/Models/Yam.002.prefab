@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6454670750982374853}
   - component: {fileID: 1681694196011529822}
   - component: {fileID: 6019748182933536781}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Yam.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

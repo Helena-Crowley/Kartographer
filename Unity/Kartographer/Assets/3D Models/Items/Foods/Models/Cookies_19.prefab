@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2093493019948628475}
   - component: {fileID: 2198881791885982186}
   - component: {fileID: 2137630132647072488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cookies_19
   m_TagString: Untagged
   m_Icon: {fileID: 0}

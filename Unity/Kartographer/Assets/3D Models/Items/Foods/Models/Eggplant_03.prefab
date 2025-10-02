@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1936469041146113471}
   - component: {fileID: 7238697779608374835}
   - component: {fileID: 6524947062790552051}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eggplant_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

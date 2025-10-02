@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4834733898958749655}
   - component: {fileID: 8690778861588917028}
   - component: {fileID: 3640552487470612914}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Papaya_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4961656173889739334}
   - component: {fileID: 2623526531555170006}
   - component: {fileID: 7074532742535396450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Celery
   m_TagString: Untagged
   m_Icon: {fileID: 0}

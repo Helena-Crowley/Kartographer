@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4664782070075455030}
   - component: {fileID: 548266916075580547}
   - component: {fileID: 6000238309170428011}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Raw_meat_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}

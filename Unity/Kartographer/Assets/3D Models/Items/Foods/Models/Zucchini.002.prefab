@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4164399908800383405}
   - component: {fileID: 1389486289582676347}
   - component: {fileID: 5233351903904160588}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Zucchini.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5494334076437589064}
   - component: {fileID: 229278373552399693}
   - component: {fileID: 8652925257083387467}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Kiwi_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

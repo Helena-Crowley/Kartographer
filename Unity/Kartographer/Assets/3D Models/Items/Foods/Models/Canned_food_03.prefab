@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2922900724536429725}
   - component: {fileID: 8306391848879948732}
   - component: {fileID: 3772933752205400179}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canned_food_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79d6593fca0499140b111426620e5085, type: 3}
+  m_Name: Banana
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: banana
+  displayName: Banana
+  icon: {fileID: 21300000, guid: 56dc4887fb0621544aec732b64cfd034, type: 3}
+  prefab: {fileID: 4135918026735994621, guid: 05764817a348ef746b6ac69527203982, type: 3}
+  value: 1
+  description: A single banana
+  isStackable: 0
+  scale: 5
+  itemType: 0
+  defaultScale: {x: 5, y: 5, z: 5}

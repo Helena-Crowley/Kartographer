@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7366906680183268523}
   - component: {fileID: 6818770109484759068}
   - component: {fileID: 489065360390786516}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sauce_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3176742872986396709}
   - component: {fileID: 8976443537762461080}
   - component: {fileID: 203401905307806219}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cauliflower
   m_TagString: Untagged
   m_Icon: {fileID: 0}

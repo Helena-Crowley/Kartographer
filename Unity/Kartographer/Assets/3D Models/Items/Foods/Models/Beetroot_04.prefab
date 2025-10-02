@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7475719939100053819}
   - component: {fileID: 3966016455006443106}
   - component: {fileID: 7610579178467894705}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Beetroot_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
