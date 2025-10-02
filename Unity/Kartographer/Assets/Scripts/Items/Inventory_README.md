@@ -1,3 +1,18 @@
+# Table of Contents
+
+- [Inventory System](#inventory-system)
+  - [Overview](#overview)
+  - [Components](#components)
+    - [ItemData.cs](#itemdatacs)
+    - [PickUp.cs](#pickupcs)
+    - [Inventory.cs](#inventorycs)
+    - [InventoryIconGenerator.cs](#inventoryicongeneratorcs)
+    - [PlayerPickUp.cs](#playerpickupcs)
+    - [ItemDatabase.cs](#itemdatabasecs)
+    - [ItemSpawner.cs](#itemspawnercs)
+    - [SpawnPoint.cs](#spawnpointcs)
+  - [How to Add a New Item](#how-to-add-a-new-item)
+
 # Inventory System
 
 ## Overview
