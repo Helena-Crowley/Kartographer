@@ -6,7 +6,7 @@ public class ItemData : ScriptableObject
 {
     public string itemId;       // unique ID
     public string displayName;  // what shows in UI
-    //public Sprite icon;         // for inventory UI
+    public Sprite icon;         // for inventory UI
     public GameObject prefab;   // optional: the 3D model or pickup prefab
     public int value;           // gold, worth, etc.
     public string description;  // tooltip text
