@@ -45,31 +45,6 @@ public class PickUp : MonoBehaviour
     }
 }
 
-
-    // void Start()
-    // {
-    //     if (itemData.prefab != null)
-    //     {
-    //         // Instantiate the mesh as a child
-    //         GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
-
-    //         // Apply scale first
-    //         meshInstance.transform.localScale = itemData.defaultScale;
-
-    //         // Get the renderer and bounds after scaling
-    //         Renderer rend = meshInstance.GetComponent<Renderer>();
-    //         if (rend != null)
-    //         {
-    //             // Move it up so it sits flat on the surface
-    //             meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
-    //         }
-    //         else
-    //         {
-    //             meshInstance.transform.localPosition = Vector3.zero; // fallback
-    //         }
-    //     }
-    // }
-
     public void OnPickup(GameObject player)
     {
         Debug.Log($"{player.name} picked up {itemData.displayName}");
