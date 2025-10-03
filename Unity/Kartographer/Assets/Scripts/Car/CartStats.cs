@@ -25,8 +25,8 @@ public class CartStats : MonoBehaviour
         int damage = Mathf.FloorToInt(distance); // Example
         health = Mathf.Max(cartStatsSO.health - damage * 1/(cartStatsSO.batteryLife), 0);
         UpdateBatteryUI();
-        Debug.Log("Cart took " + damage + " damage from distance: " + distance);
-        Debug.Log("Cart health: " + health);
+        // Debug.Log("Cart took " + damage + " damage from distance: " + distance);
+        // Debug.Log("Cart health: " + health);
 
         if (health <= 0)
         {

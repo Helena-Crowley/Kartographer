@@ -218,33 +218,66 @@ public class CarMovement : MonoBehaviour
     /// <returns>None</returns>
     private void PhysicsUpdateTire(Transform tireTransform, Transform tireMesh, Rigidbody carRigidBody)
     {
-        RaycastHit tireHit;
         Vector3 rayStart = tireMesh.position;
-        Ray tireRay = new Ray(rayStart, -tireTransform.up);
         float rayLength = tireRadius + suspensionRestDistance;
 
-        if (Physics.Raycast(tireRay, out tireHit, rayLength, layerGround))
+        // --- OverlapSphere correction ---
+        float correctionRadius = tireRadius * 0.5f;
+        Collider[] overlaps = Physics.OverlapSphere(rayStart, correctionRadius, layerGround);
+
+        if (overlaps.Length > 0)
+        {
+            foreach (var col in overlaps)
+            {
+                Vector3 closest;
+                RaycastHit hit;
+                if (Physics.Raycast(rayStart + Vector3.up, Vector3.down, out hit, 2f * correctionRadius, layerGround))
+                {
+                    closest = hit.point;
+                }
+                else
+                {
+                    // fallback — just nudge tire up a tiny bit
+                    closest = rayStart + tireTransform.up * 0.01f;
+                }
+
+                float fakeDistance = Vector3.Distance(rayStart, closest);
+
+                // Apply suspension force using the overlap helper
+                ApplySuspensionFromOverlap(tireTransform, closest, fakeDistance, col.transform.up, 1);
+
+                Debug.Log("OverlapSphere correction via suspension");
+            }
+        }
+
+        // --- Normal suspension raycasts ---
+        RaycastHit hitDown = new RaycastHit();
+        RaycastHit hitUp = new RaycastHit();
+        bool hitGroundDown = Physics.Raycast(rayStart, -tireTransform.up, out hitDown, rayLength, layerGround);
+        bool hitGroundUp = !hitGroundDown && Physics.Raycast(rayStart, tireTransform.up, out hitUp, rayLength, layerGround);
+
+        if (hitGroundDown)
         {
             float carSpeed = Vector3.Dot(carTransform.forward, carRigidBody.linearVelocity);
 
-            ApplySuspension(tireTransform, tireHit);
+            ApplySuspension(tireTransform, hitDown);
             ApplyAcceleration(tireTransform, carSpeed);
             ApplyTireGrip(tireTransform, carSpeed);
             VisualUpdateTire(tireMesh);
         }
-        else if (Physics.Raycast(rayStart, tireTransform.up, out tireHit, rayLength, layerGround))
+        else if (hitGroundUp)
         {
-            Debug.Log("underground");
-            ResetCar();
+            Debug.Log("Wheel clipped underground → correcting");
+            ApplySuspension(tireTransform, hitUp, 1);
         }
         else
         {
-            // adjust gravity muliplier to adjust floatiness of car!!!
             carRigidBody.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
         }
-Debug.DrawLine(rayStart, rayStart + tireTransform.up * rayLength, Color.red);
-Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
 
+        // Debug rays
+        Debug.DrawLine(rayStart, rayStart + tireTransform.up * rayLength, Color.red);
+        Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
     }
 
     /// <summary>
@@ -270,7 +303,7 @@ Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
     /// <param name="tireTransform"> tire empty transform to apply physics at it's given point </param>
     /// <param name="tireHit"> returns bool if RayCast hit </param>
     /// <returns>None</returns>
-    private void ApplySuspension(Transform tireTransform, RaycastHit tireHit)
+    private void ApplySuspension(Transform tireTransform, RaycastHit tireHit, int scale = 1)
     {
         Vector3 springDirection = tireTransform.up;
         Vector3 tireWorldVelocity = GetWorldVelocity(carRigidBody, tireTransform);
@@ -279,8 +312,21 @@ Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
         float velocityOnSpring = Vector3.Dot(springDirection, tireWorldVelocity);
         float suspensionForce = (offset * springStrength) - (velocityOnSpring * springDamper);
 
-        carRigidBody.AddForceAtPosition(springDirection * suspensionForce, tireTransform.position);
+        carRigidBody.AddForceAtPosition(springDirection * suspensionForce, tireTransform.position * scale);
     }
+
+    private void ApplySuspensionFromOverlap(Transform tireTransform, Vector3 closest, float fakeDistance, Vector3 normal, int scale = 1)
+    {
+        Vector3 springDirection = tireTransform.up;
+        Vector3 tireWorldVelocity = GetWorldVelocity(carRigidBody, tireTransform);
+
+        float offset = suspensionRestDistance - fakeDistance;
+        float velocityOnSpring = Vector3.Dot(springDirection, tireWorldVelocity);
+        float suspensionForce = (offset * springStrength) - (velocityOnSpring * springDamper);
+
+        carRigidBody.AddForceAtPosition(springDirection * suspensionForce, tireTransform.position * scale);
+    }
+
 
     /// <summary>
     /// Applies force for accelerating, applies engine-breaking when no input is detected

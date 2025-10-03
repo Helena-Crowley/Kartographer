@@ -6044,6 +6044,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
   spawnChance: 0.5
   itemType: 1
+--- !u!1 &1366059083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1366059084}
+  - component: {fileID: 1366059085}
+  m_Layer: 0
+  m_Name: ReconnectTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1366059084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366059083}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 33523252944309607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1366059085
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366059083}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7.34, y: 3.12, z: 12.3}
+  m_Center: {x: 0, y: 0, z: 2.23}
 --- !u!1 &1369867462
 GameObject:
   m_ObjectHideFlags: 0
@@ -8039,6 +8092,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6410927094109834544, guid: daff5ac187e8f0445b2943908352948e, type: 3}
+      propertyPath: m_TagString
+      value: Cart
+      objectReference: {fileID: 0}
     - target: {fileID: 7034225876436599156, guid: daff5ac187e8f0445b2943908352948e, type: 3}
       propertyPath: ShapeModule.angle
       value: 12.89
@@ -8467,7 +8524,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00388d572aec45c4eadeceb8fea1e699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrailerBehaviour
-  cartHitch: {fileID: 0}
+  recconnectZone: {fileID: 0}
+  joint: {fileID: 0}
 --- !u!1 &2042331158
 GameObject:
   m_ObjectHideFlags: 0
@@ -13522,6 +13580,7 @@ Transform:
   - {fileID: 8185896991002234195}
   - {fileID: 4040256941989967063}
   - {fileID: 3329524856930364087}
+  - {fileID: 1366059084}
   m_Father: {fileID: 838450618}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &618402549473377017
@@ -13565,13 +13624,14 @@ GameObject:
   - component: {fileID: 33523252944309607}
   - component: {fileID: 809743670877509599}
   - component: {fileID: 809743670877509600}
+  - component: {fileID: 809743670877509601}
   m_Layer: 0
   m_Name: GolfCartProperOrientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!54 &809743670877509599
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13580,9 +13640,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809743670877509597}
   serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0.3
-  m_AngularDamping: 3
+  m_Mass: 100
+  m_LinearDamping: 0.2
+  m_AngularDamping: 0.6
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -13677,7 +13737,7 @@ ConfigurableJoint:
     positionSpring: 30
     positionDamper: 10
     maximumForce: 3.4028233e+38
-    useAcceleration: 0
+    useAcceleration: 1
   m_AngularYZDrive:
     serializedVersion: 4
     positionSpring: 0
@@ -13701,6 +13761,20 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &809743670877509601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809743670877509597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00388d572aec45c4eadeceb8fea1e699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrailerBehaviour
+  recconnectZone: {fileID: 1366059085}
+  joint: {fileID: 809743670877509600}
 --- !u!23 &831152554976693655
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13726,7 +13800,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+  - {fileID: 2100000, guid: 1f1264e78a142344a8d5cbedbf9f78a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13774,7 +13848,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+  - {fileID: 2100000, guid: 30ebea0048c61d445b60dae044f38c5e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13848,7 +13922,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+  - {fileID: 2100000, guid: 1f1264e78a142344a8d5cbedbf9f78a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13882,6 +13956,7 @@ GameObject:
   - component: {fileID: 4153012285795079873}
   - component: {fileID: 8513581316888462023}
   - component: {fileID: 2863840849682829465}
+  - component: {fileID: 8513581316888462024}
   m_Layer: 0
   m_Name: Cart_Trailer_Bed
   m_TagString: Untagged
@@ -13937,7 +14012,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+  - {fileID: 2100000, guid: 1f1264e78a142344a8d5cbedbf9f78a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14255,7 +14330,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+  - {fileID: 2100000, guid: 1f1264e78a142344a8d5cbedbf9f78a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14479,6 +14554,7 @@ GameObject:
   - component: {fileID: 7265623449172671116}
   - component: {fileID: 8755672591694242915}
   - component: {fileID: 1224794665896352937}
+  - component: {fileID: 8755672591694242916}
   m_Layer: 0
   m_Name: Cart_Trailer_Body
   m_TagString: Untagged
@@ -14600,6 +14676,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017644920301167696}
   m_Mesh: {fileID: 3200884637518068225, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!65 &8513581316888462024
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017644920301167696}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.4674363, y: 1.2, z: 4.413237}
+  m_Center: {x: 1.0635227, y: 1.72, z: -0.026418699}
 --- !u!33 &8755672591694242915
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -14607,6 +14704,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7083942439445531683}
+  m_Mesh: {fileID: 210933577333297386, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!64 &8755672591694242916
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7083942439445531683}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: 210933577333297386, guid: e945a9437fde78948a45cee9278d2196, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
