@@ -97,6 +97,8 @@ public class CarMovement : MonoBehaviour
         springDamper = springDamper * 100;
 
         cartStats = GetComponent<CartStats>();
+
+        Physics.queriesHitBackfaces = true;
     }
 
     private void Update()
@@ -191,7 +193,7 @@ public class CarMovement : MonoBehaviour
     /// <returns>None</returns>
     private void ResetCar()
     {
-        Vector3 raisedPosition = new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z);
+        Vector3 raisedPosition = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
 
         carRigidBody.linearVelocity = Vector3.zero;
         carRigidBody.angularVelocity = Vector3.zero;
@@ -230,11 +232,19 @@ public class CarMovement : MonoBehaviour
             ApplyTireGrip(tireTransform, carSpeed);
             VisualUpdateTire(tireMesh);
         }
+        else if (Physics.Raycast(rayStart, tireTransform.up, out tireHit, rayLength, layerGround))
+        {
+            Debug.Log("underground");
+            ResetCar();
+        }
         else
         {
             // adjust gravity muliplier to adjust floatiness of car!!!
             carRigidBody.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
         }
+Debug.DrawLine(rayStart, rayStart + tireTransform.up * rayLength, Color.red);
+Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
+
     }
 
     /// <summary>

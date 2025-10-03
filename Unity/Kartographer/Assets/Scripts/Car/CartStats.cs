@@ -7,6 +7,7 @@ public class CartStats : MonoBehaviour
     public CarMovement carMovement;  // Reference to your BatteryBar UI
     public CartStatsSO cartStatsSO;  // Reference to your CartStatsSO ScriptableObject
     public int health;
+    [HideInInspector]
     public float distance = 0f;
 
     void Start()

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CartStatsSO
   m_EditorClassIdentifier: Assembly-CSharp::CartStatsSO
   health: 100
-  batteryLife: 1
+  batteryLife: 100
