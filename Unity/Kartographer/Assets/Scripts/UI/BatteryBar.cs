@@ -6,6 +6,7 @@ public class BatteryBar : MonoBehaviour
     public Image iconImage;      // Current icon
     public Image iconImageNext;  // Next icon to fade into
     public Sprite[] icons;       // 6 sprites: Full → Empty
+    public TMPro.TMP_Text percentageText;
 
     private int currentIndex = 0;
     private int nextIndex = 0;
@@ -19,6 +20,7 @@ public class BatteryBar : MonoBehaviour
 
     public void UpdateBatteryBar(int health)
     {
+        percentageText.text = health.ToString() + "%";
         currentIndex = GetCurrentIndex(health);
         nextIndex = Mathf.Min(currentIndex + 1, icons.Length - 1);
 

@@ -23,12 +23,15 @@ public class PlayerMovement : MonoBehaviour
     //public InputAction jumpAction;   // Button
 
     public CharacterController controller;
+    public PlayerStats playerStats;
     private Animator animator;
 
     private float verticalVelocity = 0f;
     private Vector2 moveInput;
     private bool isRunning;
     private float turnSmoothVelocity;
+    private bool exhausted = false;
+
 
     void Start()
     {
@@ -37,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-       
+
     }
 
     void Update()
@@ -45,7 +48,20 @@ public class PlayerMovement : MonoBehaviour
         if (!moveAction.action.enabled) return;
         // --- Get Inputs ---
         moveInput = moveAction.action.ReadValue<Vector2>();
-        isRunning = runAction.action.ReadValue<float>() > 0.5f;
+        bool runInput = runAction.action.ReadValue<float>() > 0.5f;
+
+        if (playerStats.currentStamina <= 0)
+        {
+            exhausted = true;
+        }
+
+        // If stamina recovers above 25, leave exhausted state
+        if (playerStats.currentStamina >= 30)
+        {
+            exhausted = false;
+        }
+
+        isRunning = runInput && !exhausted && playerStats.currentStamina > 0;
         bool jumpPressed = jumpAction.action.WasPressedThisFrame();
 
         // --- Movement ---
@@ -61,8 +77,22 @@ public class PlayerMovement : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
 
+        if (isRunning && moveDir.magnitude > 0)
+        {
+            playerStats.DrainStamina();
+        }
+        else
+        {
+            playerStats.RegainStamina();
+        }
+
+        Debug.Log($"isRunning: {isRunning}, stamina: {playerStats.currentStamina}, speed: {speed}");
+
         Vector3 velocity = moveDir * speed + Vector3.up * verticalVelocity;
         controller.Move(velocity * Time.deltaTime);
+
+
+
 
         // --- Animator ---
         animator.SetFloat("Horizontal", isRunning ? moveInput.x * 2 : moveInput.x);
