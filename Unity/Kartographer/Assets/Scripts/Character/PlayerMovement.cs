@@ -28,7 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
     private float verticalVelocity = 0f;
     private Vector2 moveInput;
-    private bool isRunning;
+
+    [HideInInspector]
+    public bool isRunning;
+    public bool isWalking;
+
     private float turnSmoothVelocity;
     private bool exhausted = false;
 
@@ -67,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         // --- Movement ---
         Vector3 moveDir = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
         float speed = isRunning ? runSpeed : walkSpeed;
+        if (speed == walkSpeed) isWalking = true; else isWalking = false;
 
         // Gravity
         if (controller.isGrounded && verticalVelocity < 0)
