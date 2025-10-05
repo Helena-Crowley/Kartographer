@@ -7,6 +7,7 @@ TagManager:
   - Cart
   - CinemachineTarget
   - Sand
+  - Door
   layers:
   - Default
   - TransparentFX

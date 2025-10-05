@@ -7,7 +7,7 @@ public class PlayerPickUp : MonoBehaviour
     private PickUp nearbyPickup;
     public InputActionReference pickUpAction;
     public InputActionReference dropAction;
-    public GameObject pickUpPrompt;
+    private InteractPrompt interactPrompt;
     public Inventory playerInventory;
     public InventoryIconGenerator iconGenerator;
     public GameObject pickupPrefab;
@@ -15,12 +15,12 @@ public class PlayerPickUp : MonoBehaviour
     public float interactDistance = 3f;
     public LayerMask pickupLayer;
 
-    private Camera playerCam;
+    [SerializeField] Camera playerCam;
 
     void Start()
     {
-        pickUpPrompt.SetActive(false);
-        playerCam = Camera.main;
+        interactPrompt = GetComponent<InteractPrompt>();
+        interactPrompt.ToggleInteractPrompt();
     }
 
     void Update()
@@ -29,7 +29,7 @@ public class PlayerPickUp : MonoBehaviour
 
         if (nearbyPickup != null && pickUpAction.action.WasPerformedThisFrame())
         {
-            pickUpPrompt.SetActive(false);
+            interactPrompt.ToggleInteractPrompt();
             nearbyPickup.OnPickup(gameObject);
             nearbyPickup = null; // Clear reference after pickup
         }
@@ -82,7 +82,7 @@ public class PlayerPickUp : MonoBehaviour
                 if (nearbyPickup != pickup)
                 {
                     nearbyPickup = pickup;
-                    pickUpPrompt.SetActive(true);
+                    interactPrompt.ToggleInteractPrompt("F", "pick up");
                 }
                 return;
             }
@@ -91,7 +91,7 @@ public class PlayerPickUp : MonoBehaviour
         if (nearbyPickup != null)
         {
             nearbyPickup = null;
-            pickUpPrompt.SetActive(false);
+            interactPrompt.ToggleInteractPrompt();
         }
     }
 }

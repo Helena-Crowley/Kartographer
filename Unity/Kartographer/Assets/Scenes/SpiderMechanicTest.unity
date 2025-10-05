@@ -3394,7 +3394,7 @@ PrefabInstance:
       objectReference: {fileID: 304234363}
     - target: {fileID: 6295323583785653778, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
       propertyPath: stepSpeed
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6295323583785653778, guid: 4d610380ede70aa40b7751ded607290d, type: 3}
       propertyPath: bodyHeight

@@ -1,29 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class PlayerInputManager : MonoBehaviour
 {
-    // Static instance accessible from anywhere
-    public static InputManager Instance { get; private set; }
-
-    [SerializeField] private InputActionAsset controls;
+    [SerializeField] public InputActionAsset controls;
 
     private InputActionMap playerMap;
     private InputActionMap carMap;
 
-    public static event System.Action<bool> OnCartStateChanged;
+    public System.Action<bool> OnCartStateChanged;
     private bool inCart = false;
 
     private void Awake()
     {
-        // Singleton pattern
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
         playerMap = controls.FindActionMap("Player", true);
         carMap = controls.FindActionMap("Car", true);
     }
@@ -33,7 +22,13 @@ public class InputManager : MonoBehaviour
         playerMap.Enable();
     }
 
-    public bool InCart => inCart;
+    private void OnDisable()
+    {
+        playerMap.Disable();
+        carMap.Disable();       
+    }
+
+    public bool InCart => inCart; // provides read only access to inCart
 
     public void EnterCart()
     {

@@ -4,9 +4,13 @@ public class CameraManager : MonoBehaviour
     public Camera playerCamera;
     public Camera cartCamera;
 
+    private PlayerInputManager inputManager;
+
     void Start()
     {
         SwitchToPlayerCamera();
+
+        inputManager = GetComponent<PlayerInputManager>();
     }
 
     public void SwitchToPlayerCamera()
@@ -23,12 +27,12 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
-        InputManager.OnCartStateChanged += HandleCartStateChanged;
+        inputManager.OnCartStateChanged += HandleCartStateChanged;
     }
 
     private void OnDisable()
     {
-        InputManager.OnCartStateChanged -= HandleCartStateChanged;
+        inputManager.OnCartStateChanged -= HandleCartStateChanged;
     }
 
     private void HandleCartStateChanged(bool inCart)

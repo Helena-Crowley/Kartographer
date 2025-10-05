@@ -74,6 +74,8 @@ public class CarMovement : MonoBehaviour
     [HideInInspector]
     public float totaldistance = 0f;
     public bool isCharged = true;
+    private PlayerInputManager inputManager;
+    public GameObject driverSeat;
 
     void OnEnable()
     {
@@ -95,6 +97,7 @@ public class CarMovement : MonoBehaviour
         suspensionRestDistance = carTransform.position.y - frontLeftTireMesh.position.y + tireRadius;
         springStrength = springStrength * 10000;
         springDamper = springDamper * 100;
+        inputManager = driverSeat.GetComponentInChildren<PlayerInputManager>();
 
         cartStats = GetComponent<CartStats>();
 
@@ -121,17 +124,20 @@ public class CarMovement : MonoBehaviour
         PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
         PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
         PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
-        if (InputManager.Instance.InCart)
-        {
-            cartStats.batteryCanvas.SetActive(true);
-            cartStats.distance = DistanceTravelled();
-            cartStats.TakeDamage();
-        }
-        else
-        {
-            cartStats.batteryCanvas.SetActive(false);
-        }
 
+        if (inputManager != null)
+        {
+            if (inputManager.InCart)
+            {
+                cartStats.batteryCanvas.SetActive(true);
+                cartStats.distance = DistanceTravelled();
+                cartStats.TakeDamage();
+            }
+            else
+            {
+                cartStats.batteryCanvas.SetActive(false);
+            }
+        }
 
     }
 
