@@ -8,24 +8,36 @@ public class DoorInteract : MonoBehaviour
 
     private GameObject localPlayer;
     private InteractPrompt interactPrompt;
-    private PlayerInputManager inputManager;
-    private InputActionMap playerMap;
     private InputAction interactAction;
+    private InputActionMap playerMap;
+    private PlayerInputManager inputManager;  
 
     private bool doorOpen;
+    public GameObject doorMesh;
+
+    private Quaternion closedRotation;
+    private Quaternion openRotation;
+
+    private void Start()
+    {
+        doorOpen = false;
+        closedRotation = doorMesh.transform.rotation;
+        openRotation = Quaternion.Euler(0, 90, 0) * closedRotation;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the thing entering has a PlayerUI
-
         if (other.tag == "Player")
         {
             localPlayer = other.gameObject;
 
             interactPrompt = localPlayer.GetComponentInChildren<InteractPrompt>();
             inputManager = localPlayer.GetComponent<PlayerInputManager>();
+            playerMap = inputManager.controls.FindActionMap("Player", true);
+            interactAction = playerMap.FindAction("Interact");
 
             interactPrompt?.ToggleInteractPrompt("E", "open door");
+
         }
     }
 
@@ -39,17 +51,20 @@ public class DoorInteract : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
-        // if (localPlayer != null)
-        // {
-        //     playerMap = inputManager.controls.FindActionMap("Player", true);
-        //     interactAction = playerMap.FindAction("Interact");
+        if (interactAction != null)
+        {
+            if (interactAction.WasPressedThisFrame())
+            {
+                doorOpen = !doorOpen;
+            }
+        }
 
-        //     if (interactAction.WasPerformedThisFrame() && !doorOpen)
-        //     {
-        //         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
-        //     }
-        // }
+        if (doorOpen)
+            doorMesh.transform.rotation = Quaternion.RotateTowards(doorMesh.transform.rotation, openRotation, rotationSpeed * Time.deltaTime);
+        else
+            doorMesh.transform.rotation = Quaternion.RotateTowards(doorMesh.transform.rotation, closedRotation, rotationSpeed * Time.deltaTime);
     }
 }

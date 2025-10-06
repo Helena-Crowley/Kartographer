@@ -72,17 +72,16 @@ public class CartInteraction : MonoBehaviour
 
     void Update()
     {
-        if (playerInteractAction.action.WasPressedThisFrame() || cartInteractAction.action.WasPressedThisFrame())
+        if (playerInteractAction.action.WasPressedThisFrame())
         {
-            {
-                if (!inCart && nearCart) EnterCart();
-                else
-                {
-                    Debug.Log("Exiting Cart");
-                    ExitCart();
-                }
-            }
+            if (nearCart) EnterCart();
         }
+
+        else if (cartInteractAction.action.WasPressedThisFrame())
+        {
+            if (inCart) ExitCart();
+        }
+
     }
 
     PlayerInputManager EnterCart()

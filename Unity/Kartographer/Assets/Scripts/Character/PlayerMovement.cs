@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
             playerStats.RegainStamina();
         }
 
-        Debug.Log($"isRunning: {isRunning}, stamina: {playerStats.currentStamina}, speed: {speed}");
+        //Debug.Log($"isRunning: {isRunning}, stamina: {playerStats.currentStamina}, speed: {speed}");
 
         Vector3 velocity = moveDir * speed + Vector3.up * verticalVelocity;
         controller.Move(velocity * Time.deltaTime);
