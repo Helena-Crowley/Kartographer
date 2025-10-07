@@ -37,7 +37,7 @@ public class ItemSpawner : MonoBehaviour
                     if (prefab != null)
                     {
                         var spawnedItem = Instantiate(itemPrefab, sp.transform.position, sp.transform.rotation, transform);
-                        spawnedItem.GetComponent<PickUp>().itemData = pool[index];
+                        spawnedItem.GetComponent<PickUppableItem>().itemData = pool[index];
 
                     }
                 }

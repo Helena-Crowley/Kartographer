@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerPickUp : MonoBehaviour
 {
-    private PickUp nearbyPickup;
+    private PickUppableItem nearbyPickup;
     public InputActionReference pickUpAction;
     public InputActionReference dropAction;
     private InteractPrompt interactPrompt;
@@ -40,12 +40,21 @@ public class PlayerPickUp : MonoBehaviour
             {
                 // Spawn the generic pickup prefab
                 GameObject spawned = Instantiate(pickupPrefab, transform.position + transform.forward + Vector3.up * 2, Quaternion.identity);
+                Rigidbody rb = spawned.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.AddForce((transform.forward + Vector3.up * 0.65f) * 4f, ForceMode.Impulse);
+                }
+                else
+                {
+                    Debug.Log("No rigidbody has been retrieved.");
+                }
 
                 // Assign the ItemData to the spawned PickUp component
-                PickUp pickUpComp = spawned.GetComponent<PickUp>();
-                if (pickUpComp != null)
+                PickUppableItem pickUpComponent = spawned.GetComponent<PickUppableItem>();
+                if (pickUpComponent != null)
                 {
-                    pickUpComp.itemData = item;
+                    pickUpComponent.itemData = item;
                 }
 
                 // Remove item from inventory
@@ -75,9 +84,9 @@ public class PlayerPickUp : MonoBehaviour
         Debug.DrawLine(ray.origin, ray.origin + ray.direction * interactDistance, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, pickupLayer))
         {
-            if (hit.collider.GetComponentInParent<PickUp>() is PickUp pickup)
+            if (hit.collider.GetComponentInParent<PickUppableItem>() is PickUppableItem pickup)
             {
-                Debug.Log($"Looking at pickup: {pickup.itemData.displayName}");
+                //Debug.Log($"Looking at pickup: {pickup.itemData.displayName}");
                 // Show prompt if looking at a pickup
                 if (nearbyPickup != pickup)
                 {

@@ -8,6 +8,7 @@ TagManager:
   - CinemachineTarget
   - Sand
   - Door
+  - Scrap
   layers:
   - Default
   - TransparentFX

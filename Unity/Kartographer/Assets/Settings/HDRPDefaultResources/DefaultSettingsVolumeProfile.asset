@@ -2538,6 +2538,9 @@ MonoBehaviour:
   DitherScale:
     m_OverrideState: 1
     m_Value: 0
+  Opacity:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &7542669330009093999
 MonoBehaviour:
   m_ObjectHideFlags: 3

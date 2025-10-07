@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PickUp : MonoBehaviour
+public class PickUppableItem : MonoBehaviour
 {
     public ItemData itemData;
 
@@ -9,7 +9,7 @@ public class PickUp : MonoBehaviour
     if (itemData.prefab != null)
     {
         // Instantiate the visual mesh as a child
-        GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
+            GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
 
         // Apply scale
         meshInstance.transform.localScale = itemData.defaultScale;
@@ -48,6 +48,7 @@ public class PickUp : MonoBehaviour
     public void OnPickup(GameObject player)
     {
         Debug.Log($"{player.name} picked up {itemData.displayName}");
+        itemData.owner = player;
 
         Inventory inventory = player.GetComponent<Inventory>();
         InventoryIconGenerator iconGenerator = player.GetComponent<InventoryIconGenerator>();

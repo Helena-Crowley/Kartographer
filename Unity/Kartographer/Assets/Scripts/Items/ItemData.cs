@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,6 +22,7 @@ public class ItemData : ScriptableObject
     public bool isStackable;
     public int scale = 100;
     public ItemType itemType;
+    public GameObject owner = null; //last player to hold item, if not picked up yet == null
 
     [HideInInspector]
     public Vector3 defaultScale;  
