@@ -22,6 +22,28 @@ MonoBehaviour:
   Color:
     m_OverrideState: 0
     m_Value: 48
+--- !u!114 &-5846362262032334140
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0775cbb206825d541bf6c0297ee524ca, type: 3}
+  m_Name: SplitToning
+  m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.SplitToning
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {r: 0.4818824, g: 0.4843922, b: 0.5019608, a: 1}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {r: 0.3660378, g: 0.3606912, b: 0.35291567, a: 1}
+  balance:
+    m_OverrideState: 0
+    m_Value: -9
 --- !u!114 &-5493656020222499085
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -369,6 +391,7 @@ MonoBehaviour:
   - {fileID: -1940922966757857521}
   - {fileID: -2340662530892886330}
   - {fileID: 9057712842368547237}
+  - {fileID: -5846362262032334140}
 --- !u!114 &5872778127204144532
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -16,9 +16,10 @@ MonoBehaviour:
   displayName: Canned Food
   icon: {fileID: 21300000, guid: f87bc32be79ed03479f523e992424534, type: 3}
   prefab: {fileID: 8739641199503267371, guid: be4c6c51692b501478503d98ecb192b1, type: 3}
-  value: 2
+  value: 500
   description: A can of food
   isStackable: 0
   scale: 15
   itemType: 0
+  owner: {fileID: 0}
   defaultScale: {x: 15, y: 15, z: 15}

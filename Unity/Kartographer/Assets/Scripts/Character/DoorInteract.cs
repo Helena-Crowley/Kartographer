@@ -13,6 +13,7 @@ public class DoorInteract : MonoBehaviour
     private PlayerInputManager inputManager;  
 
     private bool doorOpen;
+    private bool canOpen;
     public GameObject doorMesh;
 
     private Quaternion closedRotation;
@@ -37,6 +38,7 @@ public class DoorInteract : MonoBehaviour
             interactAction = playerMap.FindAction("Interact");
 
             interactPrompt?.ToggleInteractPrompt("E", "open door");
+            canOpen = true;
 
         }
     }
@@ -46,8 +48,10 @@ public class DoorInteract : MonoBehaviour
         if (other.gameObject == localPlayer)
         {
             localPlayer = null;
-            
+
             interactPrompt?.ToggleInteractPrompt();
+
+            canOpen = false;
         }
     }
 
@@ -56,7 +60,7 @@ public class DoorInteract : MonoBehaviour
     {
         if (interactAction != null)
         {
-            if (interactAction.WasPressedThisFrame())
+            if (interactAction.WasPressedThisFrame() && canOpen)
             {
                 doorOpen = !doorOpen;
             }

@@ -1,39 +1,97 @@
+using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Recycler : MonoBehaviour
 {
-    private PickUppableItem depositedItem;
-    private int moneyToReturn;
+    public AudioClip destroySoundEffect;
+    public TextMeshProUGUI amountText;
+    public SellItems sellItemsObject;
+    private List<GameObject> coins = new List<GameObject>();
+
+    public GameObject coinPrefab;
+    public Transform coinSpawn;
+
+    private int totalValue;
+
+    void Start()
+    {
+        amountText.text = "$0";
+    }
 
     void OnTriggerEnter(Collider other)
     {
+        // Validate tag
         if (!other.transform.root.CompareTag("Scrap"))
         {
-            Debug.Log("This isn't trash wth???");
+            Debug.Log("This isn't trash!");
             return;
         }
 
-        PickUppableItem depositedItem = other.transform.root.GetComponent<PickUppableItem>();
-        if (depositedItem == null || depositedItem.itemData == null)
+        // Retrieve item data
+        PickUppableItem item = other.transform.root.GetComponent<PickUppableItem>();
+        if (item == null || item.itemData == null)
         {
             Debug.LogWarning("Scrap item missing PickUppableItem or itemData.");
             return;
         }
 
-        int value = depositedItem.itemData.value;
-        //moneyToReturn += value;
+        // Add item value
+        totalValue += item.itemData.value;
+        amountText.text = "$" + totalValue;
 
-        Debug.Log($"Deposited scrap worth ${value}. Total: ${moneyToReturn}");
-
-        Debug.Log(depositedItem.itemData.owner);
-
-        if (depositedItem.itemData.owner != null)
+        for (int i = 0; i < item.itemData.value; i++)
         {
-            PlayerWallet wallet = depositedItem.itemData.owner.GetComponent<PlayerWallet>();
-            if (wallet != null)
-                wallet.AddMoney(value);
+            Vector3 spawnOffset = new Vector3(
+                Random.Range(-0.1f, 0.1f),
+                Random.Range(0.05f, 0.15f),
+                Random.Range(-0.1f, 0.1f)
+            );
+
+            GameObject temp = Instantiate(coinPrefab, coinSpawn.position + spawnOffset, Quaternion.identity);
+            coins.Add(temp);
+
+            // Give them a tiny physics bounce if they have rigidbody
+            Rigidbody rb = temp.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.useGravity = true;
+                rb.AddForce(Vector3.up * Random.Range(1.5f, 2.5f), ForceMode.Impulse);
+                rb.AddTorque(Random.insideUnitSphere * 2f, ForceMode.Impulse);
+            }
         }
 
-        Destroy(other.gameObject, 1f);
+        // ✅ Play scrap destruction sound and remove object
+        if (destroySoundEffect)
+            SoundManager.Instance.PlaySound(destroySoundEffect, other.transform.position, 0.5f, true);
+
+        Destroy(other.gameObject, 0.5f);
+    }
+
+    void Update()
+    {
+        // If the player triggers a sell
+        if (sellItemsObject != null && sellItemsObject.sellItems && totalValue > 0)
+        {
+            // Update player wallet
+            if (sellItemsObject.PlayerWalletRef != null)
+                sellItemsObject.PlayerWalletRef.AddMoney(totalValue);
+
+            Debug.Log($"Sold scrap for ${totalValue}");
+
+            // Reset recycler
+            totalValue = 0;
+            amountText.text = "$0";
+            sellItemsObject.sellItems = false;
+
+            foreach (GameObject coin in coins)
+            {
+                float randomTime = Random.Range(.5f, 1f);
+                if (destroySoundEffect)
+                    SoundManager.Instance.PlaySound(destroySoundEffect, coin.transform.position, 0.3f, true);
+                Destroy(coin, randomTime);
+            }
+        }
     }
 }

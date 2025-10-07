@@ -9,6 +9,9 @@ public class FootstepPlayer : MonoBehaviour
     public AudioClip[] walkingSandSFX;
     public AudioClip[] runningSandSFX;
 
+    public float minVol;
+    public float maxVol;
+
     public float rayDistance = 1f; // distance to check below the player
 
     public void PlayFootstep(int animation)
@@ -25,7 +28,7 @@ public class FootstepPlayer : MonoBehaviour
         // Pick random sound and volume
         int i = Random.Range(0, footstep.Length);
         AudioClip randomSound = footstep[i];
-        float volume = Random.Range(0.1f, 0.2f);
+        float volume = Random.Range(minVol, maxVol);
 
         audioSource.PlayOneShot(randomSound, volume);
     }

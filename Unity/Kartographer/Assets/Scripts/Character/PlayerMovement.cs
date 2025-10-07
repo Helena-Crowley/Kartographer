@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public PlayerStats playerStats;
     private Animator animator;
+    private CameraBobbing bob;
 
     private float verticalVelocity = 0f;
     private Vector2 moveInput;
@@ -32,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public bool isRunning;
     public bool isWalking;
+
+    [SerializeField]
+    private Camera playerCamera; //used to get camera bobbing script
 
     private float turnSmoothVelocity;
     private bool exhausted = false;
@@ -41,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        bob = playerCamera.GetComponent<CameraBobbing>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -67,6 +72,9 @@ public class PlayerMovement : MonoBehaviour
 
         isRunning = runInput && !exhausted && playerStats.currentStamina > 0;
         bool jumpPressed = jumpAction.action.WasPressedThisFrame();
+
+
+
 
         // --- Movement ---
         Vector3 moveDir = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
@@ -103,6 +111,30 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Horizontal", isRunning ? moveInput.x * 2 : moveInput.x);
         animator.SetFloat("Vertical", isRunning ? moveInput.y * 2 : moveInput.y);
         animator.SetFloat("Speed", moveDir.magnitude * speed);
+
+        if (bob != null)
+        {
+            bool isMoving = moveDir.magnitude > 0;
+            if (isRunning && isMoving)
+            {
+                bob.isRunning = false;
+                bob.isWalking = true;
+            }
+            else if (!isRunning && isMoving)
+            {
+                bob.isRunning = true;
+                bob.isWalking = false;
+            }
+            else
+            {
+                bob.isRunning = false;
+                bob.isWalking = false;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("bob.isRunning is null!");
+        }
     }
 
     public void Interact()

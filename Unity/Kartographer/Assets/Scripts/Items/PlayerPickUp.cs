@@ -11,6 +11,8 @@ public class PlayerPickUp : MonoBehaviour
     public Inventory playerInventory;
     public InventoryIconGenerator iconGenerator;
     public GameObject pickupPrefab;
+    public AudioClip dropSoundEffect;
+    public AudioClip pickUpSoundEffect;
 
     public float interactDistance = 3f;
     public LayerMask pickupLayer;
@@ -32,18 +34,20 @@ public class PlayerPickUp : MonoBehaviour
             interactPrompt.ToggleInteractPrompt();
             nearbyPickup.OnPickup(gameObject);
             nearbyPickup = null; // Clear reference after pickup
+            SoundManager.Instance.PlaySound(pickUpSoundEffect, transform.position, .4f, true, 2f);
         }
         if (dropAction.action.WasPerformedThisFrame())
         {
             ItemData item = playerInventory.GetLastItem();
             if (item != null && pickupPrefab != null)
             {
+                SoundManager.Instance.PlaySound(dropSoundEffect, transform.position, 0.05f, true, 1.25f);
                 // Spawn the generic pickup prefab
                 GameObject spawned = Instantiate(pickupPrefab, transform.position + transform.forward + Vector3.up * 2, Quaternion.identity);
                 Rigidbody rb = spawned.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    rb.AddForce((transform.forward + Vector3.up * 0.65f) * 4f, ForceMode.Impulse);
+                    rb.AddForce((playerCam.transform.forward + Vector3.up * 0.65f) * 4f, ForceMode.Impulse);
                 }
                 else
                 {
