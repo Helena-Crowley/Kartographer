@@ -79,7 +79,7 @@ public class SellItems : MonoBehaviour
             PlayerWalletRef = localPlayer.GetComponent<PlayerWallet>();
 
             inputManager = localPlayer.GetComponent<PlayerInputManager>();
-            interactAction = inputManager.controls.FindActionMap("Player", true).FindAction("Interact");
+            InputAction interactAction = inputManager.PlayerInput.actions.FindActionMap("Player").FindAction("Interact");
 
             interactPrompt.ToggleInteractPrompt("E", "Sell Items");
         }

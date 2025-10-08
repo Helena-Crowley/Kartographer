@@ -9,10 +9,6 @@ public class HealthBar : MonoBehaviour
 
     void Start()
     {
-        if (icons.Length != 10)
-        {
-            Debug.LogWarning("Expected 10 icons for the health bar!");
-        }
         UpdateHealthBar(100);
     }
 

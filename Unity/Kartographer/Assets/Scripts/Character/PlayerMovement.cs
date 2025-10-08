@@ -255,9 +255,17 @@ public class PlayerMovement : NetworkBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         // --- Animator ---
-        animator.SetFloat("Horizontal", isRunning ? moveInput.x * 2 : moveInput.x);
-        animator.SetFloat("Vertical", isRunning ? moveInput.y * 2 : moveInput.y);
-        animator.SetFloat("Speed", moveDir.magnitude * speed);
+        if (IsOwner)
+        {
+            animator.SetFloat("Horizontal", moveInput.x);
+            animator.SetFloat("Vertical", moveInput.y);
+            animator.SetFloat("Speed", moveDir.magnitude * speed);
+
+
+            // Send to server for syncing
+            SendAnimParametersServerRpc(moveInput.x, moveInput.y, moveDir.magnitude * speed, isRunning);
+        }
+
 
         // --- Camera bob ---
         if (bob != null)
@@ -286,4 +294,24 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return; // don’t allow remote clients to trigger
         animator.SetTrigger("Interact");
     }
+
+    [ServerRpc]
+    private void SendAnimParametersServerRpc(float horizontal, float vertical, float speed, bool isRunning)
+    {
+        // Broadcast to all clients except the owner
+        UpdateAnimParametersClientRpc(horizontal, vertical, speed, isRunning);
+    }
+
+    [ClientRpc]
+    private void UpdateAnimParametersClientRpc(float horizontal, float vertical, float speed, bool running)
+    {
+        if (IsOwner) return; // owner already has correct Animator
+
+        // Apply movement
+        animator.SetFloat("Horizontal", running ? horizontal * 2f : horizontal);
+        animator.SetFloat("Vertical", running ? vertical * 2f : vertical);
+        animator.SetFloat("Speed", speed);
+    }
+
+
 }

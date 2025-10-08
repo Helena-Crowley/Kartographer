@@ -34,7 +34,7 @@ public class DoorInteract : MonoBehaviour
 
             interactPrompt = localPlayer.GetComponentInChildren<InteractPrompt>();
             inputManager = localPlayer.GetComponent<PlayerInputManager>();
-            playerMap = inputManager.controls.FindActionMap("Player", true);
+            playerMap = inputManager.PlayerInput.actions.FindActionMap("Player", true);
             interactAction = playerMap.FindAction("Interact");
 
             interactPrompt?.ToggleInteractPrompt("E", "open door");

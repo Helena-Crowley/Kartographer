@@ -10,6 +10,7 @@ public class CarHeadlight : MonoBehaviour
     public bool headlightsOn = false;
 
     [SerializeField] private InputActionReference toggleHeadlightAction;
+    [SerializeField] private LightUIIcon lightUIIcon;
 
     // Update is called once per frame
     void Update()
@@ -18,6 +19,7 @@ public class CarHeadlight : MonoBehaviour
         {
             bool newState = !headlightLeft.activeSelf;
             headlightsOn = newState;
+            lightUIIcon.updateUI(gameObject, newState);
             headlightLeft.SetActive(newState);
             headlightRight.SetActive(newState);
         }

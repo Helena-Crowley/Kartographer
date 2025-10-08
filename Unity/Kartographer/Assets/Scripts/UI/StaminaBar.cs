@@ -9,10 +9,6 @@ public class StaminaBar : MonoBehaviour
 
     void Start()
     {
-        if (icons.Length != 10)
-        {
-            Debug.LogWarning("Expected 10 icons for the stamina bar!");
-        }
         UpdateStaminaBar(100);
     }
 

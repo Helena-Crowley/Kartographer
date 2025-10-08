@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,11 +42,18 @@ public class PlayerPickUp : MonoBehaviour
             {
                 SoundManager.Instance.PlaySound(dropSoundEffect, transform.position, 0.05f, true, 1.25f);
                 // Spawn the generic pickup prefab
-                GameObject spawned = Instantiate(pickupPrefab, transform.position + transform.forward + Vector3.up * 2, Quaternion.identity);
+                GameObject spawned = Instantiate(pickupPrefab, transform.position + transform.forward * 2 + Vector3.up * 2, Quaternion.identity);
                 Rigidbody rb = spawned.GetComponent<Rigidbody>();
+
+                Debug.Log(rb.gameObject.name);
                 if (rb != null)
                 {
-                    rb.AddForce((playerCam.transform.forward + Vector3.up * 0.65f) * 4f, ForceMode.Impulse);
+                    Vector3 forward = playerCam.transform.forward;
+
+                    // Add upward force
+                    Vector3 throwDir = forward * 3f + Vector3.up * 5f;
+
+                    rb.AddForce(throwDir, ForceMode.Impulse);
                 }
                 else
                 {
