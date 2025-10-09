@@ -5,45 +5,45 @@ public class PickUppableItem : MonoBehaviour
     public ItemData itemData;
 
     void Start()
-{
-    if (itemData.prefab != null)
     {
-        // Instantiate the visual mesh as a child
+        if (itemData.prefab != null)
+        {
+            // Instantiate the visual mesh as a child
             GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
 
-        // Apply scale
-        meshInstance.transform.localScale = itemData.defaultScale;
+            // Apply scale
+            meshInstance.transform.localScale = itemData.defaultScale;
 
-        // Get Renderer
-        Renderer rend = meshInstance.GetComponent<Renderer>();
+            // Get Renderer
+            Renderer rend = meshInstance.GetComponent<Renderer>();
 
-        // Adjust position so it sits on the container prefab
-        if (rend != null)
-        {
-            meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
+            // Adjust position so it sits on the container prefab
+            if (rend != null)
+            {
+                meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
+            }
+            else
+            {
+                meshInstance.transform.localPosition = Vector3.zero;
+            }
+
+            // Add a MeshCollider if you want the mesh itself to interact with physics
+            MeshCollider meshCol = meshInstance.GetComponent<MeshCollider>();
+            if (meshCol == null)
+                meshCol = meshInstance.AddComponent<MeshCollider>();
+
+            meshCol.sharedMesh = meshInstance.GetComponent<MeshFilter>().sharedMesh;
+            meshCol.convex = true; // Required for Rigidbody interactions
         }
-        else
+
+        // Ensure Rigidbody on the container is dynamic
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            meshInstance.transform.localPosition = Vector3.zero;
+            rb.isKinematic = false;
+            rb.useGravity = true;
         }
-
-        // Add a MeshCollider if you want the mesh itself to interact with physics
-        MeshCollider meshCol = meshInstance.GetComponent<MeshCollider>();
-        if (meshCol == null)
-            meshCol = meshInstance.AddComponent<MeshCollider>();
-
-        meshCol.sharedMesh = meshInstance.GetComponent<MeshFilter>().sharedMesh;
-        meshCol.convex = true; // Required for Rigidbody interactions
     }
-
-    // Ensure Rigidbody on the container is dynamic
-    Rigidbody rb = GetComponent<Rigidbody>();
-    if (rb != null)
-    {
-        rb.isKinematic = false;
-        rb.useGravity = true;
-    }
-}
 
     public void OnPickup(GameObject player)
     {

@@ -176,7 +176,6 @@ public class PlayerMovement : NetworkBehaviour
 
     [SerializeField] private Camera playerCamera;
 
-    private float turnSmoothVelocity;
     private bool exhausted = false;
     private PlayerInput playerInput;
 
