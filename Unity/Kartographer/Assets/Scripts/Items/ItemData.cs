@@ -25,7 +25,7 @@ public class ItemData : ScriptableObject
     public GameObject owner = null; //last player to hold item, if not picked up yet == null
 
     [HideInInspector]
-    public Vector3 defaultScale;  
+    public Vector3 defaultScale;
 
     private void OnValidate()
     {

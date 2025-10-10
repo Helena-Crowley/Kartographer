@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-public class PlayerPickUp : MonoBehaviour
+public class PlayerPickUp : NetworkBehaviour
 {
     private PickUppableItem nearbyPickup;
     public InputActionReference pickUpAction;
@@ -37,57 +38,55 @@ public class PlayerPickUp : MonoBehaviour
         }
         if (dropAction.action.WasPerformedThisFrame())
         {
-            ItemData item = playerInventory.GetLastItem();
-            if (item != null && pickupPrefab != null)
+            if (IsOwner)
             {
-                SoundManager.Instance.PlaySound(dropSoundEffect, transform.position, 0.05f, true, 1.25f);
-                // Spawn the generic pickup prefab
-                GameObject spawned = Instantiate(pickupPrefab, transform.position + transform.forward * 2 + Vector3.up * 2, Quaternion.identity);
-                Rigidbody rb = spawned.GetComponent<Rigidbody>();
+                DropItemServerRpc();
+            }
 
-                Debug.Log(rb.gameObject.name);
-                if (rb != null)
-                {
-                    Vector3 forward = playerCam.transform.forward;
+        }
+    }
 
-                    // Add upward force
-                    Vector3 throwDir = forward * 3f + Vector3.up * 5f;
 
-                    rb.AddForce(throwDir, ForceMode.Impulse);
-                }
-                else
-                {
-                    Debug.Log("No rigidbody has been retrieved.");
-                }
+    [ServerRpc]
+    private void DropItemServerRpc(ServerRpcParams rpcParams = default)
+    {
+        ItemData item = playerInventory.GetLastItem();
+        if (item != null && pickupPrefab != null)
+        {
+            GameObject spawned = Instantiate(pickupPrefab, playerCam.transform.position + playerCam.transform.forward * 2, Quaternion.identity);
 
-                // Assign the ItemData to the spawned PickUp component
-                PickUppableItem pickUpComponent = spawned.GetComponent<PickUppableItem>();
-                if (pickUpComponent != null)
-                {
-                    pickUpComponent.itemData = item;
-                }
+            // Initialize itemData before spawning
+            PickUppableItem pickUpComponent = spawned.GetComponent<PickUppableItem>();
+            if (pickUpComponent != null)
+            {
+                pickUpComponent.Initialize(item, ItemDatabase.Instance.GetItemIndex(item), ItemDatabase.Instance);
+            }
 
-                // Remove item from inventory
-                playerInventory.Remove(item);
-                int slot = iconGenerator.GetNextAvailableSlot();
-                if (slot != -1)
-                {
-                    iconGenerator.ClearSlot(slot - 1);
-                }
-                else if (slot == -1)
-                {
-                    iconGenerator.ClearSlot(iconGenerator.inventorySlots.Length - 1);
-                }
-                else
-                {
-                    Debug.LogWarning("No PickUp component found on the pickup prefab.");
-                }
+            spawned.GetComponent<NetworkObject>().Spawn();
+
+            Rigidbody rb = spawned.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 forward = playerCam.transform.forward;
+                Vector3 throwDir = forward * 0.35f + Vector3.up * 0.35f;
+                rb.AddForce(throwDir, ForceMode.Impulse);
+            }
+
+            // Remove item from inventory
+            playerInventory.Remove(item);
+            int slot = iconGenerator.GetNextAvailableSlot();
+            if (slot != -1)
+            {
+                iconGenerator.ClearSlot(slot - 1);
+            }
+            else
+            {
+                iconGenerator.ClearSlot(iconGenerator.inventorySlots.Length - 1);
             }
         }
-
-
-
     }
+
+
     void HandleRaycast()
     {
         Ray ray = new Ray(playerCam.transform.position, playerCam.transform.forward);
@@ -96,8 +95,7 @@ public class PlayerPickUp : MonoBehaviour
         {
             if (hit.collider.GetComponentInParent<PickUppableItem>() is PickUppableItem pickup)
             {
-                //Debug.Log($"Looking at pickup: {pickup.itemData.displayName}");
-                // Show prompt if looking at a pickup
+
                 if (nearbyPickup != pickup)
                 {
                     nearbyPickup = pickup;

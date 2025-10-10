@@ -1,48 +1,67 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PickUppableItem : MonoBehaviour
+public class PickUppableItem : NetworkBehaviour
 {
-    public ItemData itemData;
+    [HideInInspector] public ItemData itemData;
 
-    void Start()
+    [SerializeField] private NetworkVariable<int> itemId = new NetworkVariable<int>(-1);
+
+    private ItemDatabase database;
+
+    public void Initialize(ItemData data, int id, ItemDatabase db)
     {
-        if (itemData.prefab != null)
+        itemData = data;
+        itemId.Value = id;
+        database = db;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+            return;
+
+        // Clients use the itemId to find the correct itemData
+        if (database == null)
+            database = FindFirstObjectByType<ItemDatabase>();
+
+        if (database != null && itemId.Value >= 0)
         {
-            // Instantiate the visual mesh as a child
-            GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
-
-            // Apply scale
-            meshInstance.transform.localScale = itemData.defaultScale;
-
-            // Get Renderer
-            Renderer rend = meshInstance.GetComponent<Renderer>();
-
-            // Adjust position so it sits on the container prefab
-            if (rend != null)
-            {
-                meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
-            }
-            else
-            {
-                meshInstance.transform.localPosition = Vector3.zero;
-            }
-
-            // Add a MeshCollider if you want the mesh itself to interact with physics
-            MeshCollider meshCol = meshInstance.GetComponent<MeshCollider>();
-            if (meshCol == null)
-                meshCol = meshInstance.AddComponent<MeshCollider>();
-
-            meshCol.sharedMesh = meshInstance.GetComponent<MeshFilter>().sharedMesh;
-            meshCol.convex = true; // Required for Rigidbody interactions
+            itemData = database.GetItemById(itemId.Value);
+            CreateMesh();
         }
-
-        // Ensure Rigidbody on the container is dynamic
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
+        else
         {
-            rb.isKinematic = false;
-            rb.useGravity = true;
+            Debug.LogWarning($"{name} failed to load itemData on client (id={itemId.Value})");
         }
+    }
+
+    private void Start()
+    {
+        // On the server, we already have itemData from Initialize()
+        if (IsServer)
+            CreateMesh();
+    }
+
+    private void CreateMesh()
+    {
+        if (itemData == null || itemData.prefab == null) return;
+
+        GameObject meshInstance = Instantiate(itemData.prefab, transform.position, itemData.prefab.transform.rotation, transform);
+        meshInstance.transform.localScale = itemData.defaultScale;
+
+        Renderer rend = meshInstance.GetComponent<Renderer>();
+        if (rend != null)
+            meshInstance.transform.localPosition = new Vector3(0, rend.bounds.extents.y, 0);
+        else
+            meshInstance.transform.localPosition = Vector3.zero;
+
+        MeshCollider meshCol = meshInstance.GetComponent<MeshCollider>();
+        if (meshCol == null)
+            meshCol = meshInstance.AddComponent<MeshCollider>();
+
+        meshCol.sharedMesh = meshInstance.GetComponent<MeshFilter>().sharedMesh;
+        meshCol.convex = true;
     }
 
     public void OnPickup(GameObject player)
@@ -75,8 +94,29 @@ public class PickUppableItem : MonoBehaviour
             Debug.LogWarning("Player has no Inventory component!");
         }
 
-        gameObject.SetActive(false);
-        Destroy(gameObject, 0.1f);
+        if (IsServer)
+        {
+            NetworkObject netObj = GetComponent<NetworkObject>();
+            if (netObj != null)
+            {
+                netObj.Despawn(); // syncs destruction across the network
+            }
+
+            Destroy(gameObject, 0.1f);
+        }
+        else
+        {
+            ulong playerId = player.GetComponent<NetworkObject>().OwnerClientId;
+            RequestPickupServerRpc(playerId);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestPickupServerRpc(ulong playerId)
+    {
+        GameObject player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId).gameObject;
+        OnPickup(player); // call the same logic on the server
     }
 
 }
+
