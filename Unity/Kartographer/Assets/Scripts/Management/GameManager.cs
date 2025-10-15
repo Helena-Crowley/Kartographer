@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     public float stormDistance;
     [SerializeField] private Transform stormTransform;
 
+    public GameObject[] playersInCart;
+
     private void Awake()
     {
+        playersInCart = new GameObject[2]; //amount of players that can fit in cart
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

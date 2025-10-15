@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms;
+using Unity.Netcode;
 
-public class CartInteraction : MonoBehaviour
+public class CartInteraction : NetworkBehaviour
 {
     public Transform driverSeat;
-    public Camera playerCam;
-    public Camera cartCam;
-    public CharacterController characterController;
-    public MonoBehaviour playerLook;
-    public MonoBehaviour playerController;
+    public Transform cameraTarget;
+    private CharacterController characterController;
+    private MouseLook firstPersonMouseLook;
+    private PlayerMovement playerMovement;
+    private PlayerStats playerStats;
+    private CameraFollow cartFollowLook;
 
     private bool nearCart = false;
 
@@ -23,36 +24,51 @@ public class CartInteraction : MonoBehaviour
     private InteractPrompt interactPrompt;
     private Animator playerAnimator;
 
-    void OnEnable()
-    {
-        playerInteractAction.action.Enable();
-        cartInteractAction.action.Enable();
-    }
-    void OnDisable()
-    {
-        playerInteractAction.action.Disable();
-        cartInteractAction.action.Disable();
-    }
+    private GameObject driver;
 
+    private GameObject[] playersInCart;
+
+    // void OnEnable()
+    // {
+    //     playerInteractAction.action.Enable();
+    //     cartInteractAction.action.Enable();
+    // }
+    // void OnDisable()
+    // {
+    //     playerInteractAction.action.Disable();
+    //     cartInteractAction.action.Disable();
+    // }
+
+    // void Awake()
+    // {
+        
+    // }
     void Start()
     {
-        playerLook.enabled = true;
-        playerController.enabled = true;
+        playersInCart = GameManager.Instance.playersInCart;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+
             localPlayer = other.gameObject;
 
             interactPrompt = localPlayer.GetComponent<InteractPrompt>();
-            playerAnimator = localPlayer.GetComponent<Animator>();
-            inputManager = localPlayer.GetComponent<PlayerInputManager>();
 
             interactPrompt?.ToggleInteractPrompt("E", "enter cart");
 
+            nearCart = localPlayer.GetComponent<PlayerStats>().nearCart;
             nearCart = true;
+            inCart = localPlayer.GetComponent<PlayerStats>().inCart;
+
+            characterController = localPlayer.GetComponent<CharacterController>();
+            playerMovement = localPlayer.GetComponent<PlayerMovement>();
+            playerAnimator = localPlayer.GetComponent<Animator>();
+            inputManager = localPlayer.GetComponent<PlayerInputManager>();
+            firstPersonMouseLook = localPlayer.GetComponent<MouseLook>();
+            cartFollowLook = localPlayer.GetComponent<CameraFollow>();
         }
     }
 
@@ -72,6 +88,8 @@ public class CartInteraction : MonoBehaviour
 
     void Update()
     {
+        if (!IsOwner) return; 
+
         if (playerInteractAction.action.WasPressedThisFrame())
         {
             if (nearCart) EnterCart();
@@ -84,41 +102,67 @@ public class CartInteraction : MonoBehaviour
 
     }
 
-    PlayerInputManager EnterCart()
+    void EnterCart()
     {
-        playerController.enabled = false;
-        playerLook.enabled = false;
+        if (playersInCart[0] == null)
+        {
+            playersInCart[0] = localPlayer;
+            driver = playersInCart[0];
+            localPlayer.transform.SetParent(driverSeat); // make seat array for this
+        }
+        else if (playersInCart[1] == null)
+        {
+            playersInCart[1] = localPlayer;
+        }
+        else
+        {
+            Debug.Log("Cart is full");
+            return; // cart is full
+        }
+        playerMovement.enabled = false;
+        firstPersonMouseLook.enabled = false;
         characterController.enabled = false;
 
-        localPlayer.transform.SetParent(driverSeat);
+        // playercam do something
+        // cartyfollow cam do something
+        cartFollowLook.target = cameraTarget;
+        cartFollowLook.enabled = true;
+
         localPlayer.transform.localPosition = Vector3.zero;
         localPlayer.transform.localRotation = Quaternion.identity;
 
-        playerCam.enabled = false;
-        cartCam.enabled = true;
-
         playerAnimator?.SetBool("InCart", true);
         interactPrompt?.ToggleInteractPrompt();
-        inputManager?.EnterCart();
+        inputManager?.EnableCartInputMap();
         inCart = true;
-
-        return inputManager;
     }
 
     void ExitCart()
     {
         localPlayer.transform.SetParent(null);
         localPlayer.transform.position = driverSeat.position + driverSeat.right * 2f; // exit to the side
+        localPlayer.transform.rotation = Quaternion.Euler(0f, driverSeat.rotation.eulerAngles.y + 90f, 0f);
+
         playerAnimator?.SetBool("InCart", false);
 
-        cartCam.enabled = false;
-        playerCam.enabled = true;
-        //cartController.enabled = false;
-        playerController.enabled = true;
-        playerLook.enabled = true;
+        playerMovement.enabled = true;
+        firstPersonMouseLook.enabled = true;
         characterController.enabled = true;
 
-        inputManager?.ExitCart();
+        // playercam do something
+        // cartyfollow cam do something
+        cartFollowLook.enabled = false;
+        inputManager?.DisableCartInputMap();
         inCart = false;
+
+        if (localPlayer == driver)
+        {
+            playersInCart[0] = null;
+            driver = null;
+        }
+        else if (localPlayer == playersInCart[1])
+        {
+            playersInCart[1] = null;
+        }
     }
 }

@@ -52,7 +52,7 @@ public class CameraFollow : MonoBehaviour
     public Vector3 followOffset = new Vector3(0f, 5f, -10f);
 
     [Header("Input")]
-    public InputAction lookAroundAction;
+    public InputActionReference lookAroundAction;
 
     [Header("Settings")]
     public float orbitSpeed = 180f;
@@ -71,15 +71,23 @@ public class CameraFollow : MonoBehaviour
     private float orbitPitch;
     private float orbitDistance;
 
-    void OnEnable() => lookAroundAction.Enable();
-    void OnDisable() => lookAroundAction.Disable();
+    private Transform cameraFirstPersonTransform;
+    private Camera playerCam;
+    private Vector3 tempTarget;
 
-    void Start()
+    void Awake()
     {
+        playerCam = GetComponentInChildren<Camera>();
+    }
+    void OnEnable()
+    {
+        lookAroundAction.action.Enable();
+        cameraFirstPersonTransform = playerCam.transform;
+
         // Initialize camera behind car
         currentOffset = followOffset;
-        transform.position = target.position + followOffset;
-        transform.LookAt(target);
+        playerCam.transform.position = target.position + followOffset;
+        playerCam.transform.LookAt(target);
 
         // Initialize orbit spherical coordinates from offset
         orbitDistance = followOffset.magnitude;
@@ -87,11 +95,32 @@ public class CameraFollow : MonoBehaviour
         orbitPitch = Mathf.Asin(followOffset.y / orbitDistance) * Mathf.Rad2Deg;
     }
 
+    void OnDisable()
+    {
+        lookAroundAction.action.Disable();
+        playerCam.transform.position = cameraFirstPersonTransform.position;
+        playerCam.transform.rotation = cameraFirstPersonTransform.rotation; 
+    }
+
+
+    void Start()
+    {
+        // // Initialize camera behind car
+        // currentOffset = followOffset;
+        // playerCam.transform.position = target.position + followOffset;
+        // playerCam.transform.LookAt(target);
+
+        // // Initialize orbit spherical coordinates from offset
+        // orbitDistance = followOffset.magnitude;
+        // orbitYaw = Mathf.Atan2(followOffset.x, followOffset.z) * Mathf.Rad2Deg;
+        // orbitPitch = Mathf.Asin(followOffset.y / orbitDistance) * Mathf.Rad2Deg;
+    }
+
     void LateUpdate()
     {
         if (!target) return;
 
-        bool looking = lookAroundAction.ReadValue<float>() > 0.5f;
+        bool looking = lookAroundAction.action.ReadValue<float>() > 0.5f;
 
         // Start orbit mode on right mouse press
         if (looking && !isOrbiting)
@@ -99,7 +128,7 @@ public class CameraFollow : MonoBehaviour
             isOrbiting = true;
 
             // Convert current camera offset to spherical coordinates relative to target
-            Vector3 offsetRel = transform.position - target.position;
+            Vector3 offsetRel = playerCam.transform.position - target.position;
             orbitDistance = offsetRel.magnitude;
             orbitYaw = Mathf.Atan2(offsetRel.x, offsetRel.z) * Mathf.Rad2Deg;
             orbitPitch = Mathf.Asin(offsetRel.y / orbitDistance) * Mathf.Rad2Deg;
@@ -135,11 +164,12 @@ public class CameraFollow : MonoBehaviour
 
         // Smoothly interpolate offset
         currentOffset = Vector3.SmoothDamp(currentOffset, desiredOffset, ref velocity, transitionSmoothTime);
-        transform.position = target.position + currentOffset;
+        playerCam.transform.position = target.position + currentOffset;
 
         // Look at the car
-        transform.rotation = Quaternion.Slerp(transform.rotation,
-            Quaternion.LookRotation(target.position - transform.position),
+        tempTarget = new Vector3(target.position.x, target.position.y + 2.5f, target.position.z);
+        playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation,
+            Quaternion.LookRotation(tempTarget - playerCam.transform.position),
             followSmoothSpeed * Time.deltaTime);
     }
 }

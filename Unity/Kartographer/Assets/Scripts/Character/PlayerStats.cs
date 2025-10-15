@@ -12,6 +12,9 @@ public class PlayerStats : MonoBehaviour
     public PlayerBaseStatsSO playerBaseStats;
     private int currentHealth;
 
+    [HideInInspector] public bool nearCart = false;
+    [HideInInspector] public bool inCart = false;
+
     void Start()
     {
         currentHealth = playerBaseStats.health;
