@@ -60,8 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb26bbaa903e7b418d346b6f30d8bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DistanceText
+  ShowTopMostFoldoutHeaderGroup: 1
   distanceText: {fileID: 2603477471307632759}
-  playerTransform: {fileID: 2515957143515165177}
   stormTransform: {fileID: 0}
 --- !u!1 &233143909469299259
 GameObject:
@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214486945243d2f438edb53145bca6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightUIIcon
-  carHeadlight: {fileID: 0}
   lightIcon: {fileID: 8582369275780293617}
   lightOnIcon: {fileID: 2046640640, guid: a1a52143758e06147a59929230051656, type: 3}
   lightOffIcon: {fileID: 1811565392, guid: a1a52143758e06147a59929230051656, type: 3}
@@ -430,7 +429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2950345138103390528
 Transform:
   m_ObjectHideFlags: 0
@@ -651,30 +650,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068750975939940095}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88faee2320bf9df40a4beff9cceda601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   target: {fileID: 0}
   followOffset: {x: 0, y: 2, z: -11}
-  lookAroundAction:
-    m_Name: Look Around
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 735797c0-d926-482a-9afc-933c7a7cc3fb
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 8266c66f-5c8b-4dbe-9505-787c3b928cec
-      m_Path: <Mouse>/rightButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Look Around
-      m_Flags: 0
-    m_Flags: 0
+  lookAroundAction: {fileID: 0}
   orbitSpeed: 25
   followSmoothSpeed: 50
   transitionSmoothTime: 0.25
@@ -8113,7 +8096,7 @@ GameObject:
   - component: {fileID: 4197974565423669334}
   - component: {fileID: 4629462994219134838}
   m_Layer: 0
-  m_Name: Player
+  m_Name: NOT THE ONE THAT IS SPAWNED IN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8244,7 +8227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4256120999
+  GlobalObjectIdHash: 503714168
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -9305,6 +9288,8 @@ MonoBehaviour:
   maxStamina: 0
   staminaDrainSpeed: 11
   playerBaseStats: {fileID: 11400000, guid: 54a9b83795f6c2e4bba39e295b9f2b7b, type: 2}
+  nearCart: 0
+  inCart: 0
 --- !u!114 &6128368168382284293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9317,6 +9302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f937fe16199c5d64684986c7bc85fc81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPickUp
+  ShowTopMostFoldoutHeaderGroup: 1
   pickUpAction: {fileID: 8219511703600054389, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   dropAction: {fileID: -1125511150292163761, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   playerInventory: {fileID: 7293583885420121591}
@@ -9541,7 +9527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2def8680e5f8b4fb1071e01ddf09c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
-  controls: {fileID: -944628639613478452, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerInput: {fileID: 0}
 --- !u!114 &3701561114218668671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9554,6 +9541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb53d1224360f742ae15397b1ac4ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
+  ShowTopMostFoldoutHeaderGroup: 1
   playerCamera: {fileID: 2774637538397520563}
   cartCamera: {fileID: 2932775780022883479}
 --- !u!114 &4350035693050891407
@@ -9588,7 +9576,6 @@ MonoBehaviour:
   mouseLook: {fileID: 3096627555882573751}
   inventory: {fileID: 7293583885420121591}
   playerCamera: {fileID: 3163646012509620673}
-  cartCamera: {fileID: 1068750975939940095}
   playerInput: {fileID: 928125638799291457}
 --- !u!114 &7947281236574051490
 MonoBehaviour:
@@ -9648,7 +9635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
+  m_Actions: {fileID: 0}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:

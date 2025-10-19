@@ -1,48 +1,3 @@
-// using UnityEngine;
-// public class CameraManager : MonoBehaviour
-// {
-//     public Camera playerCamera;
-//     public Camera cartCamera;
-
-//     private PlayerInputManager inputManager;
-
-//     void Start()
-//     {
-//         SwitchToPlayerCamera();
-
-//         inputManager = GetComponent<PlayerInputManager>();
-//     }
-
-//     public void SwitchToPlayerCamera()
-//     {
-//         playerCamera.enabled = true;
-//         cartCamera.enabled = false;
-//     }
-
-//     public void SwitchToCartCamera()
-//     {
-//         playerCamera.enabled = false;
-//         cartCamera.enabled = true;
-//     }
-
-//     private void OnEnable()
-//     {
-//         inputManager.OnCartStateChanged += HandleCartStateChanged;
-//     }
-
-//     private void OnDisable()
-//     {
-//         inputManager.OnCartStateChanged -= HandleCartStateChanged;
-//     }
-
-//     private void HandleCartStateChanged(bool inCart)
-//     {
-//         if (inCart)
-//             SwitchToCartCamera();
-//         else
-//             SwitchToPlayerCamera();
-//     }
-// }
 using UnityEngine;
 using Unity.Netcode;
 
@@ -82,7 +37,7 @@ public class CameraManager : NetworkBehaviour
         inputManager.OnCartStateChanged -= HandleCartStateChanged;
     }
 
-    private void HandleCartStateChanged(bool inCart)
+    public void HandleCartStateChanged(bool inCart)
     {
         if (inCart)
             SwitchToCartCamera();
@@ -94,11 +49,15 @@ public class CameraManager : NetworkBehaviour
     {
         playerCamera.enabled = true;
         cartCamera.enabled = false;
+        cartCamera.GetComponent<CameraFollow>().enabled = false;
+        Debug.Log("Switched to Player Camera");
     }
 
     public void SwitchToCartCamera()
     {
         playerCamera.enabled = false;
         cartCamera.enabled = true;
+        cartCamera.GetComponent<CameraFollow>().enabled = true;
+        Debug.Log("Switched to Cart Camera");
     }
 }
