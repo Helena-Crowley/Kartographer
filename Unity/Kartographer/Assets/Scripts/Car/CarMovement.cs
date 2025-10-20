@@ -261,7 +261,6 @@ public class CarMovement : NetworkBehaviour
         }
         else if (hitGroundUp)
         {
-            Debug.Log("Wheel clipped underground → correcting");
             ApplySuspension(tireTransform, hitUp, 1);
         }
         else

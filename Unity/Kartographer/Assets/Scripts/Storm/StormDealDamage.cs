@@ -16,6 +16,7 @@ public class StormDealDamage : MonoBehaviour
         {
             timers[col] += Time.deltaTime;
             var player = col.GetComponent<PlayerStats>();
+            if (player == null) return;
             if (player != null && timers[col] >= tickRate)
             {
                 player.TakeDamage(damagePerTick);
