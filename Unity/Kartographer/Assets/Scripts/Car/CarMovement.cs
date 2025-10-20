@@ -1,12 +1,12 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using Unity.Netcode;
 using UnityEngine.InputSystem;
 
 /// \file CarMovement.cs
 /// \brief Handles car movement using basic phyics and empty game objects.
 /// \ingroup Vehicle
 
-public class CarMovement : MonoBehaviour
+public class CarMovement : NetworkBehaviour
 {
     [Header("Tire Object")]
     public Transform frontLeftTire;
@@ -77,18 +77,6 @@ public class CarMovement : MonoBehaviour
     private PlayerInputManager inputManager;
     public GameObject driverSeat;
 
-    void OnEnable()
-    {
-        resetAction.action.performed += _ => ResetCar();
-        //driveAction.action.Enable();
-    }
-
-    void OnDisable()
-    {
-        resetAction.action.performed -= _ => ResetCar();
-        //driveAction.action.Disable();
-    }
-
     private void Start()
     {
         transform.position += Vector3.up * 0.5f;
@@ -106,10 +94,15 @@ public class CarMovement : MonoBehaviour
 
     private void Update()
     {
+
         if (isCharged)
         {
-            CheckUserInput();
+            Vector2 userInput = driveAction.action.ReadValue<Vector2>();
+            // SendInputServerRpc(userInput);
         }
+
+        if (resetAction.action.WasPressedThisFrame()) ResetCarServerRpc();
+
         else
         {
             accelInput = 0f;
@@ -120,6 +113,10 @@ public class CarMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
+
+        CheckUserInput();
+
         PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
         PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
         PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
@@ -150,11 +147,6 @@ public class CarMovement : MonoBehaviour
         return totaldistance;
     }
 
-    /// <summary>
-    /// Handles user input, calls respective functions/adjusts needed variables.
-    ///     Utilizes Input Action system.
-    /// </summary>
-    /// <returns>None</returns>
     private void CheckUserInput()
     {
         //x is x and y is z (vector 2 to 3)
@@ -182,22 +174,11 @@ public class CarMovement : MonoBehaviour
             turnDirection = 0f;
         }
 
-        //turning
-        if (Mathf.Abs(turnDirection) > 0.01f)
-        {
-            ApplySteering(turnDirection, true);
-        }
-        else
-        {
-            ApplySteering(turnDirection);
-        }
+        
     }
 
-    /// <summary>
-    /// Resets car's position when stuck, uses current position and adds .5f to y-axis.
-    /// </summary>
-    /// <returns>None</returns>
-    private void ResetCar()
+    [ServerRpc(RequireOwnership = false)]
+    private void ResetCarServerRpc()
     {
         Vector3 raisedPosition = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
 
@@ -214,14 +195,13 @@ public class CarMovement : MonoBehaviour
         Debug.Log("Car Reset: Lifted above current position.");
     }
 
-    /// <summary>
-    /// Applies all physics updates to the tire empties and the tire mesh emptys. Uses Raycast to detect
-    ///     distance from ground for suspension calculation. Uses FixedUpdate() to run physics simulations.
-    /// </summary>
-    /// <param name="tireTransform"> tire empty transform to apply physics at it's given point </param>
-    /// <param name="tireMesh"> Transform of the tireMesh object </param>
-    /// <param name="carRigidBody"> gameObject's rigidbody component </param>
-    /// <returns>None</returns>
+    // [ServerRpc(RequireOwnership = false)]
+    // private void SendInputServerRpc(Vector2 input)
+    // {
+    //     inputVector = input;
+
+    // }
+
     private void PhysicsUpdateTire(Transform tireTransform, Transform tireMesh, Rigidbody carRigidBody)
     {
         Vector3 rayStart = tireMesh.position;
@@ -252,8 +232,16 @@ public class CarMovement : MonoBehaviour
                 // Apply suspension force using the overlap helper
                 ApplySuspensionFromOverlap(tireTransform, closest, fakeDistance, col.transform.up, 1);
 
-                Debug.Log("OverlapSphere correction via suspension");
             }
+        }
+
+        if (Mathf.Abs(turnDirection) > 0.01f)
+        {
+            ApplySteering(turnDirection, true);
+        }
+        else
+        {
+            ApplySteering(turnDirection);
         }
 
         // --- Normal suspension raycasts ---
@@ -286,11 +274,6 @@ public class CarMovement : MonoBehaviour
         Debug.DrawLine(rayStart, rayStart - tireTransform.up * rayLength, Color.green);
     }
 
-    /// <summary>
-    /// Updates tire mesh to turn, updates visual mesh and uses collisions to turn vehicle
-    /// </summary>
-    /// <param name="tireMesh"> Transform of the tireMesh object </param>
-    /// <returns>None</returns>
     private void VisualUpdateTire(Transform tireMesh)
     {
         float tireRadius = 0.35f;
@@ -303,12 +286,6 @@ public class CarMovement : MonoBehaviour
         tireMesh.Rotate(Vector3.right, rotationAngle, Space.Self);
     }
 
-    /// <summary>
-    /// Applies suspension force along spring z-axis
-    /// </summary>
-    /// <param name="tireTransform"> tire empty transform to apply physics at it's given point </param>
-    /// <param name="tireHit"> returns bool if RayCast hit </param>
-    /// <returns>None</returns>
     private void ApplySuspension(Transform tireTransform, RaycastHit tireHit, int scale = 1)
     {
         Vector3 springDirection = tireTransform.up;
@@ -333,13 +310,6 @@ public class CarMovement : MonoBehaviour
         carRigidBody.AddForceAtPosition(springDirection * suspensionForce, tireTransform.position * scale);
     }
 
-
-    /// <summary>
-    /// Applies force for accelerating, applies engine-breaking when no input is detected
-    /// </summary>
-    /// <param name="tireTransform"> tire empty transform to apply physics at it's given point </param>
-    /// <param name="carSpeed"> Current car world speed </param>
-    /// <returns>None</returns>
     private void ApplyAcceleration(Transform tireTransform, float carSpeed)
     {
         Vector3 accelDir = tireTransform.forward;
@@ -360,12 +330,6 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Applies rotation to tire mesh turning the car (non-physics)
-    /// </summary>
-    /// <param name="turnDirection"> Direction wheels are going to point </param>
-    /// <param name="isTurning"> User input toggles bool when turn key pressed</param>
-    /// <returns>None</returns>
     private void ApplyTireGrip(Transform tireTransform, float carSpeed)
     {
         Vector3 steeringDir = tireTransform.right;
@@ -379,14 +343,6 @@ public class CarMovement : MonoBehaviour
         carRigidBody.AddForceAtPosition(steeringDir * tireMass * desiredAcceleration, tireTransform.position);
     }
 
-    /// <summary>
-    /// Emits particles given carSpeed threshold and userinput
-    /// ----emits when initally accelerating
-    /// ----emits when sliding
-    /// </summary>
-    /// <param name="steeringVelocity"> Speed car is sliding (loss of traction) </param>
-    /// <param name="carSpeed"> Current car world speed </param>
-    /// <returns>None</returns>
     private void EmitParticles(float steeringVelocity, float carSpeed)
     {
         bool shouldEmit = false;
@@ -406,12 +362,6 @@ public class CarMovement : MonoBehaviour
         emission2.enabled = shouldEmit;
     }
 
-    /// <summary>
-    /// Applies rotation to tire mesh turning the car (non-physics)
-    /// </summary>
-    /// <param name="turnDirection"> Direction wheels are going to point </param>
-    /// <param name="isTurning"> User input toggles bool when turn key pressed</param>
-    /// <returns>None</returns>
     private void ApplySteering(float turnDirection, bool isTurning = false)
     {
         float steeringSpeed = 200f * tireRotationSpeed.Evaluate(normalizedSpeed);
@@ -435,12 +385,6 @@ public class CarMovement : MonoBehaviour
         frontRightTire.localRotation = steerRotation;
     }
 
-    /// <summary>
-    /// Returns velocity at a given point with respect to world position.
-    /// </summary>
-    /// <param name="rb">Rigidbody for GetPointVelocity().</param>
-    /// <param name="objTransform">Transform for GetPointVelocity().</param>
-    /// <returns>The Vector3 velocity.</returns>
     private Vector3 GetWorldVelocity(Rigidbody rb, Transform objTransform)
     {
 

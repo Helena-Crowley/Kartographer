@@ -6,7 +6,6 @@ using Unity.Netcode.Components;
 public class CartInteraction : NetworkBehaviour
 {
     public Transform driverSeat;
-    //public Transform cameraTarget;
     private CharacterController characterController;
     private MouseLook firstPersonMouseLook;
     private PlayerMovement playerMovement;
@@ -29,24 +28,11 @@ public class CartInteraction : NetworkBehaviour
 
     private GameObject[] playersInCart;
 
-    // void OnEnable()
-    // {
-    //     playerInteractAction.action.Enable();
-    //     cartInteractAction.action.Enable();
-    // }
-    // void OnDisable()
-    // {
-    //     playerInteractAction.action.Disable();
-    //     cartInteractAction.action.Disable();
-    // }
-
-    // void Awake()
-    // {
-
-    // }
     void Start()
     {
         playersInCart = GameManager.Instance.playersInCart;
+        Debug.Log($"CartInteraction NetworkObjectId: {GetComponent<NetworkObject>().NetworkObjectId}, " +
+          $"IsSpawned: {GetComponent<NetworkObject>().IsSpawned}");
     }
 
     void OnTriggerEnter(Collider other)
@@ -89,11 +75,6 @@ public class CartInteraction : NetworkBehaviour
 
     void Update()
     {
-        // if (!IsOwner)
-        // {
-        //     Debug.Log("Not owner, cannot enter cart");
-        //     return;
-        // } 
 
         if (playerInteractAction.action.WasPressedThisFrame())
         {
@@ -107,120 +88,123 @@ public class CartInteraction : NetworkBehaviour
 
     }
 
-    void EnterCart()
-    {
-        // Tell the server to reparent the player properly
-        EnterCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
+    void EnterCart() => EnterCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
 
-        // Then handle local-only stuff (animations, input maps, camera)
-        playerMovement.enabled = false;
-        firstPersonMouseLook.enabled = false;
-        characterController.enabled = false;
-        cartFollowLook.enabled = true;
-        playerAnimator?.SetBool("InCart", true);
-        interactPrompt?.ToggleInteractPrompt();
-        inputManager?.EnableCartInputMap();
-        inCart = true;
-        localPlayer.GetComponent<CameraManager>().HandleCartStateChanged(inCart);
-        // if (playersInCart[0] == null)
-        // {
-        //     Debug.Log("Entered as driver");
-        //     playersInCart[0] = localPlayer;
-        //     driver = playersInCart[0];
-        //     localPlayer.transform.SetParent(driverSeat); // make seat array for this
-        // }
-        // else if (playersInCart[1] == null)
-        // {
-        //     playersInCart[1] = localPlayer;
-        // }
-        // else
-        // {
-        //     Debug.Log("Cart is full");
-        //     return; // cart is full
-        // }
-        // playerMovement.enabled = false;
-        // firstPersonMouseLook.enabled = false;
-        // characterController.enabled = false;
 
-        // // playercam do something
-        // // cartyfollow cam do something
-        // //cartFollowLook.target = cameraTarget;
-        // cartFollowLook.enabled = true;
-
-        // localPlayer.transform.localPosition = Vector3.zero;
-        // localPlayer.transform.localRotation = Quaternion.identity;
-
-        // playerAnimator?.SetBool("InCart", true);
-        // interactPrompt?.ToggleInteractPrompt();
-        // inputManager?.EnableCartInputMap();
-        // inCart = true;
-        // localPlayer.GetComponent<CameraManager>().HandleCartStateChanged(inCart);
-    }
-
-    void ExitCart()
-    {
-        ExitCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
-
-        playerAnimator?.SetBool("InCart", false);
-        playerMovement.enabled = true;
-        firstPersonMouseLook.enabled = true;
-        characterController.enabled = true;
-        cartFollowLook.enabled = false;
-        inputManager?.DisableCartInputMap();
-        inCart = false;
-        localPlayer.GetComponent<CameraManager>().HandleCartStateChanged(inCart);
-        // localPlayer.transform.SetParent(null);
-        // localPlayer.transform.position = driverSeat.position + driverSeat.right * 2f; // exit to the side
-        // localPlayer.transform.rotation = Quaternion.Euler(0f, driverSeat.rotation.eulerAngles.y + 90f, 0f);
-
-        // playerAnimator?.SetBool("InCart", false);
-
-        // playerMovement.enabled = true;
-        // firstPersonMouseLook.enabled = true;
-        // characterController.enabled = true;
-
-        // // playercam do something
-        // // cartyfollow cam do something
-        // cartFollowLook.enabled = false;
-        // inputManager?.DisableCartInputMap();
-        // inCart = false;
-
-        // if (localPlayer == driver)
-        // {
-        //     playersInCart[0] = null;
-        //     driver = null;
-        // }
-        // else if (localPlayer == playersInCart[1])
-        // {
-        //     playersInCart[1] = null;
-        // }
-        // localPlayer.GetComponent<CameraManager>().HandleCartStateChanged(inCart);
-    }
+    void ExitCart() => ExitCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
 
     [ServerRpc(RequireOwnership = false)]
     void EnterCartServerRpc(ulong playerId)
     {
-        GameObject player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId).gameObject;
-        if (player == null) return;
-        var netTransform = player.GetComponent<NetworkTransform>();
-        netTransform.enabled = false;
-        player.transform.SetParent(driverSeat);
-        Debug.Log("Player parented to cart on server");
-        player.transform.position = driverSeat.position;
-        player.transform.rotation = driverSeat.rotation;
-        //netTransform.enabled = true;
+        var playerNetObj = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId);
+        var cartNetObj = GetComponent<NetworkObject>();
+
+        if (playerNetObj == null) return;
+
+        playerNetObj.TrySetParent(cartNetObj);
+        playerNetObj.transform.SetPositionAndRotation(driverSeat.position, driverSeat.rotation);
+
+        EnterCartClientRpc(playerId);
+
+        playerNetObj.GetComponent<NetworkTransform>().enabled = false;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void ExitCartServerRpc(ulong playerId)
     {
+        Debug.Log("ExitCartServerRpc called");
+        var playerNetObj = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId);
+        if (playerNetObj == null) return;
+
+        playerNetObj.transform.SetParent(null);
+
+        ExitCartClientRpc(playerId);
+
+        playerNetObj.GetComponent<NetworkTransform>().enabled = true;
+    }
+
+
+    [ClientRpc]
+    void EnterCartClientRpc(ulong playerId)
+    {
         GameObject player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId).gameObject;
+
+        player.transform.position = driverSeat.position;
+        player.transform.rotation = driverSeat.rotation;
+
         if (player == null) return;
 
-        player.transform.SetParent(null);
+        bool isLocal = player.GetComponent<NetworkBehaviour>().IsOwner;
+
+        Animator anim = player.GetComponent<Animator>();
+        anim?.SetBool("InCart", true);
+
+        if (isLocal)
+        {
+            var movement = player.GetComponent<PlayerMovement>();
+            var look = player.GetComponent<MouseLook>();
+            var characterController = player.GetComponent<CharacterController>();
+            var cameraManager = player.GetComponent<CameraManager>();
+            var inputManager = player.GetComponent<PlayerInputManager>();
+            var prompt = player.GetComponent<InteractPrompt>();
+            var cartFollow = cameraManager.cartCamera.GetComponent<CameraFollow>();
+
+            movement.enabled = false;
+            look.enabled = false;
+            characterController.enabled = false;
+            cartFollow.enabled = true;
+            prompt?.ToggleInteractPrompt();
+            inputManager?.EnableCartInputMap();
+            inCart = true;
+
+            cameraManager.HandleCartStateChanged(true);
+        }
+
+        AssignCarOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+    }
+
+    [ClientRpc]
+    void ExitCartClientRpc(ulong playerId)
+    {
+        Debug.Log("in Exit cart client");
+        GameObject player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId).gameObject;
+
         player.transform.position = driverSeat.position + driverSeat.right * 2f;
         player.transform.rotation = Quaternion.Euler(0f, driverSeat.rotation.eulerAngles.y + 90f, 0f);
+
+        if (player == null) return;
+
+        bool isLocal = player.GetComponent<NetworkBehaviour>().IsOwner;
+
+        Animator anim = player.GetComponent<Animator>();
+        anim?.SetBool("InCart", false);
+
+        if (isLocal)
+        {
+            var movement = player.GetComponent<PlayerMovement>();
+            var look = player.GetComponent<MouseLook>();
+            var controller = player.GetComponent<CharacterController>();
+            var cameraManager = player.GetComponent<CameraManager>();
+            var inputManager = player.GetComponent<PlayerInputManager>();
+            var cartFollow = cameraManager.cartCamera.GetComponent<CameraFollow>();
+
+            movement.enabled = true;
+            look.enabled = true;
+            controller.enabled = true;
+            cartFollow.enabled = false;
+            inCart = false;
+            inputManager?.DisableCartInputMap();
+            cameraManager.HandleCartStateChanged(false);
+        }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void AssignCarOwnershipServerRpc(ulong clientId)
+    {
+        NetworkObject carNetObj = GetComponent<NetworkObject>();
+        carNetObj.ChangeOwnership(clientId);
+    }
+
 
 
 }

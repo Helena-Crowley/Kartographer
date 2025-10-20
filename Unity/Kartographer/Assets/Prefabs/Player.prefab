@@ -1290,7 +1290,7 @@ GameObject:
   - component: {fileID: 2084081061279354626}
   - component: {fileID: 7753823126073041457}
   m_Layer: 0
-  m_Name: Player_ReOrganized
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
