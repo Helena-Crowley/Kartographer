@@ -15,6 +15,11 @@ public class VersionIncrementer
         version.buildNumber++;
         EditorUtility.SetDirty(version);
         AssetDatabase.SaveAssets();
+
+        // Print to console
         Debug.Log("Version incremented: " + version.buildNumber);
+
+        // This makes Unity print to standard output in batch mode
+        System.Console.WriteLine(version.buildNumber);
     }
 }
