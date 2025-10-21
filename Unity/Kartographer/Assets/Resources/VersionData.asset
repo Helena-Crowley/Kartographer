@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b9aa29dea27894b8d6fb853d2ee11b, type: 3}
   m_Name: VersionData
   m_EditorClassIdentifier: Assembly-CSharp::VersionData
-  buildNumber: 5
+  buildNumber: 7
   versionPrefix: v0.0.
