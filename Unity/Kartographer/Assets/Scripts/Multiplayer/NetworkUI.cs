@@ -12,10 +12,18 @@ public class NetworkUI : MonoBehaviour
     public Button joinButton;
     public GameObject joinScreen;
 
+        [SerializeField] private TMP_Text ipDisplayText;
+
     void Start()
     {
         hostButton.onClick.AddListener(StartHost);
         joinButton.onClick.AddListener(OnJoinClicked);
+
+        string localIP = GetLocalIPAddress();
+        Debug.Log($"[Network] Local IP Address: {localIP}");
+
+        if (ipDisplayText != null)
+            ipDisplayText.text = $"Host IP: {localIP}";
     }
 
     private void StartHost()
