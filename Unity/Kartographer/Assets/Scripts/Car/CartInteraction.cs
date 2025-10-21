@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using System.Collections.Generic;
 
 public class CartInteraction : NetworkBehaviour
 {
@@ -16,23 +17,33 @@ public class CartInteraction : NetworkBehaviour
     private PlayerInputManager inputManager;
     private InteractPrompt interactPrompt;
     private Animator playerAnimator;
-
     private PlayerInput playerInput;
 
-    private int playersInCart = 0;
+    // private int playersInCart = 0;
+    private List<ulong?> playerIds = new List<ulong?> {null, null, null, null};
 
     public Transform[] seatPositions; //0 = driver seat
 
     void Start()
     {
-        Debug.Log($"CartInteraction NetworkObjectId: {GetComponent<NetworkObject>().NetworkObjectId}, " +
-          $"IsSpawned: {GetComponent<NetworkObject>().IsSpawned}");
+        // playerIds[0] = null;
+        // playerIds[1] = null;
+        // playerIds[2] = null;
+        // playerIds[3] = null;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        if (playersInCart == 3) return;
+        int counter = 0;
+        for (int i = 0; i < playerIds.Count; i++)
+        {
+            if (playerIds[i] != null)
+            {
+                counter++;
+            }
+        }
+        if (counter == 4) return;
 
         var netObj = other.GetComponent<NetworkObject>();
         if (netObj == null) return;
@@ -40,7 +51,6 @@ public class CartInteraction : NetworkBehaviour
         if (!netObj.IsOwner) return;
 
         localPlayer = other.gameObject;
-        Debug.Log($"localPlayer named: {localPlayer.GetComponent<NetworkObject>().OwnerClientId}");
         interactPrompt = localPlayer.GetComponent<InteractPrompt>();
 
         interactPrompt?.ToggleInteractPrompt("E", "enter cart");
@@ -71,10 +81,6 @@ public class CartInteraction : NetworkBehaviour
 
             playerStats.nearCart = false;
             localPlayer = null;
-            if (localPlayer == null)
-            {
-                Debug.Log("localPlayer is null");
-            }
         }
     }
 
@@ -100,37 +106,52 @@ public class CartInteraction : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void EnterCartServerRpc(ulong playerId)
     {
+        int seatIndex = -1;
+        for (int i = 0; i < playerIds.Count; i++)
+        {
+            if (playerIds[i] == null)
+            {
+                playerIds[i] = playerId;
+                seatIndex = i;
+                break;
+            }
+        }
+
         var playerNetObj = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId);
         var cartNetObj = GetComponent<NetworkObject>();
 
         if (playerNetObj == null) return;
-
-        int seatIndex = playersInCart;
-        if (seatIndex < 0 || seatIndex >= seatPositions.Length) return;
+        if (seatIndex < 0) return;
 
         playerNetObj.TrySetParent(cartNetObj);
         playerNetObj.transform.SetPositionAndRotation(seatPositions[seatIndex].position, seatPositions[seatIndex].rotation);
-
-        playersInCart += 1;
 
         EnterCartClientRpc(playerId, seatIndex);
 
         playerNetObj.GetComponent<NetworkTransform>().enabled = false;
 
-        
+
     }
 
     [ServerRpc(RequireOwnership = false)]
     void ExitCartServerRpc(ulong playerId)
     {
+        int seatIndex = -1;
         var playerNetObj = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId);
         if (playerNetObj == null) return;
 
         playerNetObj.transform.SetParent(null);
 
-        int seatIndex = playersInCart; 
-        playersInCart -= 1;
-
+        for (int i = 0; i < playerIds.Count; i++)
+        {
+            if (playerIds[i] == playerId)
+            {
+                playerIds[i] = null;
+                seatIndex = i;
+                break;
+            }
+        }
+        if (seatIndex < 0) return;
         ExitCartClientRpc(playerId, seatIndex);
 
         playerNetObj.GetComponent<NetworkTransform>().enabled = true;
@@ -141,6 +162,7 @@ public class CartInteraction : NetworkBehaviour
     [ClientRpc]
     void EnterCartClientRpc(ulong playerId, int seatIndex)
     {
+        //Debug.Log("player: " + playerId + " getting into seat: " + seatIndex);
         GameObject player = null;
 
         if (NetworkManager.Singleton.IsServer)
@@ -161,8 +183,6 @@ public class CartInteraction : NetworkBehaviour
 
         player.transform.position = seatPositions[seatIndex].position;
         player.transform.rotation = seatPositions[seatIndex].rotation;
-
-        Debug.Log($"Players in cart (entercartClientRPC) = {playersInCart}");
 
         bool isLocal = player.GetComponent<NetworkBehaviour>().IsOwner;
 
@@ -189,7 +209,6 @@ public class CartInteraction : NetworkBehaviour
                 inputManager?.EnableCartInputMap();
 
             playerStats.inCart = true;
-
             cameraManager.HandleCartStateChanged(true);
         }
         player.GetComponent<NetworkTransform>().enabled = false;
@@ -200,6 +219,7 @@ public class CartInteraction : NetworkBehaviour
     void ExitCartClientRpc(ulong playerId, int seatIndex)
     {
         GameObject player = null;
+        //Debug.Log("player: " + playerId + " getting out of seat: " + seatIndex);
 
         if (NetworkManager.Singleton.IsServer)
         {
@@ -245,7 +265,7 @@ public class CartInteraction : NetworkBehaviour
 
             cameraManager.HandleCartStateChanged(false);
         }
-        
+
         player.GetComponent<NetworkTransform>().enabled = true;
     }
 
