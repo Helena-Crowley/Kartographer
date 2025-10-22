@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4417925053463840669
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -336.87622
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -6.67966
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -31.13685
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      propertyPath: m_Name
+      value: Desert_cactus_01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3419309533505587206}
+  m_SourcePrefab: {fileID: 100100000, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+--- !u!1 &3571062842739129036 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d9f2bb6c5566fa478de45e939436d5d, type: 3}
+  m_PrefabInstance: {fileID: 4417925053463840669}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3419309533505587206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3571062842739129036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f3327f5453a5640a366040c3e0f9ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestructibleCactus
+  pieces:
+  - {fileID: 4640856852930567150, guid: 5f34e30ee1337a0408f8c25086a5e1a6, type: 3}
+  - {fileID: 7688081240562490992, guid: cc76a83d0eff2b24ea4b8fe553bc9aad, type: 3}
+  - {fileID: 8474260734869019403, guid: 0d3913ff0ab3b664ab3320dc939be200, type: 3}
+  - {fileID: 359247886350292217, guid: b50606a71c208a04e857187f51838601, type: 3}
+  - {fileID: 7578260524463076746, guid: 68d961cd90485a7449c6cc2490237a3d, type: 3}
+  - {fileID: 1706942315863002428, guid: f5b1fbeab7eb85f418f98b732c0071f6, type: 3}
+  - {fileID: 59063026853168262, guid: 4646bb1ce764bca459ef02d7082eab1c, type: 3}
+  - {fileID: 4213407623701024429, guid: 054da9b6a8a1cb74f9dc0da49e270622, type: 3}
+  breakSound: {fileID: 8300000, guid: bbb69f53bdc58fa449d1f5623e598d15, type: 3}

@@ -69,6 +69,14 @@ public class CarMovement : NetworkBehaviour
     private Camera playerCamera;
     public Vector3 cameraOffset;
 
+    [Header("Audio")]
+    private CartAudio cartAudio;
+    private WindAudio windAudio;
+    public AudioClip slidingSoundEffect;
+    AudioSource skidSource = null;
+
+    private bool shouldEmit;
+
     private Vector3 lastPosition;
     private CartStats cartStats;
     [HideInInspector]
@@ -88,6 +96,9 @@ public class CarMovement : NetworkBehaviour
         inputManager = driverSeat.GetComponentInChildren<PlayerInputManager>();
 
         cartStats = GetComponent<CartStats>();
+
+        cartAudio = GetComponent<CartAudio>();
+        windAudio = GetComponent<WindAudio>();
 
         Physics.queriesHitBackfaces = true;
     }
@@ -147,35 +158,47 @@ public class CarMovement : NetworkBehaviour
         return totaldistance;
     }
 
-    private void CheckUserInput()
+    private bool CheckUserInput()
     {
-        //x is x and y is z (vector 2 to 3)
         inputVector = driveAction.action.ReadValue<Vector2>();
-        // forward control
+
+        bool hasInput = false;
+
+        // Forward/backward
         if (inputVector.y > 0)
         {
             accelInput = appliedAcceleration;
+            hasInput = true;
         }
-        // backward control
         else if (inputVector.y < 0)
         {
             accelInput = -appliedAcceleration;
+            hasInput = true;
+
         }
         else
         {
             accelInput = 0f;
         }
-        if (inputVector.x > 0 || inputVector.x < 0)
+
+        // Left/right
+        if (inputVector.x != 0)
         {
             turnDirection = inputVector.x;
         }
         else
         {
             turnDirection = 0f;
+
         }
 
-        
+        cartAudio.UpdatePitch(normalizedSpeed);
+        windAudio.UpdateWind(normalizedSpeed);
+
+
+        return hasInput;
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     private void ResetCarServerRpc()
@@ -344,22 +367,41 @@ public class CarMovement : NetworkBehaviour
 
     private void EmitParticles(float steeringVelocity, float carSpeed)
     {
-        bool shouldEmit = false;
+        // Determine if sliding based on particles or input
+        shouldEmit = (Mathf.Abs(accelInput) > 0f && carSpeed < 2.5f) || Mathf.Abs(steeringVelocity) > slideThreshold;
 
-        if (Mathf.Abs(accelInput) > 0.0f && carSpeed < 2.5f)
-        {
-            shouldEmit = true;
-        }
-        if (Mathf.Abs(steeringVelocity) > slideThreshold)
-        {
-            shouldEmit = true;
-        }
-
+        // Enable/disable particles
         var emission1 = particles1.emission;
         var emission2 = particles2.emission;
         emission1.enabled = shouldEmit;
         emission2.enabled = shouldEmit;
+
+        // Check if either particle system is emitting
+        bool anyEmitting = particles1.particleCount > 0 || particles2.particleCount > 0;
+
+
+        if (anyEmitting)
+        {
+            if (skidSource == null)
+                skidSource = SoundManager.Instance.PlayLoopingSound(slidingSoundEffect, transform.position, 0.75f);
+            else if (!skidSource.isPlaying)
+                skidSource.Play();
+            skidSource.transform.position = transform.position;
+        }
+        else
+        {
+            if (skidSource != null)
+            {
+                skidSource.volume = Mathf.Lerp(skidSource.volume, 0f, Time.fixedDeltaTime * 10f);
+                if (skidSource.volume < 0.01f)
+                {
+                    SoundManager.Instance.StopSound(skidSource);
+                    skidSource = null;
+                }
+            }
+        }
     }
+
 
     private void ApplySteering(float turnDirection, bool isTurning = false)
     {

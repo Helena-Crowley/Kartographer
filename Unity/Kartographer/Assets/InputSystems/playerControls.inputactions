@@ -486,7 +486,7 @@
                     "name": "PauseGame",
                     "type": "Button",
                     "id": "a1df4fb3-9759-4cfe-a259-df978f807e1f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

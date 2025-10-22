@@ -32,6 +32,13 @@ public class ObjectSpawner : MonoBehaviour
 
                 GameObject spawnedObject = Instantiate(objectToSpawn, hit.point, rotation);
                 spawnedObject.transform.parent = parentObject.transform;
+
+                foreach (Renderer rend in spawnedObject.GetComponentsInChildren<Renderer>())
+                {
+                    // Forces all child renderers to use the shared material asset instead of making a unique instance
+                    rend.sharedMaterial = rend.sharedMaterial;
+                }
+
             }
             else
             {

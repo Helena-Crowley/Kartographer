@@ -12,7 +12,7 @@ public class NetworkUI : MonoBehaviour
     public Button joinButton;
     public GameObject joinScreen;
 
-        [SerializeField] private TMP_Text ipDisplayText;
+    [SerializeField] private TMP_Text ipDisplayText;
 
     void Start()
     {
