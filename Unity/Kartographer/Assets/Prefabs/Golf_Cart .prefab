@@ -7538,10 +7538,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd1ea05165241748b492abf0f9d9323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CartAudio
+  windSound: {fileID: 0}
+  tickSound: {fileID: 8300000, guid: 121f0dc0efb4b8a4cb6ce24a76bc4871, type: 3}
+  suspensionSqueak: []
   engineA: {fileID: 174703711764387731}
   engineB: {fileID: 4482687149118346300}
-  minPitch: 3.5
-  maxPitch: 4.5
   pitchCurve:
     serializedVersion: 2
     m_Curve:

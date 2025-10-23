@@ -1,16 +1,24 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class CartAudio : MonoBehaviour
 {
+    [Header("Cart SFX")]
+    [SerializeField] private AudioClip windSound;
+    [SerializeField] private AudioClip tickSound;
+    [SerializeField] private AudioClip[] suspensionSqueak;
+
+
     [SerializeField] private AudioSource engineA;
     [SerializeField] private AudioSource engineB;
-    [SerializeField] private float minPitch = 1f;
-    [SerializeField] private float maxPitch = 1.75f;
     [SerializeField] private AnimationCurve pitchCurve = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField] private float pitchSmooth = 5f;
-    [SerializeField] private float stopPitchSpeed = 5f;    // how fast pitch goes to min before stopping
-    [SerializeField] private float stopThreshold = 0.03f;  // normalized speed to start stopping
+    [SerializeField] private float stopPitchSpeed = 5f;
+    [SerializeField] private float stopThreshold = 0.03f;
+
+    private AudioSource golfCartAudioSource;
 
     private float currentPitch = 1f;
     private float halfLength;
@@ -26,7 +34,24 @@ public class CartAudio : MonoBehaviour
         }
     }
 
-    public void UpdatePitch(float normalizedSpeed)
+    private void Start()
+    {
+        golfCartAudioSource = gameObject.AddComponent<AudioSource>();
+        golfCartAudioSource.spatialBlend = 1f;
+        golfCartAudioSource.volume = .1f;
+    }
+
+    public void PlaySpeedDependentSound(float normalizedSpeed)
+    {
+        UpdatePitch(normalizedSpeed);
+    }
+
+    public void PlayTickSound()
+    {
+            golfCartAudioSource.PlayOneShot(tickSound);
+    }
+
+    private void UpdatePitch(float normalizedSpeed, float minPitch = 2.5f, float maxPitch = 3.5f)
     {
         if (engineA == null || engineB == null) return;
 

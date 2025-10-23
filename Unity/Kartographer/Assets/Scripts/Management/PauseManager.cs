@@ -1,105 +1,86 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-
-public class PauseManager : MonoBehaviour
+[RequireComponent(typeof(PlayerInput))]
+public class PauseManager : NetworkBehaviour
 {
-    public static PauseManager Instance { get; private set; }
-
     [SerializeField] private GameObject pauseMenu;
+
+    private PlayerInput playerInput;
+    private PlayerInputManager inputManager;
+    private InputAction pauseAction;
     private bool isPaused = false;
 
-    [SerializeField] private InputActionReference pauseAction;
-
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null && Instance != this)
+        // Only local owner should control pause
+        if (!IsOwner)
         {
-            Destroy(gameObject);
+            if (pauseMenu != null) pauseMenu.SetActive(false);
+            enabled = false;
             return;
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        playerInput = GetComponent<PlayerInput>();
+        inputManager = GetComponent<PlayerInputManager>();
+
+        // Ensure menu starts hidden
+        if (pauseMenu != null) pauseMenu.SetActive(false);
+
+        // Cache the Pause action from any map
+        pauseAction = playerInput.actions["Pause"];
+        pauseAction.Enable();
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        pauseAction.action.performed += OnPausePressed;
-        pauseAction.action.Enable();
-
+        if (!IsOwner || pauseAction == null) return;
+        pauseAction = playerInput.actions["Pause"];
+        // Trigger toggle when Pause is pressed
+        if (pauseAction.WasPerformedThisFrame())
+        {
+            TogglePause();
+        }
     }
 
-    private void OnDisable()
+    public void TogglePause()
     {
-        pauseAction.action.performed -= OnPausePressed;
-        pauseAction.action.Disable();
+        if (!IsOwner) return;
 
-    }
+        isPaused = !isPaused;
 
-    private void OnPausePressed(InputAction.CallbackContext context)
-    {
-        // Toggle local pause UI
+        if (pauseMenu != null) pauseMenu.SetActive(isPaused);
+
         if (isPaused)
-            ResumeGame();
+        {
+            // Switch to UI map
+            playerInput.SwitchCurrentActionMap("UI");
+
+            // Disable cart/player input
+            inputManager?.DisableNonUIInput();
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
         else
-            PauseGame();
-    }
-
-    private void PauseGame()
-    {
-        pauseMenu.SetActive(true);
-        isPaused = true;
-
-        // Stop player input, not time
-        var player = FindLocalPlayerMovement();
-        var mouse = FindLocalMouseLook();
-
-        if (player != null && mouse != null)
         {
-            player.enabled = false;
-            mouse.enabled = false;
+            // Restore previous map
+            if (inputManager != null)
+            {
+                if (inputManager.InCart)
+                    inputManager.EnableCartInputMap();
+                else
+                    inputManager.DisableCartInputMap();
+            }
+            else
+            {
+                playerInput.SwitchCurrentActionMap("Player");
+            }
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
-
-    public void ResumeGame()
-    {
-        pauseMenu.SetActive(false);
-        isPaused = false;
-
-        var player = FindLocalPlayerMovement();
-        var mouse = FindLocalMouseLook();
-
-        if (player != null && mouse != null)
-        {
-            player.enabled = true;
-            mouse.enabled = true;
-        }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private MonoBehaviour FindLocalPlayerMovement()
-    {
-        foreach (var player in Object.FindObjectsByType<PlayerMovement>(FindObjectsSortMode.None))
-        {
-            if (player.IsOwner)
-                return player;
-        }
-        return null;
-    }
-
-    private MonoBehaviour FindLocalMouseLook()
-    {
-        foreach (var player in Object.FindObjectsByType<MouseLook>(FindObjectsSortMode.None))
-        {
-            if (player.IsOwner)
-                return player;
-        }
-        return null;
     }
 }

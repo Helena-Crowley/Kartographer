@@ -73,7 +73,8 @@ public class CarMovement : NetworkBehaviour
     private CartAudio cartAudio;
     private WindAudio windAudio;
     public AudioClip slidingSoundEffect;
-    AudioSource skidSource = null;
+    private AudioSource skidSource = null;
+    private bool wasMoving = false;
 
     private bool shouldEmit;
 
@@ -192,8 +193,19 @@ public class CarMovement : NetworkBehaviour
 
         }
 
-        cartAudio.UpdatePitch(normalizedSpeed);
+        cartAudio.PlaySpeedDependentSound(normalizedSpeed);
         windAudio.UpdateWind(normalizedSpeed);
+
+
+        // detect transitions
+        if (hasInput && !wasMoving)
+            cartAudio.PlayTickSound();
+        if (!hasInput && wasMoving)
+            cartAudio.PlayTickSound();
+
+
+        // update state
+        wasMoving = hasInput;
 
 
         return hasInput;
@@ -370,13 +382,11 @@ public class CarMovement : NetworkBehaviour
         // Determine if sliding based on particles or input
         shouldEmit = (Mathf.Abs(accelInput) > 0f && carSpeed < 2.5f) || Mathf.Abs(steeringVelocity) > slideThreshold;
 
-        // Enable/disable particles
         var emission1 = particles1.emission;
         var emission2 = particles2.emission;
         emission1.enabled = shouldEmit;
         emission2.enabled = shouldEmit;
 
-        // Check if either particle system is emitting
         bool anyEmitting = particles1.particleCount > 0 || particles2.particleCount > 0;
 
 
