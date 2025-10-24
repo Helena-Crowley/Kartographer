@@ -11,6 +11,7 @@ public class NetworkUI : MonoBehaviour
     public Button hostButton;
     public Button joinButton;
     public GameObject joinScreen;
+    [SerializeField] private AudioListener audioListener;
 
     [SerializeField] private TMP_Text ipDisplayText;
 
@@ -33,6 +34,7 @@ public class NetworkUI : MonoBehaviour
         NetworkManager.Singleton.StartHost();
 
         Debug.Log("Hosting on " + GetLocalIPAddress());
+        //Destroy(audioListener);
         Destroy(joinScreen, 1f);
     }
 
@@ -50,6 +52,7 @@ public class NetworkUI : MonoBehaviour
         NetworkManager.Singleton.StartClient();
 
         Debug.Log("Trying to connect to " + ipAddress);
+        //Destroy(audioListener);
         Destroy(joinScreen, 1f);
     }
 

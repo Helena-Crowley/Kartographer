@@ -44,29 +44,7 @@ public class PlayerMovement : NetworkBehaviour
         if (playerCamera != null)
             bob = playerCamera.GetComponent<CameraBobbing>();
 
-        // Only lock cursor for the local player
-
     }
-
-    // void OnEnable()
-    // {
-    //     if (IsOwner)
-    //     {
-    //         moveAction.action.Enable();
-    //         runAction.action.Enable();
-    //         jumpAction.action.Enable();
-    //     }
-    // }
-
-    // void OnDisable()
-    // {
-    //     if (IsOwner)
-    //     {
-    //         moveAction.action.Disable();
-    //         runAction.action.Disable();
-    //         jumpAction.action.Disable();
-    //     }
-    // }
 
     void Update()
     {

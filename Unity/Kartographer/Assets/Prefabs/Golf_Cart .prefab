@@ -5278,7 +5278,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8500674359688714116}
-  - component: {fileID: 1941306764416672205}
   m_Layer: 0
   m_Name: DriverSeat
   m_TagString: Untagged
@@ -5301,31 +5300,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 120112599191467148}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1941306764416672205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1649606432264301367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4051275593
-  InScenePlacedSourceGlobalObjectIdHash: 2540960787
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &1688786497615870140
 GameObject:
   m_ObjectHideFlags: 0
@@ -7743,7 +7717,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2489108870846671833}
-  - component: {fileID: 4335231259616074915}
   m_Layer: 0
   m_Name: ShotgunSeat
   m_TagString: Untagged
@@ -7766,31 +7739,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 120112599191467148}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4335231259616074915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5539088258944155364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2689329851
-  InScenePlacedSourceGlobalObjectIdHash: 2540960787
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &5583045503242880282
 GameObject:
   m_ObjectHideFlags: 0
@@ -7889,7 +7837,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7706683073019993145}
-  - component: {fileID: 8620745136795992765}
   m_Layer: 0
   m_Name: BackSeat_Right
   m_TagString: Untagged
@@ -7912,31 +7859,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 120112599191467148}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &8620745136795992765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5836248127927291346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 177148995
-  InScenePlacedSourceGlobalObjectIdHash: 2540960787
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &5995556530010205120
 GameObject:
   m_ObjectHideFlags: 0
@@ -13394,7 +13316,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2977608804882724387}
-  - component: {fileID: 1123753979804289004}
   m_Layer: 0
   m_Name: BackSeat_Left
   m_TagString: Untagged
@@ -13417,31 +13338,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 120112599191467148}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &1123753979804289004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7700671933559815923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3656999318
-  InScenePlacedSourceGlobalObjectIdHash: 2540960787
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &7759228322984897287
 GameObject:
   m_ObjectHideFlags: 0

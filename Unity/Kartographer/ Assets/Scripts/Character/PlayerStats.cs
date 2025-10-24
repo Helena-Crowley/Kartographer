@@ -29,11 +29,9 @@ public class PlayerStats : NetworkBehaviour
         UpdateStaminaUI();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void TakeDamageServerRpc(int damage)
+    [ServerRpc]
+    public void TakeDamage(int damage)
     {
-        if (!IsServer) return;
-
         currentHealth = Mathf.Max(currentHealth - damage, 0);
         UpdateHealthClientRpc(currentHealth);
 

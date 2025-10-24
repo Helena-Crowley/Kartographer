@@ -16,7 +16,6 @@ public class ObjectSpawner : MonoBehaviour
     {
         // Example: Randomly find a location and raycast down
         //entire building spawnpoint (no corner ref)
-        Debug.Log($"Random Seed: {GameManager.Instance.randomSeed}");
         int objectMissedCount = 0;
         for (int i = 0; i < count; i++)
         {
@@ -65,6 +64,7 @@ public class ObjectSpawner : MonoBehaviour
         {
             SpawnObject(objects[i], amounts[i]);
         }
+        Debug.Log($"Random Seed: {GameManager.Instance.randomSeed}");
 
     }
 

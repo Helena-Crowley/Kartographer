@@ -1,49 +1,98 @@
 using UnityEngine;
+using Unity.Netcode;
 using System.Collections.Generic;
 
-public class StormDealDamage : MonoBehaviour
+public class StormDealDamage : NetworkBehaviour
 {
-    public int damagePerTick = 5;
-    public float tickRate = 1f;
+    [Header("Storm Settings")]
+    [SerializeField] private int damagePerTick = 2;
+    [SerializeField] private float tickRate = 1f;
 
-    private Dictionary<Collider, float> timers = new Dictionary<Collider, float>();
-    private HashSet<Collider> insidePlayers = new HashSet<Collider>();
-
+    // Track which players are inside the storm and their timers
+    private HashSet<ulong> insidePlayers = new HashSet<ulong>();
+    private Dictionary<ulong, float> timers = new Dictionary<ulong, float>();
 
     private void Update()
     {
-        foreach (var col in new List<Collider>(insidePlayers))
+        if (!IsServer) return; // Only server handles damage
+
+        foreach (var playerId in new List<ulong>(insidePlayers))
         {
-            timers[col] += Time.deltaTime;
-            var player = col.GetComponent<PlayerStats>();
-            if (player == null) return;
-            if (player != null && timers[col] >= tickRate)
+            // Safely initialize timer if missing
+            if (!timers.ContainsKey(playerId))
+                timers[playerId] = 0f;
+
+            timers[playerId] += Time.deltaTime;
+
+            if (timers[playerId] >= tickRate)
             {
-                player.TakeDamage(damagePerTick);
-                timers[col] = 0f;
+                timers[playerId] = 0f;
+
+                if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerId, out var netObj) && netObj != null)
+                {
+                    // Get PlayerStats from root or children
+                    var playerStats = netObj.GetComponent<PlayerStats>() 
+                                      ?? netObj.GetComponentInChildren<PlayerStats>();
+
+                    if (playerStats != null)
+                    {
+                        playerStats.TakeDamageServerRpc(damagePerTick);
+                        Debug.Log($"[Server] Dealt {damagePerTick} damage to {netObj.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[Server] PlayerStats not found on {netObj.name}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[Server] No spawned object found for ID {playerId}");
+                }
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !insidePlayers.Contains(other))
+        if (!other.CompareTag("Player")) return;
+
+        var netObj = other.GetComponentInParent<NetworkObject>();
+        if (netObj != null && !insidePlayers.Contains(netObj.NetworkObjectId))
         {
-            insidePlayers.Add(other);
-            if (!timers.ContainsKey(other))
-                timers[other] = 0f;
-            Debug.Log("Entered storm: " + other.name);
+            // Let the server handle adding player and initializing timer
+            AddPlayerServerRpc(netObj.NetworkObjectId);
+            Debug.Log($"[Server] {netObj.name} entered storm");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && insidePlayers.Contains(other))
+        if (!other.CompareTag("Player")) return;
+
+        var netObj = other.GetComponentInParent<NetworkObject>();
+        if (netObj != null && insidePlayers.Contains(netObj.NetworkObjectId))
         {
-            insidePlayers.Remove(other);
-            timers.Remove(other);
-            Debug.Log("Exited storm: " + other.name);
+            RemovePlayerServerRpc(netObj.NetworkObjectId);
+            Debug.Log($"[Server] {netObj.name} exited storm");
         }
     }
 
+    // ServerRpc to add player to storm
+    [ServerRpc(RequireOwnership = false)]
+    private void AddPlayerServerRpc(ulong playerId)
+    {
+        if (!insidePlayers.Contains(playerId))
+            insidePlayers.Add(playerId);
+
+        if (!timers.ContainsKey(playerId))
+            timers[playerId] = 0f; // Initialize timer
+    }
+
+    // ServerRpc to remove player from storm
+    [ServerRpc(RequireOwnership = false)]
+    private void RemovePlayerServerRpc(ulong playerId)
+    {
+        insidePlayers.Remove(playerId);
+        timers.Remove(playerId);
+    }
 }
