@@ -10,7 +10,7 @@ public class DoorInteract : MonoBehaviour
     private InteractPrompt interactPrompt;
     private InputAction interactAction;
     private InputActionMap playerMap;
-    private PlayerInputManager inputManager;  
+    private PlayerInputManager inputManager;
 
     private bool doorOpen;
     private bool canOpen;
@@ -18,6 +18,9 @@ public class DoorInteract : MonoBehaviour
 
     private Quaternion closedRotation;
     private Quaternion openRotation;
+
+    [HideInInspector]
+    public bool slam = false;
 
     private void Start()
     {
@@ -68,6 +71,8 @@ public class DoorInteract : MonoBehaviour
 
         if (doorOpen)
             doorMesh.transform.rotation = Quaternion.RotateTowards(doorMesh.transform.rotation, openRotation, rotationSpeed * Time.deltaTime);
+        else if (slam)
+            doorMesh.transform.rotation = Quaternion.RotateTowards(doorMesh.transform.rotation, closedRotation, rotationSpeed * 2 * Time.deltaTime);
         else
             doorMesh.transform.rotation = Quaternion.RotateTowards(doorMesh.transform.rotation, closedRotation, rotationSpeed * Time.deltaTime);
     }

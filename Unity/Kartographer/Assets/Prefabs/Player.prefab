@@ -2164,6 +2164,7 @@ GameObject:
   - component: {fileID: 2084081061279354626}
   - component: {fileID: 7753823126073041457}
   - component: {fileID: 6177395879404734054}
+  - component: {fileID: -2763129840863056162}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2347,13 +2348,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009eca99a32e5f2498e9579823f041b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  ShowTopMostFoldoutHeaderGroup: 1
   healthBar: {fileID: 4773856700819552434}
   staminaBar: {fileID: 5435803046187972745}
-  staminaDrainRate: 15
-  currentStamina: 0
-  maxStamina: 0
-  staminaDrainSpeed: 11
   playerBaseStats: {fileID: 11400000, guid: 54a9b83795f6c2e4bba39e295b9f2b7b, type: 2}
+  staminaDrainRate: 15
+  staminaDrainSpeed: 11
+  currentStamina: 0
+  currentHealth: 0
   nearCart: 0
   inCart: 0
 --- !u!114 &4357661112018826242
@@ -2953,6 +2955,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseManager
   ShowTopMostFoldoutHeaderGroup: 1
   pauseMenu: {fileID: 2416859307620498226}
+--- !u!114 &-2763129840863056162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538848329134641862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6877855ecbf5abb459b9ec4a9344a3d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPullHandler
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2552898346324515920
 GameObject:
   m_ObjectHideFlags: 0
