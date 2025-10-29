@@ -34,8 +34,11 @@ public class NetworkUI : MonoBehaviour
         NetworkManager.Singleton.StartHost();
 
         Debug.Log("Hosting on " + GetLocalIPAddress());
-        //Destroy(audioListener);
-        Destroy(joinScreen, 1f);
+
+        // Show loading screen for host
+        GameManager.Instance.LoadScene("OutPost"); // your loading screen handles fade/progress
+
+        Destroy(joinScreen);
     }
 
     private void OnJoinClicked()
@@ -52,8 +55,10 @@ public class NetworkUI : MonoBehaviour
         NetworkManager.Singleton.StartClient();
 
         Debug.Log("Trying to connect to " + ipAddress);
-        //Destroy(audioListener);
-        Destroy(joinScreen, 1f);
+        // Optional: show temporary connecting/loading UI
+        GameManager.Instance.LoadScene("OutPost"); 
+    
+        Destroy(joinScreen);
     }
 
     private string GetLocalIPAddress()

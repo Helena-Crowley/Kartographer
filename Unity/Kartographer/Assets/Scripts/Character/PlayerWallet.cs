@@ -19,11 +19,6 @@ public class PlayerWallet : NetworkBehaviour
         money.OnValueChanged += OnMoneyChanged;
     }
 
-    private void OnDestroy()
-    {
-        money.OnValueChanged -= OnMoneyChanged;
-    }
-
     private void OnMoneyChanged(int oldValue, int newValue)
     {
         UpdateMoneyUI();

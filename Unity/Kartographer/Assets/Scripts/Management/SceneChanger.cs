@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -36,16 +37,19 @@ public class SceneChanger : NetworkBehaviour
     {
         if (sceneEvent.SceneEventType == SceneEventType.LoadEventCompleted)
         {
+            if (!IsServer) return;
+
             foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 var player = client.PlayerObject;
                 if (player != null)
                 {
-                    // Example spawn position
-                    player.transform.position = new Vector3(Random.Range(0, .5f), 0, Random.Range(0, .5f));
+                    // Move player to spawn inside building
+                    player.GetComponent<NetworkTransform>().Teleport(new Vector3(1f, 0.5f, 1f), Quaternion.identity, Vector3.one);
                 }
             }
         }
     }
+
 
 }

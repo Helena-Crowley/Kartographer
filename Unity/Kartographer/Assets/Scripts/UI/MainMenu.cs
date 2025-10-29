@@ -1,29 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    private GameObject canvasToGoBackTo;
-    private GameObject canvasToDeactivate;
+    [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private GameObject networkCanvas;
 
-    public void LoadScene(string sceneName)
+    public void OnPlayButtonPressed()
     {
-        SceneManager.LoadScene(sceneName);
+        mainMenuCanvas.SetActive(false);
+        networkCanvas.SetActive(true);
+    }
+
+    public void GoBackToMenu()
+    {
+        networkCanvas.SetActive(false);
+        mainMenuCanvas.SetActive(true);
     }
 
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    public void GoBack()
-    {
-        canvasToDeactivate.SetActive(false);
-        canvasToGoBackTo.SetActive(true);
-    }
-
-    public void ResumeGame(GameObject currentCanvas)
-    {
-        currentCanvas.SetActive(false);
     }
 }

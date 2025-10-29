@@ -385,11 +385,11 @@ Transform:
   m_GameObject: {fileID: 23085250}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.29849243, y: 1.1809201, z: 0.119888306}
+  m_LocalPosition: {x: -344.562, y: -6.73322, z: -98.2518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1914889211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &23085254
 MonoBehaviour:
@@ -1783,11 +1783,11 @@ Transform:
   m_GameObject: {fileID: 353120811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 344.26352, y: 7.91414, z: 98.37169}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1914889211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &353120813
 MonoBehaviour:
@@ -2419,7 +2419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &599984234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5396,6 +5396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6198c436f71415043bc201202b5f2720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  mainMenuCanvas: {fileID: 0}
+  networkCanvas: {fileID: 0}
 --- !u!114 &1234154043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5624,6 +5626,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6198c436f71415043bc201202b5f2720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  mainMenuCanvas: {fileID: 0}
+  networkCanvas: {fileID: 0}
 --- !u!114 &1246974593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6936,54 +6940,6 @@ Transform:
   - {fileID: 1597636323}
   m_Father: {fileID: 1202929726}
   m_LocalEulerAnglesHint: {x: 0, y: -180.54, z: 0}
---- !u!1 &1539729839
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1539729840}
-  - component: {fileID: 1539729841}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1539729840
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1539729839}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 344.26352, y: 7.91414, z: 98.37169}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2023169006}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1539729841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1539729839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8603c58e8617cdc4fa75a6b790eaf355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  randomSeed: 0
-  stormDistance: 0
-  stormTransform: {fileID: 0}
 --- !u!1 &1544168858
 GameObject:
   m_ObjectHideFlags: 0
@@ -7532,7 +7488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1639542545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8454,7 +8410,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1440}
+  m_SizeDelta: {x: 2560, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1767338471
 MonoBehaviour:
@@ -9019,6 +8975,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6198c436f71415043bc201202b5f2720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  mainMenuCanvas: {fileID: 0}
+  networkCanvas: {fileID: 0}
 --- !u!114 &1881647431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9089,6 +9047,9 @@ Transform:
   - {fileID: 691220947}
   - {fileID: 778735470}
   - {fileID: 1744143426}
+  - {fileID: 2023169006}
+  - {fileID: 23085252}
+  - {fileID: 353120812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1974649437
@@ -9350,7 +9311,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1539729840}
+  m_Father: {fileID: 1914889211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2023169007
 MonoBehaviour:
@@ -21503,10 +21464,7 @@ MeshRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1539729840}
   - {fileID: 786802262}
-  - {fileID: 23085252}
-  - {fileID: 353120812}
   - {fileID: 1914889211}
   - {fileID: 99485209}
   - {fileID: 838450618}
