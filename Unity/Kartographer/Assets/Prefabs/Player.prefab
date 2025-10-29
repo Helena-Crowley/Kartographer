@@ -2165,6 +2165,7 @@ GameObject:
   - component: {fileID: 7753823126073041457}
   - component: {fileID: 6177395879404734054}
   - component: {fileID: -2763129840863056162}
+  - component: {fileID: 8425832216876865169}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2257,7 +2258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 533672282
+  GlobalObjectIdHash: 1965846206
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2968,6 +2969,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPullHandler
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &8425832216876865169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538848329134641862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4380944023ca1469a3b4f5287225e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  ShowTopMostFoldoutHeaderGroup: 1
+  outpostScene: OutPost
+  desertScene: DefaultScene
+  toggleAction: {fileID: 994724758625142806, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
 --- !u!1 &2552898346324515920
 GameObject:
   m_ObjectHideFlags: 0
