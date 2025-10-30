@@ -1,0 +1,33 @@
+@startuml
+title CartAudio Class Diagram
+
+class CartAudio {
+    - AudioClip windSound
+    - AudioClip tickSound
+    - AudioClip[] suspensionSqueak
+    - AudioSource engineA
+    - AudioSource engineB
+    - AnimationCurve pitchCurve
+    - float pitchSmooth
+    - float stopPitchSpeed
+    - float stopThreshold
+    - AudioSource golfCartAudioSource
+    - float currentPitch
+    - float halfLength
+    - bool stopping
+
+    + Awake() : void
+    + Start() : void
+    + PlaySpeedDependentSound(normalizedSpeed : float) : void
+    + PlayTickSound() : void
+    - UpdatePitch(normalizedSpeed : float, minPitch : float, maxPitch : float) : void
+    - PlayB() : void
+    - PlayA() : void
+}
+
+note top of CartAudio
+RequiresComponent: AudioSource
+Uses UnityEngine classes:
+AudioSource, AudioClip, AnimationCurve
+end note
+@enduml
