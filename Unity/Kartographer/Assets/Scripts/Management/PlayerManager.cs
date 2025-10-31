@@ -27,13 +27,13 @@ public class PlayerManager : NetworkBehaviour
     }
 
     // Letting everyone (including you) know you took damage (Step2)
-    public void TakeDamage(ulong clientId, int damage)
-    {
-        if (!IsServer) return;
+    // public void TakeDamage(ulong clientId, int damage)
+    // {
+    //     if (!IsServer) return;
 
-        if (playersInGame.TryGetValue(clientId, out PlayerObj player))
-        {
-            player.ApplyDamage(damage);
-        }
-    }
+    //     if (playersInGame.TryGetValue(clientId, out PlayerObj player))
+    //     {
+    //         player.ApplyDamage(damage);
+    //     }
+    // }
 }

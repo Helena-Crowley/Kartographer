@@ -1,8 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Services.Lobbies.Models;
 
 public class StormDealDamage : NetworkBehaviour
 {
@@ -16,20 +14,27 @@ public class StormDealDamage : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsServer) return;
+
         foreach (var player in insidePlayers)
         {
             timers[player] += Time.deltaTime;
+
             if (timers[player] >= tickRate)
             {
                 timers[player] = 0f;
-                player.ApplyDamage(damagePerTick);
+
+                // Use the new TakeDamage method on PlayerObj
+                player.TakeDamage(damagePerTick);
+
+                Debug.Log($"Storm applied {damagePerTick} damage to Player {player.playerId}");
             }
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsServer) return;
         if (!other.CompareTag("Player")) return;
 
         PlayerObj playerObj = other.GetComponent<PlayerObj>();
@@ -37,32 +42,26 @@ public class StormDealDamage : NetworkBehaviour
         {
             AddPlayerToInsidePlayerList(playerObj);
             Debug.Log($"{playerObj.playerId} entered storm");
-            Debug.LogAssertion(insidePlayers);
-        }
-        else
-        {
-            Debug.Log("uh oh thats not right!");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (!IsServer) return;
         if (!other.CompareTag("Player")) return;
 
         PlayerObj playerObj = other.GetComponent<PlayerObj>();
         if (playerObj != null && insidePlayers.Contains(playerObj))
         {
             RemovePlayerFromInside(playerObj);
+            Debug.Log($"{playerObj.playerId} exited storm");
         }
     }
 
     private void AddPlayerToInsidePlayerList(PlayerObj playerObj)
     {
-        if (!insidePlayers.Contains(playerObj))
-            insidePlayers.Add(playerObj);
-
-        if (!timers.ContainsKey(playerObj))
-            timers[playerObj] = 0f; // Initialize timer
+        insidePlayers.Add(playerObj);
+        timers[playerObj] = 0f; // Initialize timer
     }
 
     private void RemovePlayerFromInside(PlayerObj playerObj)

@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 
 public class PlayerObj : NetworkBehaviour
 {
@@ -11,89 +10,114 @@ public class PlayerObj : NetworkBehaviour
     public float distanceFromStorm = 0f;
     public float walletAmount = 0f;
     public ItemData[] inventoryItems = new ItemData[5];
-    public ulong playerId; //who we are
+    public ulong playerId;
 
     public float moveSpeed = 5f;
     public float jumpHeight = 1f;
     public float staminaDrainRate = 5f;
     public int staminaDrainSpeed = 10;
 
-    public InputActionMap currentInputMapping = null;
-
     [Header("UI References")]
     public HealthBar healthBar;
     public StaminaBar staminaBar;
 
+    //================ Networked Variables ==================
+    public NetworkVariable<int> currentHealth = new(
+        100,
+        NetworkVariableReadPermission.Everyone,       // everyone can read
+        NetworkVariableWritePermission.Server         // only server can write
+    );
 
-    //-----Local Variables-----
-    [HideInInspector]
-    public float currentStamina;
+    //================ Local Variables ==================
+    [HideInInspector] public float currentStamina;
     private float maxStamina;
-
-    [HideInInspector]
-    private int currentHealth;
     private int maxHealth;
-
 
     [HideInInspector] public bool nearCart = false;
     [HideInInspector] public bool inCart = false;
 
+    //======================================================
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
-        playerId = GetComponent<NetworkObject>().OwnerClientId;
-        Debug.Log("Player: "+ playerId + " was spawned in");
-
-        currentHealth = health;
+        playerId = OwnerClientId;
         maxHealth = health;
-
-        currentStamina = stamina;
         maxStamina = stamina;
+        currentStamina = stamina;
+
+        currentHealth.OnValueChanged += OnHealthChanged;
+
+        if (IsOwner)
+        {
+            Debug.Log($"Binding UI for local player {OwnerClientId}");
+            PlayerUIManager.Instance.BindPlayer(this);
+
+            // Force initial update after binding
+            if (healthBar != null)
+                healthBar.UpdateHealthBar(currentHealth.Value);
+            if (staminaBar != null)
+                staminaBar.UpdateStaminaBar(currentStamina);
+        }
     }
 
-    /* ---------------------------HEALTH STUFF------------------------*/
-
-
-    public void ApplyDamage(int dmg)
+    private void OnHealthChanged(int oldVal, int newVal)
     {
-        if (!IsLocalPlayer) return;
+        Debug.Log($"[{(IsOwner ? "LOCAL" : "REMOTE")}] Player {OwnerClientId}: Health {oldVal} → {newVal}");
 
-        currentHealth -= dmg;
-        Debug.Log("Damage applied = " + dmg + "to " + playerId);
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        UpdateHealthUI();
+        // Update health UI for everyone, not just owner
+        if (healthBar != null)
+            healthBar.UpdateHealthBar(newVal);
     }
 
-    private void UpdateHealthUI()
+    private void OnDestroy()
     {
-        if (!IsLocalPlayer) return;
-        healthBar.UpdateHealthBar(currentHealth);
+        currentHealth.OnValueChanged -= OnHealthChanged;
     }
 
+    //======================================================
+    /* ------------------ HEALTH ------------------ */
 
-    /* ---------------------------STAMINA STUFF------------------------*/
+    /// <summary>
+    /// Call this from any script to apply damage.
+    /// Handles server/client logic automatically.
+    /// </summary>
+    public void TakeDamage(int dmg)
+    {
+        if (IsServer)
+        {
+            currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
+            Debug.Log($"Server applied {dmg} damage to Player {OwnerClientId}");
+        }
+        else
+        {
+            TakeDamageServerRpc(dmg);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRpc(int dmg)
+    {
+        currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
+        Debug.Log($"Server applied {dmg} damage via RPC to Player {OwnerClientId}");
+    }
+
+    //======================================================
+    /* ------------------ STAMINA ------------------ */
+
     public void DrainStamina()
     {
-        if (!IsLocalPlayer) return;
-        Debug.Log("Draining Player: " + playerId + "s stamina");
+        if (!IsOwner) return;
+
         currentStamina -= staminaDrainRate * Time.deltaTime;
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-        UpdateStaminaUI();
+        staminaBar.UpdateStaminaBar(currentStamina);
     }
 
     public void RegainStamina()
     {
-        if (!IsLocalPlayer) return;
+        if (!IsOwner) return;
 
-        currentStamina += staminaDrainRate / 2 * Time.deltaTime;
+        currentStamina += (staminaDrainRate / 2) * Time.deltaTime;
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-        UpdateStaminaUI();
-    }
-
-    private void UpdateStaminaUI()
-    {
-        if (!IsLocalPlayer) return;
         staminaBar.UpdateStaminaBar(currentStamina);
     }
 }
