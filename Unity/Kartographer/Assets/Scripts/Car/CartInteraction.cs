@@ -11,7 +11,7 @@ public class CartInteraction : NetworkBehaviour
     private CharacterController characterController;
     private MouseLook firstPersonMouseLook;
     private PlayerMovement playerMovement;
-    private PlayerStats playerStats;
+    private PlayerObj playerStats;
     private CameraFollow cartFollowLook;
     private GameObject localPlayer;
     private PlayerInputManager inputManager;
@@ -55,7 +55,7 @@ public class CartInteraction : NetworkBehaviour
 
         interactPrompt?.ToggleInteractPrompt("E", "enter cart");
 
-        playerStats = localPlayer.GetComponent<PlayerStats>();
+        playerStats = localPlayer.GetComponent<PlayerObj>();
 
         playerStats.nearCart = true;
 

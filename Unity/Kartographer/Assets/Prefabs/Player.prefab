@@ -1456,6 +1456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6198c436f71415043bc201202b5f2720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  mainMenuCanvas: {fileID: 0}
+  networkCanvas: {fileID: 0}
 --- !u!1 &1841932841456733905
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,11 +2352,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   ShowTopMostFoldoutHeaderGroup: 1
-  healthBar: {fileID: 4773856700819552434}
-  staminaBar: {fileID: 5435803046187972745}
-  playerBaseStats: {fileID: 11400000, guid: 54a9b83795f6c2e4bba39e295b9f2b7b, type: 2}
+  health: 100
+  stamina: 100
+  distanceFromStorm: 0
+  walletAmount: 0
+  inventoryItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerId: 0
+  moveSpeed: 5
+  jumpHeight: 1
   staminaDrainRate: 15
   staminaDrainSpeed: 11
+  currentInputMapping:
+    m_Name: Current Input Mapping
+    m_Id: 14379530-2b43-4a92-aa88-c839d901bb76
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  healthBar: {fileID: 4773856700819552434}
+  staminaBar: {fileID: 5435803046187972745}
   currentStamina: 0
   currentHealth: 0
   nearCart: 0
@@ -2625,7 +2645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af3916c4a3e2334099c78888c22eb28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWallet
-  money: 0
+  ShowTopMostFoldoutHeaderGroup: 1
   moneyText: {fileID: 4222524446680094323}
 --- !u!114 &6647965804132111819
 MonoBehaviour:
@@ -13457,6 +13477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6198c436f71415043bc201202b5f2720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  mainMenuCanvas: {fileID: 0}
+  networkCanvas: {fileID: 0}
 --- !u!1 &8854107471757996811
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,11 +5,16 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerInputManager : NetworkBehaviour
 {
+    //
+    //PER PLAYER NOT A SINGLETON
+    //
     [Header("References")]
     [SerializeField] private PlayerInput playerInput;
+    
 
     private InputActionMap playerMap;
     private InputActionMap carMap;
+    private InputActionMap currentActionMap;
 
     private bool inCart = false;
 
@@ -18,6 +23,11 @@ public class PlayerInputManager : NetworkBehaviour
     /// true = in cart, false = on foot
     /// </summary>
     public System.Action<bool> OnCartStateChanged;
+
+    public InputActionMap GetCurrentInputMapping()
+    {
+        return currentActionMap;
+    }
 
     private void Awake()
     {
@@ -36,6 +46,7 @@ public class PlayerInputManager : NetworkBehaviour
         {
             // Enable player input for local owner only
             playerMap.Enable();
+            currentActionMap = playerMap;
             carMap.Disable();
         }
         else
@@ -51,6 +62,7 @@ public class PlayerInputManager : NetworkBehaviour
         if (IsOwner)
         {
             playerMap.Enable();
+            currentActionMap = playerMap;
             carMap.Disable();
         }
     }
@@ -73,6 +85,7 @@ public class PlayerInputManager : NetworkBehaviour
         if (!IsOwner) return;
 
         carMap.Enable();
+        currentActionMap = carMap;
         playerMap.Disable();
         inCart = true;
         OnCartStateChanged?.Invoke(true);
@@ -84,6 +97,7 @@ public class PlayerInputManager : NetworkBehaviour
         if (!IsOwner) return;
 
         playerMap.Enable();
+        currentActionMap = playerMap;
         carMap.Disable();
         inCart = false;
         OnCartStateChanged?.Invoke(false);
@@ -92,6 +106,7 @@ public class PlayerInputManager : NetworkBehaviour
     public void DisableNonUIInput()
     {
         playerMap.Disable();
+        currentActionMap = null;
         carMap.Disable();
     }
 }

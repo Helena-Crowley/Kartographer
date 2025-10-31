@@ -36,7 +36,7 @@ public class NetworkUI : MonoBehaviour
         Debug.Log("Hosting on " + GetLocalIPAddress());
 
         // Show loading screen for host
-        GameManager.Instance.LoadScene("OutPost"); // your loading screen handles fade/progress
+        //GameManager.Instance.LoadScene("OutPost"); // your loading screen handles fade/progress
 
         Destroy(joinScreen);
     }
@@ -56,7 +56,7 @@ public class NetworkUI : MonoBehaviour
 
         Debug.Log("Trying to connect to " + ipAddress);
         // Optional: show temporary connecting/loading UI
-        GameManager.Instance.LoadScene("OutPost"); 
+        //GameManager.Instance.LoadScene("OutPost"); 
     
         Destroy(joinScreen);
     }

@@ -20,7 +20,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private InputActionReference jumpAction;
 
     public CharacterController controller;
-    public PlayerStats playerStats;
+    public PlayerObj playerStats;
     private Animator animator;
     private CameraBobbing bob;
 
