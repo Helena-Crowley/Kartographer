@@ -14,7 +14,7 @@ public class StormDealDamage : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsServer) return;
+        //if (!IsServer) return;
 
         foreach (var player in insidePlayers)
         {
@@ -27,27 +27,27 @@ public class StormDealDamage : NetworkBehaviour
                 // Use the new TakeDamage method on PlayerObj
                 player.TakeDamage(damagePerTick);
 
-                Debug.Log($"Storm applied {damagePerTick} damage to Player {player.playerId}");
+                Debug.LogWarning($"Storm applied {damagePerTick} damage to Player {player.playerId}");
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;
+        //if (!IsServer) return;
         if (!other.CompareTag("Player")) return;
 
         PlayerObj playerObj = other.GetComponent<PlayerObj>();
         if (playerObj != null && !insidePlayers.Contains(playerObj))
         {
             AddPlayerToInsidePlayerList(playerObj);
-            Debug.Log($"{playerObj.playerId} entered storm");
+            Debug.LogWarning($"{playerObj.playerId} entered storm");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!IsServer) return;
+        //if (!IsServer) return;
         if (!other.CompareTag("Player")) return;
 
         PlayerObj playerObj = other.GetComponent<PlayerObj>();
