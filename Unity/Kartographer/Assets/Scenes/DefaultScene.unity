@@ -513,6 +513,7 @@ GameObject:
   - component: {fileID: 85269984}
   - component: {fileID: 85269986}
   - component: {fileID: 85269985}
+  - component: {fileID: 85269987}
   m_Layer: 5
   m_Name: MiniMap
   m_TagString: Untagged
@@ -551,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 211fbb6e06a0d0840be71a307a1f53de, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -574,6 +575,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85269983}
   m_CullTransparentMesh: 1
+--- !u!114 &85269987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85269983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4959523064afbda4fb6837ea4ba4ee61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapFogController
+  minimapTexture: {fileID: 8400000, guid: 9e671ee3134ca2f41a21529321502505, type: 2}
+  fogMaskTexture: {fileID: 8400000, guid: 50bae02cd2697fc4398ed514e9b133ba, type: 2}
+  minimapFogShader: {fileID: 4800000, guid: 12ce7e3f80bcd184caaf84a69a60f00f, type: 3}
+  minimapCamera: {fileID: 0}
+  worldMinX: -100
+  worldMaxX: 100
+  worldMinZ: -100
+  worldMaxZ: 100
+  unexploredColor: {r: 0.278, g: 0.278, b: 0.278, a: 1}
 --- !u!1 &99485208
 GameObject:
   m_ObjectHideFlags: 0
@@ -5000,6 +5022,7 @@ MonoBehaviour:
   offHandIcon: {fileID: 21300000, guid: 291cb2e029e3fe84d97f83e71e4aaf27, type: 3}
   stormTransform: {fileID: 763241701}
   distanceText: {fileID: 125986981}
+  minimapFogController: {fileID: 0}
 --- !u!1 &838450617
 GameObject:
   m_ObjectHideFlags: 0
@@ -11193,6 +11216,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769782213}
   m_CullTransparentMesh: 1
+--- !u!1 &1770212973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1770212974}
+  m_Layer: 0
+  m_Name: WorldCoordsEmpty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1770212974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770212973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -566, y: -5.86359, z: 264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1775559823
 GameObject:
   m_ObjectHideFlags: 0
@@ -25304,3 +25358,4 @@ SceneRoots:
   - {fileID: 1312717799}
   - {fileID: 822552406}
   - {fileID: 1449188913}
+  - {fileID: 1770212974}

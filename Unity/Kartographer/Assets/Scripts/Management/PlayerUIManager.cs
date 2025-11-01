@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ public class PlayerUIManager : MonoBehaviour
     public Sprite offHandIcon;
     public Transform stormTransform;
     public TMP_Text distanceText;
+    public MinimapFogController minimapFogController;
 
     private void Awake()
     {
@@ -52,5 +54,10 @@ public class PlayerUIManager : MonoBehaviour
     {
         distanceTextScript.distanceText = distanceText;
         distanceTextScript.stormTransform = stormTransform;
+    }
+
+    public void BindPlayer(FogPainter fogPainter)
+    {
+        minimapFogController.minimapCamera = fogPainter.minimapCamera;
     }
 }

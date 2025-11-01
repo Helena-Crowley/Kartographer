@@ -2169,8 +2169,8 @@ GameObject:
   - component: {fileID: -2763129840863056162}
   - component: {fileID: 8425832216876865169}
   - component: {fileID: 8222893598219982139}
-  - component: {fileID: 7061175555033577904}
   - component: {fileID: 6282108136424175527}
+  - component: {fileID: 1184061451623509728}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2264,7 +2264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 533672282
+  GlobalObjectIdHash: 1965846206
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3019,20 +3019,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   distanceText: {fileID: 0}
   stormTransform: {fileID: 0}
---- !u!114 &7061175555033577904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2538848329134641862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdf013230ca9d2c47803c3ca65fa06e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  mapCamera: {fileID: 0}
-  mapTexture: {fileID: 0}
 --- !u!114 &6282108136424175527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3048,6 +3034,26 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   cameraTransform: {fileID: 8267765356683103835}
   offset: {x: 0, y: 22, z: 0}
+--- !u!114 &1184061451623509728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538848329134641862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eafdfd0d0e3429045bc62a32f873795d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  fogMask: {fileID: 8400000, guid: 50bae02cd2697fc4398ed514e9b133ba, type: 2}
+  paintMaterial: {fileID: 2100000, guid: b0e5071f4db31b444adb4b9993a94613, type: 2}
+  worldMinX: -566
+  worldMaxX: 500
+  worldMinZ: -185
+  worldMaxZ: 264
+  brushSize: 0.075
+  minimapCamera: {fileID: 3300119524853108438}
 --- !u!1 &2552898346324515920
 GameObject:
   m_ObjectHideFlags: 0
@@ -13055,10 +13061,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8267765356683103835}
   - component: {fileID: 3300119524853108438}
-  - component: {fileID: 113362060818512398}
   - component: {fileID: 7895060014432178472}
   m_Layer: 0
-  m_Name: MiniMapCamera
+  m_Name: MinimapCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13131,14 +13136,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &113362060818512398
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8478421440693033765}
-  m_Enabled: 1
 --- !u!114 &7895060014432178472
 MonoBehaviour:
   m_ObjectHideFlags: 0
