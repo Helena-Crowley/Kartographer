@@ -12,29 +12,28 @@ public class PickUppableItem : NetworkBehaviour
     public void Initialize(ItemData data, int id, ItemDatabase db)
     {
         itemData = data;
-        itemId.Value = id;
         database = db;
+
+        if (IsServer)
+            itemId.Value = id; // safe: only server writes NetworkVariable
     }
+
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-            return;
+        base.OnNetworkSpawn();
 
-        // Clients use the itemId to find the correct itemData
-        if (database == null)
-            database = FindFirstObjectByType<ItemDatabase>();
+        // Only clients need this
+        if (!IsServer)
+        {
+            itemId.OnValueChanged += OnItemIdChanged;
 
-        if (database != null && itemId.Value >= 0)
-        {
-            itemData = database.GetItemById(itemId.Value);
-            CreateMesh();
-        }
-        else
-        {
-            Debug.LogWarning($"{name} failed to load itemData on client (id={itemId.Value})");
+            // If already set, apply immediately
+            if (itemId.Value >= 0)
+                SetupItemData(itemId.Value);
         }
     }
+
 
     private void Start()
     {
@@ -117,6 +116,28 @@ public class PickUppableItem : NetworkBehaviour
         GameObject player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerId).gameObject;
         OnPickup(player); // call the same logic on the server
     }
+
+    private void OnItemIdChanged(int oldValue, int newValue)
+    {
+        SetupItemData(newValue);
+    }
+
+    private void SetupItemData(int id)
+    {
+        if (database == null)
+            database = FindFirstObjectByType<ItemDatabase>();
+
+        if (database != null && id >= 0)
+        {
+            itemData = database.GetItemById(id);
+            CreateMesh();
+        }
+        else
+        {
+            Debug.LogWarning($"{name} failed to load itemData on client (id={id})");
+        }
+    }
+
 
 }
 

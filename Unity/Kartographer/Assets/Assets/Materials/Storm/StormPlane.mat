@@ -158,7 +158,7 @@ Material:
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 10
-    - _AlphaRemapMax: 0.2751441
+    - _AlphaRemapMax: 0.06479865
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 0
     - _Anisotropy: 0
@@ -264,8 +264,8 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.69439435, b: 0, a: 1}
-    - _Color: {r: 1, g: 0.69439435, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 0.69411767, b: 0, a: 1}
+    - _Color: {r: 1, g: 0.69411767, b: 0, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

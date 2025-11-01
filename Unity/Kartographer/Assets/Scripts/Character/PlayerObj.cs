@@ -199,7 +199,7 @@ public class PlayerObj : NetworkBehaviour
     // on *any* client (local or remote).
     private void OnHealthChanged(int oldVal, int newVal)
     {
-        Debug.Log($"[{(IsOwner ? "LOCAL" : "REMOTE")}] Player {OwnerClientId}: Health {oldVal} → {newVal}");
+        //Debug.Log($"[{(IsOwner ? "LOCAL" : "REMOTE")}] Player {OwnerClientId}: Health {oldVal} → {newVal}");
 
         // Update health bar on all clients (each instance has its own UI ref)
         if (healthBar != null)
@@ -225,7 +225,7 @@ public class PlayerObj : NetworkBehaviour
         if (IsServer)
         {
             currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
-            Debug.Log($"Server applied {dmg} damage to Player {OwnerClientId}");
+            //Debug.Log($"Server applied {dmg} damage to Player {OwnerClientId}");
         }
         else
         {
@@ -243,7 +243,7 @@ public class PlayerObj : NetworkBehaviour
     {
         // The server safely updates the authoritative NetworkVariable.
         currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
-        Debug.Log($"Server applied {dmg} damage via RPC to Player {OwnerClientId}");
+        //Debug.Log($"Server applied {dmg} damage via RPC to Player {OwnerClientId}");
     }
 
     // ======================================================

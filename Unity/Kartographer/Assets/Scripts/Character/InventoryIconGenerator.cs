@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,13 @@ public class InventoryIconGenerator : MonoBehaviour
     public Image[] inventorySlots;       // Your 5-box inventory UI
     public Sprite offHandIcon; // assign your "OffHandIcon" in the inspector
 
+    private void Start()
+    {
+        var netObj = GetComponentInParent<NetworkBehaviour>();
+        if (netObj != null && !netObj.IsOwner)
+            return; // don't bind other players' UI
+        PlayerUIManager.Instance.BindPlayer(this);
+    }
     // Generates an icon from a 3D prefab and sets it to a slot
     public void GenerateIcon(ItemData itemData, int slotIndex)
     {

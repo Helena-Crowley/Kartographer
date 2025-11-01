@@ -1,39 +1,50 @@
 using UnityEngine;
 using TMPro;
 using Unity.Netcode;
+using System.Collections;
 
 public class DistanceText : NetworkBehaviour
 {
+    [Header("UI Elements")]
     public TMP_Text distanceText;
-    public Transform stormTransform;
-    private Transform playerTransform;
 
-    private float timer = 0f;
+    [Header("World References")]
+    public Transform stormTransform;
+
+    private Transform playerTransform;
     private float updateInterval = 0.5f;
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return; // only local player shows their own distance
+        if (!IsOwner) return; // Only local player updates their own UI
+        PlayerUIManager.Instance.BindPlayer(this);
 
-        playerTransform = transform; // assume this script is on the player prefab
-        distanceText.text = StormDistance().ToString("F1") + "m";
+        playerTransform = transform; // Assumes this script is on the player prefab
+
+        // Initialize text
+        if (distanceText != null)
+            distanceText.text = StormDistance().ToString("F1") + "m";
+
+        // Start updating distance periodically
+        StartCoroutine(UpdateDistanceCoroutine());
     }
 
-    void Update()
+    private IEnumerator UpdateDistanceCoroutine()
     {
-        if (!IsOwner) return; // only update for local player
-
-        timer += Time.deltaTime;
-        if (timer >= updateInterval)
+        while (true)
         {
-            distanceText.text = StormDistance().ToString("F1") + "m";
-            timer = 0f;
+            if (distanceText != null)
+                distanceText.text = StormDistance().ToString("F1") + "m";
+
+            yield return new WaitForSeconds(updateInterval);
         }
     }
 
     private float StormDistance()
     {
         if (playerTransform == null || stormTransform == null) return 0f;
+
+        // Use full 3D distance
         return playerTransform.position.x - stormTransform.position.x;
     }
 }

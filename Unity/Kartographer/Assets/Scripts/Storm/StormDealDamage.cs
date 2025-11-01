@@ -27,7 +27,7 @@ public class StormDealDamage : NetworkBehaviour
                 // Use the new TakeDamage method on PlayerObj
                 player.TakeDamage(damagePerTick);
 
-                Debug.LogWarning($"Storm applied {damagePerTick} damage to Player {player.playerId}");
+                //Debug.LogWarning($"Storm applied {damagePerTick} damage to Player {player.playerId}");
             }
         }
     }

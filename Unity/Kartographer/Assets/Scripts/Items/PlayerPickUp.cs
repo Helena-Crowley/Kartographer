@@ -27,6 +27,7 @@ public class PlayerPickUp : NetworkBehaviour
 
     void Update()
     {
+        if (!IsOwner) return;
         HandleRaycast();
 
         if (nearbyPickup != null && pickUpAction.action.WasPerformedThisFrame())
@@ -54,15 +55,15 @@ public class PlayerPickUp : NetworkBehaviour
         if (item != null && pickupPrefab != null)
         {
             GameObject spawned = Instantiate(pickupPrefab, playerCam.transform.position + playerCam.transform.forward * 2, Quaternion.identity);
+            NetworkObject netObj = spawned.GetComponent<NetworkObject>();
+            netObj.Spawn();
 
-            // Initialize itemData before spawning
+            // Now safe to modify NetworkVariables
             PickUppableItem pickUpComponent = spawned.GetComponent<PickUppableItem>();
             if (pickUpComponent != null)
             {
                 pickUpComponent.Initialize(item, ItemDatabase.Instance.GetItemIndex(item), ItemDatabase.Instance);
             }
-
-            spawned.GetComponent<NetworkObject>().Spawn();
 
             Rigidbody rb = spawned.GetComponent<Rigidbody>();
             if (rb != null)
@@ -73,18 +74,26 @@ public class PlayerPickUp : NetworkBehaviour
             }
 
             // Remove item from inventory
-            playerInventory.Remove(item);
-            int slot = iconGenerator.GetNextAvailableSlot();
-            if (slot != -1)
+            // Remove last item from inventory and get its slot
+            int slotIndex;
+            ItemData removedItem = playerInventory.RemoveLast(out slotIndex);
+            if (removedItem != null && slotIndex >= 0)
             {
-                iconGenerator.ClearSlot(slot - 1);
+                ClearInventorySlotClientRpc(slotIndex);
             }
-            else
-            {
-                iconGenerator.ClearSlot(iconGenerator.inventorySlots.Length - 1);
-            }
+
         }
     }
+
+    [ClientRpc]
+    private void ClearInventorySlotClientRpc(int slot)
+    {
+        // Only the owner should update their UI
+        if (!IsOwner) return;
+
+        iconGenerator.ClearSlot(slot);
+    }
+
 
 
     void HandleRaycast()
