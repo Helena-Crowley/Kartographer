@@ -7,13 +7,13 @@ public class MinimapFogController : MonoBehaviour
     public RenderTexture minimapTexture;
     public RenderTexture fogMaskTexture;
 
-    [Header("Shader (use MinimapFogRevealZoomed shader)")]
+    [Header("Shader")]
     public Shader minimapFogShader;
 
     [Header("Minimap Camera (for zoomed-in bounds)")]
     public Camera minimapCamera;
 
-    [Header("World Bounds")]
+    [Header("World Bounds (MUST match FogPainter)")]
     public float worldMinX = -100f;
     public float worldMaxX = 100f;
     public float worldMinZ = -100f;
@@ -21,6 +21,9 @@ public class MinimapFogController : MonoBehaviour
 
     [Header("Settings")]
     public Color unexploredColor = Color.black;
+
+    [Header("Debug")]
+    public bool showDebugInfo = true;
 
     private RawImage rawImage;
     private Material materialInstance;
@@ -35,7 +38,14 @@ public class MinimapFogController : MonoBehaviour
         }
 
         if (minimapFogShader == null)
-            minimapFogShader = Shader.Find("Custom/MinimapFogRevealZoomed");
+        {
+            minimapFogShader = Shader.Find("Custom/MinimapFogReveal");
+            if (minimapFogShader == null)
+            {
+                Debug.LogError("Could not find Custom/MinimapFogReveal shader!");
+                return;
+            }
+        }
 
         SetupMinimapMaterial();
     }
@@ -51,27 +61,48 @@ public class MinimapFogController : MonoBehaviour
 
         rawImage.material = materialInstance;
         rawImage.texture = minimapTexture;
+
+        if (showDebugInfo)
+        {
+            Debug.Log($"MinimapFogController: World bounds set to ({worldMinX}, {worldMaxX}, {worldMinZ}, {worldMaxZ})");
+        }
     }
 
     private void LateUpdate()
     {
-        if (materialInstance == null || minimapCamera == null) return;
+        if (materialInstance == null) { return; }
+        if (minimapCamera == null) { return; }
 
-        // Update minimap camera bounds each frame
+
+        // Calculate what the camera is currently viewing
         float orthoSize = minimapCamera.orthographicSize;
         float aspect = minimapCamera.aspect;
         Vector3 camPos = minimapCamera.transform.position;
 
+        // View bounds: what world coordinates are visible in the minimap
+        // Remove the zoomFactor multiplication - just use the camera's natural orthographic size
         Vector4 viewBounds = new Vector4(
-            camPos.x - orthoSize * aspect, camPos.x + orthoSize * aspect,
-            camPos.z - orthoSize, camPos.z + orthoSize
+            camPos.x - orthoSize * aspect,
+            camPos.x + orthoSize * aspect,
+            camPos.z - orthoSize,
+            camPos.z + orthoSize
         );
-
         materialInstance.SetVector("_MinimapViewBounds", viewBounds);
+
 
         // Keep textures updated
         materialInstance.SetTexture("_MainTex", minimapTexture);
         materialInstance.SetTexture("_FogMask", fogMaskTexture);
+
+        if (showDebugInfo && Time.frameCount % 60 == 0) // Log once per second
+        {
+            Debug.Log($"Camera at ({camPos.x:F1}, {camPos.z:F1}) | View bounds: ({viewBounds.x:F1}, {viewBounds.y:F1}, {viewBounds.z:F1}, {viewBounds.w:F1})");
+
+            // Calculate what fog mask UV this corresponds to
+            float centerFogU = Mathf.InverseLerp(worldMinX, worldMaxX, camPos.x);
+            float centerFogV = Mathf.InverseLerp(worldMinZ, worldMaxZ, camPos.z);
+            Debug.Log($"Center of view maps to fog UV: ({centerFogU:F2}, {centerFogV:F2})");
+        }
     }
 
     private void OnDestroy()

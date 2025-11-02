@@ -4,6 +4,7 @@ ShaderImporter:
   externalObjects: {}
   defaultTextures:
   - _MainTex: {instanceID: 0}
+  - _FogMask: {instanceID: 0}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 

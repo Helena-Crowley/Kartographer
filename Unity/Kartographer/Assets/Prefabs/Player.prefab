@@ -2264,7 +2264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1965846206
+  GlobalObjectIdHash: 533672282
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3048,11 +3048,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   fogMask: {fileID: 8400000, guid: 50bae02cd2697fc4398ed514e9b133ba, type: 2}
   paintMaterial: {fileID: 2100000, guid: b0e5071f4db31b444adb4b9993a94613, type: 2}
-  worldMinX: -566
+  worldMinX: -500
   worldMaxX: 500
-  worldMinZ: -185
-  worldMaxZ: 264
-  brushSize: 0.075
+  worldMinZ: -250
+  worldMaxZ: 250
+  revealRadius: 10
+  showDebugInfo: 1
   minimapCamera: {fileID: 3300119524853108438}
 --- !u!1 &2552898346324515920
 GameObject:
