@@ -1,8 +1,9 @@
 /*
  * Author: Leonhard Robin Schnaitl
  * GitHub: https://github.com/leonhardrobin
-*/ 
+*/
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -13,6 +14,9 @@ namespace LRS
     [RequireComponent(typeof(LineRenderer))]
     public class Scanner : MonoBehaviour
     {
+        public float scannedPercentage = 0f;
+        public AudioClip hitPointSFX;
+        public AudioClip completeSound;
         private InputAction _fire;
         //private InputAction _changeRadius;
         private List<Vector3> _positionsList = new();
@@ -22,6 +26,7 @@ namespace LRS
         private Color[] _positions;
         private bool _createNewVFX;
         private int _particleAmount;
+        [SerializeField] private int _particleCompleteScanAmount = 1000;
         [SerializeField] private LineRenderer _lineRenderer;
 
         //private const string REJECT_LAYER_NAME = "PointReject";
@@ -36,13 +41,22 @@ namespace LRS
         [SerializeField] private VisualEffect _vfxPrefab;
         [SerializeField] public GameObject _vfxContainer;
         [SerializeField] private Transform _castPoint;
-        [SerializeField] private float _radius = 10f;
-        [SerializeField] private float _maxRadius = 10f;
-        [SerializeField] private float _minRadius = 1f;
-        [SerializeField] private int _pointsPerScan = 40;
+        [SerializeField] private float _radius = 1f;
+        [SerializeField] private float _maxRadius = 1f;
+        [SerializeField] private float _minRadius = 0.5f;
+        [SerializeField] private int _pointsPerScan = 1;
         [SerializeField] private float _range = 10f;
 
-        [SerializeField] private int resolution = 100;
+        [SerializeField] private int resolution = 50;
+
+        [SerializeField] private float minParticleDistance = 0.5f; // in world units, x tresting density stuff
+        public bool isScanning = true;
+
+        //timer
+        [SerializeField] private float resetDelay = 10f; // seconds of inactivity before reset
+        private float _inactivityTimer = 0f;
+
+
 
         private void Start()
         {
@@ -59,27 +73,64 @@ namespace LRS
         private void FixedUpdate()
         {
             Scan();
+            scannedPercentage = ScannedAmount();
+            //Debug.Log(scannedPercentage + "scanned percent");
             //ChangeRadius();
+
+            // 🔹 Update inactivity timer
+            if (_fire.IsPressed())
+                _inactivityTimer = 0f;
+            else
+                _inactivityTimer += Time.fixedDeltaTime;
+
+            if (_inactivityTimer >= resetDelay)
+            {
+                ResetScan();
+            }
         }
-        // private void ChangeRadius()
-        // {
-        //     if (_changeRadius.triggered)
-        //     {
-        //         _radius = Mathf.Clamp(_radius + _changeRadius.ReadValue<float>() * Time.deltaTime, _minRadius, _maxRadius);
-        //     }
-        // }
+        private void ResetScan()
+        {
+            //Debug.Log("Scanner reset due to inactivity.");
+            GetComponentInParent<ScannerUI>().ResetUI();
+
+            // Stop current scanning
+            _lineRenderer.enabled = false;
+            isScanning = true; // allow scanning again
+
+            // Reset lists and data
+            _positionsList.Clear();
+            _particleAmount = 0;
+            scannedPercentage = 0f;
+
+            // Reset timer
+            //_inactivityTimer = 0f;
+
+            // Clear VFX
+            if (_currentVFX != null)
+                Destroy(_currentVFX.gameObject);
+
+            // Clear all old effects
+            foreach (var vfx in _vfxList)
+                if (vfx != null) Destroy(vfx.gameObject);
+            _vfxList.Clear();
+
+            // Prepare a new VFX instance
+            _createNewVFX = true;
+            CreateNewVisualEffect();
+            _currentVFX.enabled = false;
+        }
 
         public void ApplyPositions()
         {
             // create array from list
             Vector3[] pos = _positionsList.ToArray();
-            
+
             // cache position for offset
             Vector3 vfxPos = _currentVFX.transform.position;
-            
+
             // cache transform position
             Vector3 transformPos = transform.position;
-            
+
             // cache some more stuff for faster access
             int loopLength = _texture.width * _texture.height;
             int posListLen = pos.Length;
@@ -98,11 +149,11 @@ namespace LRS
                 }
                 _positions[i] = data;
             }
-            
+
             // apply to texture
             _texture.SetPixels(_positions);
             _texture.Apply();
-            
+
             // apply to VFX
             _currentVFX.SetTexture(TEXTURE_NAME, _texture);
             _currentVFX.Reinit();
@@ -112,24 +163,24 @@ namespace LRS
         {
             // make sure it only gets called once
             if (!_createNewVFX) return;
-            
+
             // add old VFX to list
             _vfxList.Add(_currentVFX);
-            
+
             // create new VFX
             _currentVFX = Instantiate(_vfxPrefab, transform.position, Quaternion.identity, _vfxContainer.transform);
             _currentVFX.SetUInt(RESOLUTION_PARAMETER_NAME, (uint)resolution);
             //_currentVFX.SetInt(PARTICLES_PER_SCAN_PARAMETER_NAME, _pointsPerScan);
-            
+
             // create texture
             _texture = new Texture2D(resolution, resolution, TextureFormat.RGBAFloat, false);
-            
+
             // create color array for positions
             _positions = new Color[resolution * resolution];
-            
+
             // clear list
             _positionsList.Clear();
-            
+
             // set particle amount to 0
             _particleAmount = 0;
             //_currentVFX.SetInt(PARTICLE_AMOUNT_PARAMETER_NAME, _particleAmount);
@@ -140,54 +191,105 @@ namespace LRS
         private void Scan()
         {
             // only call if button is pressed
-            if (_fire.IsPressed())
+            if (_fire.IsPressed() && scannedPercentage < 1f)
             {
+                _currentVFX.enabled = true;
                 for (int i = 0; i < _pointsPerScan; i++)
                 {
-                    // generate random point
-                    Vector3 randomPoint = Random.insideUnitSphere * _radius;
-                    randomPoint += _castPoint.position;
+                    Vector3 randomOffset = Random.insideUnitSphere * _radius;
 
-                    // calculate direction to random point
+                    // Flip if behind
+                    if (Vector3.Dot(randomOffset, transform.forward) < 0f)
+                    {
+                        randomOffset = -randomOffset;
+                    }
+
+                    // Add cast point position
+                    Vector3 randomPoint = _castPoint.position + randomOffset;
+
+                    // Direction from scanner to point
                     Vector3 dir = (randomPoint - transform.position).normalized;
 
-                    // cast ray
                     if (Physics.Raycast(transform.position, dir, out RaycastHit hit, _range, _layerMask))
                     {
                         Debug.DrawRay(transform.position, dir * hit.distance, Color.green);
-                        // only add point if the particle count limit is not reached
+
+                        // Only add point if particle count limit is not reached
                         if (_positionsList.Count < resolution * resolution)
                         {
-                            //if (hit.collider.CompareTag(REJECT_LAYER_NAME)) continue;
-                            _positionsList.Add(hit.point);
-                            _lineRenderer.enabled = true;
-                            _lineRenderer.SetPositions(new[]
+                            // --- START: minimum distance check ---
+                            bool tooClose = false;
+                            float minDistance = 0.5f; // set this to whatever world-space distance you want
+
+                            foreach (var pos in _positionsList)
                             {
-                                transform.position,
-                                hit.point
-                            });
-                            _particleAmount++;
-                            //_currentVFX.SetInt(PARTICLE_AMOUNT_PARAMETER_NAME, _particleAmount);
+                                if (Vector3.Distance(pos, hit.point) < minDistance)
+                                {
+                                    tooClose = true;
+                                    break;
+                                }
+                            }
+
+                            if (!tooClose)
+                            {
+                                _positionsList.Add(hit.point);
+                                _lineRenderer.enabled = true;
+                                _lineRenderer.SetPositions(new[]
+                                {
+                            transform.position,
+                            hit.point
+                        });
+
+                                _particleAmount++;
+                                if (_particleAmount % 1 == 0)
+                                {
+                                    SoundManager.Instance.PlaySound2D(hitPointSFX, .2f);
+                                }
+                            }
+                            // --- END: minimum distance check ---
                         }
-                        // create new VFX if the particle count limit is reached
                         else
                         {
                             _createNewVFX = true;
                             CreateNewVisualEffect();
                             break;
                         }
-                    } // raycast
-                    else
-                    {
-                        Debug.DrawRay(transform.position, dir * _range, Color.red);
+
                     }
                 } // for loop
-                ApplyPositions();
-            } // button press
+                ApplyPositions();// button press
+            }
+            else if (scannedPercentage >= 1f && isScanning)
+            {
+                //SCAN COMPLETED
+                SoundManager.Instance.PlaySound2D(completeSound, .3f);
+                isScanning = false;
+                GetComponentInParent<ScannerUI>().ScanComplete();
+            }
             else
             {
                 _lineRenderer.enabled = false;
             }
         }
+
+        public float ScannedAmount()
+        {
+            if (_particleCompleteScanAmount == 0)
+            { //Debug.Log("left scanned amount"); 
+                return 0;
+            }
+
+            float percentage = (float)_particleAmount / _particleCompleteScanAmount;
+
+            return percentage;
+        }
+
     }
+    // private void ChangeRadius()
+    // {
+    //     if (_changeRadius.triggered)
+    //     {
+    //         _radius = Mathf.Clamp(_radius + _changeRadius.ReadValue<float>() * Time.deltaTime, _minRadius, _maxRadius);
+    //     }
+    // }
 }
