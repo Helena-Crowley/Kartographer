@@ -21,13 +21,13 @@ public class MiniMapCameraFollow : NetworkBehaviour
         }
     }
 
-    void LateUpdate()
-    {
-        if (!IsOwner) return;
+    // void LateUpdate()
+    // {
+    //     if (!IsOwner) return;
 
-        // Follow position only
-        cameraTransform.position = playerTransform.position + offset;
-        // Don’t rotate with player — keep fixed rotation
-        cameraTransform.rotation = Quaternion.Euler(90f, 0f, 0f); // top-down
-    }
+    //     // Follow position only
+    //     cameraTransform.position = playerTransform.position + offset;
+    //     // Don’t rotate with player — keep fixed rotation
+    //     cameraTransform.rotation = Quaternion.Euler(90f, 0f, 0f); // top-down
+    // }
 }

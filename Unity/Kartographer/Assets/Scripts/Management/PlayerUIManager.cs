@@ -17,7 +17,7 @@ public class PlayerUIManager : MonoBehaviour
     public Sprite offHandIcon;
     public Transform stormTransform;
     public TMP_Text distanceText;
-    public MinimapFogController minimapFogController;
+    // public MinimapFogController minimapFogController;
 
     private void Awake()
     {
@@ -56,8 +56,8 @@ public class PlayerUIManager : MonoBehaviour
         distanceTextScript.stormTransform = stormTransform;
     }
 
-    public void BindPlayer(FogPainter fogPainter)
-    {
-        minimapFogController.minimapCamera = fogPainter.minimapCamera;
-    }
+    // public void BindPlayer(FogPainter fogPainter)
+    // {
+    //     minimapFogController.minimapCamera = fogPainter.minimapCamera;
+    // }
 }
