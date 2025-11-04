@@ -30,6 +30,7 @@ using UnityEngine;
 public class VFXContainer : MonoBehaviour
 {
     public TMP_Text scannableZoneText;
+    [SerializeField] private Drone drone;
 
     private Scanner scanner;
     private bool isFading = false;
@@ -38,7 +39,10 @@ public class VFXContainer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (buildingScanned) return;
+        if (buildingScanned)
+        {
+            return;
+        }
         if (other.CompareTag("Player") && !isFading)
         {
             ShowWelcomeText("Scannable Zone");
@@ -117,6 +121,7 @@ public class VFXContainer : MonoBehaviour
     public void MarkBuildingAsScanned()
     {
         buildingScanned = true;
+        drone.droneScanning = true;
     }
 }
 

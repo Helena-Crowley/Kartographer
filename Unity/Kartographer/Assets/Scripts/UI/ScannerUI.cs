@@ -118,6 +118,7 @@ public class ScannerUI : NetworkBehaviour
 
     public event System.Action<GameObject> ScanCompleteEvent;
 
+
     private Color originalColor;
 
     [SerializeField] private Scanner scanner;
@@ -140,7 +141,7 @@ public class ScannerUI : NetworkBehaviour
         if (!scanner.isScanning)
         {
             ScanCompleteEvent?.Invoke(currentBuilding);
-            vfxContainer.buildingScanned = true;
+            vfxContainer.MarkBuildingAsScanned();
             Destroy(vfxContainer.GetComponent<BoxCollider>());
             StartCoroutine(ShowScanCompleteUI());
             Debug.Log("Scan Complete!");
