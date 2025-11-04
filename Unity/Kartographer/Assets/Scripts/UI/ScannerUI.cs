@@ -113,9 +113,11 @@ public class ScannerUI : NetworkBehaviour
     [HideInInspector] public Image percentageSlider;
     [HideInInspector] public TMP_Text completedText;
     [HideInInspector] public TMP_Text scanningZoneText; // For trigger zone message
-    public GameObject currentBuilding;
+    [HideInInspector] public GameObject currentBuilding;
+    [HideInInspector] public VFXContainer vfxContainer;
 
     public event System.Action<GameObject> ScanCompleteEvent;
+
     private Color originalColor;
 
     [SerializeField] private Scanner scanner;
@@ -138,6 +140,7 @@ public class ScannerUI : NetworkBehaviour
         if (!scanner.isScanning)
         {
             ScanCompleteEvent?.Invoke(currentBuilding);
+            Destroy(vfxContainer.GetComponent<BoxCollider>());
             Debug.Log("Invoked!");
             StartCoroutine(ShowScanCompleteUI());
         }
@@ -160,46 +163,7 @@ public class ScannerUI : NetworkBehaviour
     }
 
     // New method to show a welcome/scannable zone message
-    public void ShowWelcomeText(string message = "Scannable Zone")
-    {
-        if (scanningZoneText != null)
-        {
-            scanningZoneText.text = message;
-            StartCoroutine(FadeTextCoroutine(scanningZoneText, 2f)); // fade duration 2s
-        }
-    }
 
-    private IEnumerator FadeTextCoroutine(TMPro.TMP_Text text, float fadeDuration)
-    {
-        text.gameObject.SetActive(true);
-        Color originalColor = text.color;
-
-        // Fade in
-        float timer = 0f;
-        while (timer < fadeDuration)
-        {
-            timer += Time.deltaTime;
-            float alpha = Mathf.Clamp01(timer / fadeDuration);
-            text.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-            yield return null;
-        }
-
-        // Keep fully visible for 1 second
-        yield return new WaitForSeconds(1f);
-
-        // Fade out
-        timer = 0f;
-        while (timer < fadeDuration)
-        {
-            timer += Time.deltaTime;
-            float alpha = 1f - Mathf.Clamp01(timer / fadeDuration);
-            text.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-            yield return null;
-        }
-
-        text.gameObject.SetActive(false);
-        text.color = originalColor; // reset
-    }
 
     private IEnumerator ShowScanCompleteUI()
     {

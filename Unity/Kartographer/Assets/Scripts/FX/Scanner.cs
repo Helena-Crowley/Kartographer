@@ -117,7 +117,7 @@ namespace LRS
             // Prepare a new VFX instance
             _createNewVFX = true;
             CreateNewVisualEffect();
-            _currentVFX.enabled = false;
+            //_currentVFX.enabled = false;
         }
 
         public void ApplyPositions()
@@ -248,12 +248,13 @@ namespace LRS
                             }
                             // --- END: minimum distance check ---
                         }
-                        else
+                        else if (_fire.IsPressed())
                         {
                             _createNewVFX = true;
                             CreateNewVisualEffect();
                             break;
                         }
+
 
                     }
                 } // for loop

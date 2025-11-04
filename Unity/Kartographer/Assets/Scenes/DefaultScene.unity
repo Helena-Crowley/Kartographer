@@ -1591,14 +1591,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206388438}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -348.45, y: -11.26, z: -37.58}
+  m_LocalRotation: {x: -0, y: 0.62946445, z: -0, w: 0.77702934}
+  m_LocalPosition: {x: -371.05, y: -14.27, z: -37.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 543450653089711088}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 78.021, z: 0}
 --- !u!65 &206388440
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1632,6 +1632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9aa40932a50b86479ecf8dff5b4ad53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VFXContainer
+  scannableZoneText: {fileID: 1704590594}
 --- !u!1 &212599326
 GameObject:
   m_ObjectHideFlags: 0
@@ -11923,6 +11924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9aa40932a50b86479ecf8dff5b4ad53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VFXContainer
+  scannableZoneText: {fileID: 1704590594}
 --- !u!65 &1678995521
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12261,7 +12263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1704590593
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15922,8 +15924,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132147730907900}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -343.08478, y: -10.415859, z: -36.72}
+  m_LocalRotation: {x: -0, y: 0.77702934, z: -0, w: -0.62946445}
+  m_LocalPosition: {x: -365.73, y: -12.25, z: -36.72}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -15936,7 +15938,7 @@ Transform:
   - {fileID: 183708138}
   - {fileID: 2060086202}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 258.021, z: 0}
 --- !u!4 &543450653089711088 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1981478563868149894, guid: 9f135fc51d50b2b4885606cced596ff4, type: 3}
