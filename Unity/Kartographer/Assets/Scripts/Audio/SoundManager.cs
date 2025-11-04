@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class SoundManager : MonoBehaviour
         }
 
         Instance = this;
+        if(transform.parent != null) transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -33,7 +35,7 @@ public class SoundManager : MonoBehaviour
         aSource.pitch = speed;
 
         if (randomPitchEnabled)
-            aSource.pitch = Random.Range(0.7f, 1.2f) + speed - 1;
+            aSource.pitch = UnityEngine.Random.Range(0.7f, 1.2f) + speed - 1;
 
         aSource.Play();
         Destroy(tempGO, clip.length / Mathf.Abs(aSource.pitch)); // adjust for pitch speed
@@ -51,7 +53,7 @@ public class SoundManager : MonoBehaviour
         aSource.pitch = speed;
 
         if (randomPitchEnabled)
-            aSource.pitch = Random.Range(0.7f, 1.2f) + speed - 1;
+            aSource.pitch = UnityEngine.Random.Range(0.7f, 1.2f) + speed - 1;
 
         aSource.Play();
         Destroy(tempGO, clip.length / Mathf.Abs(aSource.pitch));

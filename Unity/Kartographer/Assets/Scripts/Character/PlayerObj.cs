@@ -184,7 +184,7 @@ public class PlayerObj : NetworkBehaviour
         // (the client that owns this PlayerObj), then bind its UI elements.
         if (IsOwner)
         {
-            Debug.Log($"Binding UI for local player {OwnerClientId}");
+            //Debug.Log($"Binding UI for local player {OwnerClientId}");
             PlayerUIManager.Instance.BindPlayer(this);
 
             // Initialize UI with current values
@@ -206,10 +206,12 @@ public class PlayerObj : NetworkBehaviour
             healthBar.UpdateHealthBar(newVal);
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         // Always unsubscribe from events to avoid leaks when object despawns
         currentHealth.OnValueChanged -= OnHealthChanged;
+
+        base.OnDestroy();
     }
 
     // ======================================================

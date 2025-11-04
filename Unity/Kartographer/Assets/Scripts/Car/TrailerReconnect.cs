@@ -82,15 +82,14 @@ public class TrailerReconnect : MonoBehaviour
             joint.breakForce = 3000f;
             joint.breakTorque = 3000f;
 
-            Debug.Log("Trailer successfully hitched to cart!");
+            //Debug.Log("Trailer successfully hitched to cart!");
         }
     }
 
     void OnJointBreak(float breakForce)
     {
-        Debug.Log("trailer broke off!");
+        //Debug.Log("trailer broke off!");
         trailerRb.linearVelocity = Vector3.zero;
-        //trailerRb.AddExplosionForce(5000, transform.position, 50);
     }
 
 

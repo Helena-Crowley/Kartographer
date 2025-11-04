@@ -34,16 +34,18 @@ public class VFXContainer : MonoBehaviour
     private Scanner scanner;
     private bool isFading = false;
 
+    [HideInInspector] public bool buildingScanned = false;
+
     private void OnTriggerEnter(Collider other)
     {
+        if (buildingScanned) return;
         if (other.CompareTag("Player") && !isFading)
         {
             ShowWelcomeText("Scannable Zone");
-            
+
             scanner = other.GetComponentInChildren<Scanner>();
             scanner._vfxContainer = gameObject; // assign building as VFX container
-            // scanner.CreateNewVisualEffect();
-            // scanner.ApplyPositions();
+            scanner.CreateNewVisualEffect();
 
             // Dynamically tell ScannerUI which building this is
             ScannerUI scannerUI = other.GetComponent<ScannerUI>();
@@ -57,6 +59,17 @@ public class VFXContainer : MonoBehaviour
                 Debug.LogWarning("NO SCANNERUI WAS BINDED");
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Scanner scanner = other.GetComponentInChildren<Scanner>();
+        scanner._vfxContainer = null;
+        scanner.ResetScan();
+        ScannerUI scannerUI = other.GetComponent<ScannerUI>();
+        scannerUI.currentBuilding = null;
+        scannerUI.vfxContainer = null;
+
     }
 
     public void ShowWelcomeText(string message = "Scannable Zone")
@@ -101,5 +114,9 @@ public class VFXContainer : MonoBehaviour
         isFading = false; // reset flag when done
     }
 
+    public void MarkBuildingAsScanned()
+    {
+        buildingScanned = true;
+    }
 }
 

@@ -14,7 +14,7 @@ public class CartSpawner : NetworkBehaviour
             // Spawn the cart once on the server
             var cart = Instantiate(cartPrefab, spawnPosition, spawnRotation);
             cart.GetComponent<NetworkObject>().Spawn(true);
-            Debug.Log("Cart spawned on server!");
+            //Debug.Log("Cart spawned on server!");
         }
     }
 }

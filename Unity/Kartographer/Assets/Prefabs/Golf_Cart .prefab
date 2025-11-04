@@ -311,8 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00388d572aec45c4eadeceb8fea1e699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrailerBehaviour
-  recconnectZone: {fileID: 0}
-  joint: {fileID: 0}
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1312241475680229627
 GameObject:
   m_ObjectHideFlags: 0
@@ -5169,7 +5168,14 @@ GameObject:
   - component: {fileID: 4014083368458493859}
   - component: {fileID: 2481369880836771665}
   - component: {fileID: 8005495474496113023}
-  - component: {fileID: 5089537341799661373}
+  - component: {fileID: 1434213584042425730}
+  - component: {fileID: 545658793352438273}
+  - component: {fileID: 1124404566785428118}
+  - component: {fileID: 9106963170651713058}
+  - component: {fileID: 8664076219305708751}
+  - component: {fileID: 661901520574147153}
+  - component: {fileID: 8864876639667627131}
+  - component: {fileID: 227420167669236689}
   m_Layer: 0
   m_Name: Cart_Trailer_Bed
   m_TagString: Untagged
@@ -5248,7 +5254,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5089537341799661373
+--- !u!65 &1434213584042425730
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5267,8 +5273,151 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.4674363, y: 1.2, z: 4.413237}
-  m_Center: {x: 1.0635227, y: 1.72, z: -0.026418699}
+  m_Size: {x: 5.467434, y: 0.14, z: 4.413235}
+  m_Center: {x: 1.0633849, y: 1.22, z: -0.026418684}
+--- !u!65 &545658793352438273
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.467434, y: 1.05, z: 0.2}
+  m_Center: {x: 1.0633849, y: 1.78, z: -2.24}
+--- !u!65 &1124404566785428118
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.467434, y: 1.05, z: 0.2}
+  m_Center: {x: 1.0633849, y: 1.78, z: 2.08}
+--- !u!65 &9106963170651713058
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 1.1454265, z: 4.413235}
+  m_Center: {x: 3.79, y: 1.71, z: -0.026418684}
+--- !u!65 &8664076219305708751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 1.1454265, z: 4.413235}
+  m_Center: {x: -1.65, y: 1.71, z: -0.026418684}
+--- !u!65 &661901520574147153
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.467434, y: 7.18, z: 4.413235}
+  m_Center: {x: 1.0633849, y: 4.92, z: -0.026418684}
+--- !u!114 &8864876639667627131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00388d572aec45c4eadeceb8fea1e699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrailerBehaviour
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &227420167669236689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634225877549445342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 928986966
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1649606432264301367
 GameObject:
   m_ObjectHideFlags: 0
@@ -7005,7 +7154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2540960787
+  GlobalObjectIdHash: 2655085064
   InScenePlacedSourceGlobalObjectIdHash: 2540960787
   DeferredDespawnTick: 0
   Ownership: 1

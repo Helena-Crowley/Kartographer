@@ -6,7 +6,6 @@ public class VideoSwitcher : MonoBehaviour
     public VideoPlayer videoPlayer;
     public VideoClip clip1;
     public VideoClip clip2;
-    public VideoClip scareClip;
 
     void Start()
     {
@@ -17,12 +16,6 @@ public class VideoSwitcher : MonoBehaviour
     public void SwitchToClip2()
     {
         videoPlayer.clip = clip2;
-        videoPlayer.Play();
-    }
-
-    public void SwitchToScareClip()
-    {
-        videoPlayer.clip = scareClip;
         videoPlayer.Play();
     }
 }

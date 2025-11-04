@@ -23,7 +23,6 @@ public class DoorInteract : NetworkBehaviour
     private Quaternion openRotation;
     private bool doorOpen = false;
     private bool canOpen = false;
-    private bool hasPlayedSound = false;
 
     private void Start()
     {
@@ -82,8 +81,6 @@ public class DoorInteract : NetworkBehaviour
 
         openRotation = Quaternion.Euler(0, (dot > 0 ? 90 : -90), 0) * closedRotation;
 
-        hasPlayedSound = false; // reset sound flag
-
         if (IsServer)
         {
             ToggleDoor();
@@ -103,7 +100,6 @@ public class DoorInteract : NetworkBehaviour
     private void ToggleDoor()
     {
         doorOpen = !doorOpen;
-        hasPlayedSound = false;
 
         // Broadcast sound to all clients
         PlayDoorSoundClientRpc(doorOpen);

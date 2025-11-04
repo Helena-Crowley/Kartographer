@@ -50,7 +50,7 @@ public class CameraManager : NetworkBehaviour
         playerCamera.enabled = true;
         cartCamera.enabled = false;
         cartCamera.GetComponent<CameraFollow>().enabled = false;
-        Debug.Log("Switched to Player Camera");
+        //Debug.Log("Switched to Player Camera");
     }
 
     public void SwitchToCartCamera()
@@ -58,6 +58,6 @@ public class CameraManager : NetworkBehaviour
         playerCamera.enabled = false;
         cartCamera.enabled = true;
         cartCamera.GetComponent<CameraFollow>().enabled = true;
-        Debug.Log("Switched to Cart Camera");
+        //Debug.Log("Switched to Cart Camera");
     }
 }

@@ -1,28 +1,68 @@
-using Unity.VisualScripting;
+// using Unity.VisualScripting;
+// using UnityEngine;
+
+// public class TrailerBehaviour : MonoBehaviour
+// {
+//     private Rigidbody rb;
+//     private void OnTriggerEnter(Collider other)
+//     {
+//         GameObject itemMesh = other.gameObject;
+//         if (itemMesh.transform.parent.tag == "Scrap")
+//         {
+//             rb = itemMesh.GetComponentInParent<Rigidbody>();
+//             if (rb != null)
+//             {
+//                 rb.isKinematic = true;
+//                 Debug.Log("enabled is kinematic");
+//             }
+//             else
+//             {
+//                 Debug.Log("rb from sceap was null");
+//             }
+//         }
+//     }
+// }
+using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TrailerBehaviour : MonoBehaviour
+public class TrailerBehaviour : NetworkBehaviour
 {
-    public Collider recconnectZone;
-    public ConfigurableJoint joint;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        recconnectZone.enabled = true;
-        joint.connectedBody = null;
+        // get the NetworkObject on the scrap's rigidbody root (safer)
+        var attachedRb = other.attachedRigidbody;
+        if (attachedRb == null) return;
+
+        var scrapNetObj = attachedRb.GetComponent<NetworkObject>();
+        if (scrapNetObj == null) return; // not a networked scrap
+
+        // Call server to attach (allow non-owners to call)
+        RequestAttachToTrailerServerRpc(scrapNetObj.NetworkObjectId);
     }
 
-    // Update is called once per frame
-    void OnTriggerEnter(Collider other)
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestAttachToTrailerServerRpc(ulong scrapNetworkId, ServerRpcParams rpcParams = default)
     {
-        if (other.CompareTag("Cart"))
+        // Ensure server has the NetworkObject
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(scrapNetworkId, out var scrapNetObj))
         {
-            Debug.Log("Cart entered reconnect zone");
-            recconnectZone.enabled = false;
-            joint.anchor = new Vector3(0, .55f, -2.24f);
-            // Attach trailer to cart
-            joint.connectedBody = other.GetComponent<Rigidbody>();
-
+            Debug.LogWarning("Server: scrap not found in SpawnedObjects.");
+            return;
         }
+
+        // Optional: wait or check if scrap is settled; here we parent immediately on server
+        // Ensure this trailer is also a NetworkObject and spawned
+        var myNetObj = GetComponent<NetworkObject>();
+        if (myNetObj == null || !myNetObj.IsSpawned)
+        {
+            Debug.LogWarning("Trailer has no spawned NetworkObject; cannot parent.");
+            return;
+        }
+
+        // TrySetParent the scrap's NetworkObject under this trailer's NetworkObject
+        bool ok = scrapNetObj.TrySetParent(myNetObj);
+        Debug.Log($"Server: TrySetParent result = {ok} for {scrapNetObj.name}");
     }
 }
+

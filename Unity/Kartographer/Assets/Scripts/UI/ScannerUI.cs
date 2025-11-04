@@ -140,9 +140,10 @@ public class ScannerUI : NetworkBehaviour
         if (!scanner.isScanning)
         {
             ScanCompleteEvent?.Invoke(currentBuilding);
+            vfxContainer.buildingScanned = true;
             Destroy(vfxContainer.GetComponent<BoxCollider>());
-            Debug.Log("Invoked!");
             StartCoroutine(ShowScanCompleteUI());
+            Debug.Log("Scan Complete!");
         }
     }
 
@@ -204,5 +205,7 @@ public class ScannerUI : NetworkBehaviour
         percentageSlider.color = new Color32(0, 0, 0, 0);
         completedText.gameObject.SetActive(false);
         percentageSlider.gameObject.SetActive(false);
+
+        scanner.RemoveFX(); //take away da dots
     }
 }
