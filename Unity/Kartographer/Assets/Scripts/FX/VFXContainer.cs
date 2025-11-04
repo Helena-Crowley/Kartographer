@@ -42,8 +42,8 @@ public class VFXContainer : MonoBehaviour
             
             scanner = other.GetComponentInChildren<Scanner>();
             scanner._vfxContainer = gameObject; // assign building as VFX container
-            scanner.CreateNewVisualEffect();
-            scanner.ApplyPositions();
+            // scanner.CreateNewVisualEffect();
+            // scanner.ApplyPositions();
 
             // Dynamically tell ScannerUI which building this is
             ScannerUI scannerUI = other.GetComponent<ScannerUI>();

@@ -2266,7 +2266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1965846206
+  GlobalObjectIdHash: 533672282
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3051,7 +3051,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   percentageSlider: {fileID: 0}
   completedText: {fileID: 0}
+  scanningZoneText: {fileID: 0}
   currentBuilding: {fileID: 0}
+  vfxContainer: {fileID: 0}
   scanner: {fileID: 7414364654619419196}
 --- !u!114 &4923665034963816336
 MonoBehaviour:
@@ -3068,6 +3070,7 @@ MonoBehaviour:
   mapToggle: {fileID: 3275238628389446033, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   map: {fileID: 3991807780034636535}
   iconPrefab: {fileID: 5273103729627446292}
+  playerIcon: {fileID: 8977154650686489991, guid: a1928bf0c1bc91144a6d7dd832a8905d, type: 3}
   levelMin: {x: -889, y: 0, z: -623}
   levelMax: {x: 279, y: 0, z: 591}
   buildings: []
@@ -13918,7 +13921,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 255
+    m_Bits: 1279
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

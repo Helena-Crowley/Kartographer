@@ -364,7 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CartSpawner
   ShowTopMostFoldoutHeaderGroup: 1
   cartPrefab: {fileID: 5517077382940005212, guid: 46f80a3978eecc341b763b0e7e0584b8, type: 3}
-  spawnPosition: {x: -342.12, y: 10, z: -31.59}
+  spawnPosition: {x: -342.12, y: -10, z: -31.59}
   spawnRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
 --- !u!1001 &37588475
 PrefabInstance:

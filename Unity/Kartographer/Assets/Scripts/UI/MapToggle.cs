@@ -240,6 +240,7 @@ public class MapToggle : MonoBehaviour
 
     [Header("Icon Settings")]
     public GameObject iconPrefab; // Prefab for the icons
+    public GameObject playerIcon;
 
     [Header("Level Bounds")]
     public Vector3 levelMin = new Vector3(-50, 0, -50);
@@ -260,7 +261,7 @@ public class MapToggle : MonoBehaviour
             scannerUI.ScanCompleteEvent += OnBuildingScanned; // now correct
         }
 
-
+        playerIcon = Instantiate(playerIcon, map.transform);
     }
 
     void Update()
@@ -277,6 +278,7 @@ public class MapToggle : MonoBehaviour
                 icon.SetActive(mapEnabled);
             }
         }
+        playerIcon.transform.localPosition = GetIconLocalPosition(transform.position);
     }
 
     public void OnBuildingScanned(GameObject building)
