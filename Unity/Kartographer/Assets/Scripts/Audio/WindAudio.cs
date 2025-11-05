@@ -19,6 +19,7 @@ public class WindAudio : MonoBehaviour
     {
         if (windAudio != null)
         {
+            if (windAudio.enabled == false) return;
             windAudio.loop = true; // wind is seamless
             windAudio.Play();
         }

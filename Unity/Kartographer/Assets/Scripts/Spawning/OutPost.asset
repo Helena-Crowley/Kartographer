@@ -13,13 +13,10 @@ MonoBehaviour:
   m_Name: OutPost
   m_EditorClassIdentifier: Assembly-CSharp::SpawnData
   sceneName: OutPost
-  spawnPositions:
-  - {x: 1.01, y: 0, z: 3.26}
-  - {x: 1.05, y: 0, z: -5.44}
-  - {x: 5.47, y: 0, z: -4.75}
+  positions:
+  - {x: 1, y: 0, z: 3.25}
+  - {x: 1, y: 0, z: -5.44}
+  - {x: 5.5, y: 0, z: -4.75}
   - {x: 0, y: 0, z: -2.56}
-  spawnRotations:
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
+  rotations:
   - {x: 0, y: 0, z: 0, w: 0}

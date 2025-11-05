@@ -9,6 +9,7 @@ public class InteractPrompt : MonoBehaviour
     private void Start()
     {
         PlayerUIManager.Instance.BindPlayer(this);
+        interactPrompt.SetActive(false);
     }
 
     /// <summary>

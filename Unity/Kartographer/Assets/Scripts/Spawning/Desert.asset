@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Desert
   m_EditorClassIdentifier: Assembly-CSharp::SpawnData
   sceneName: DefaultScene
-  spawnPositions:
-  - {x: 0, y: 3, z: 0}
-  spawnRotations:
+  positions:
+  - {x: -420.85, y: -14.65, z: -46.82}
+  - {x: -420.85, y: -14.65, z: -33.33}
+  - {x: -420.85, y: -14.65, z: -23.17}
+  rotations:
   - {x: 0, y: 0, z: 0, w: 0}

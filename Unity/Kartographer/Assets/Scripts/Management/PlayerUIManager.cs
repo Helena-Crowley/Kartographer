@@ -35,6 +35,8 @@ public class PlayerUIManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     // Called by the local player to hook up UI

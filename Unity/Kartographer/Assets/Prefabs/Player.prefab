@@ -2198,9 +2198,7 @@ GameObject:
   - component: {fileID: 7753823126073041457}
   - component: {fileID: 6177395879404734054}
   - component: {fileID: -2763129840863056162}
-  - component: {fileID: 8425832216876865169}
   - component: {fileID: 8222893598219982139}
-  - component: {fileID: 6282108136424175527}
   - component: {fileID: 110251132995169303}
   - component: {fileID: 4923665034963816336}
   m_Layer: 2
@@ -2297,7 +2295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1965846206
+  GlobalObjectIdHash: 533672282
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2306,7 +2304,7 @@ MonoBehaviour:
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
@@ -3021,22 +3019,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPullHandler
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &8425832216876865169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2538848329134641862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4380944023ca1469a3b4f5287225e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
-  ShowTopMostFoldoutHeaderGroup: 1
-  outpostScene: OutPost
-  desertScene: DefaultScene
-  toggleAction: {fileID: 994724758625142806, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
 --- !u!114 &8222893598219982139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3052,21 +3034,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   distanceText: {fileID: 0}
   stormTransform: {fileID: 0}
---- !u!114 &6282108136424175527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2538848329134641862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1a53654945694747b44f184a7b3990f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MiniMapCameraFollow
-  ShowTopMostFoldoutHeaderGroup: 1
-  cameraTransform: {fileID: 0}
-  offset: {x: 0, y: 22, z: 0}
 --- !u!114 &110251132995169303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3098,6 +3065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c811e8ecc46c58c42bbdd205ee79d833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   mapToggle: {fileID: 3275238628389446033, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   map: {fileID: 3991807780034636535}
   iconPrefab: {fileID: 5273103729627446292}
