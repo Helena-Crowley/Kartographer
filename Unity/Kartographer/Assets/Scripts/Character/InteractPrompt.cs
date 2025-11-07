@@ -25,7 +25,7 @@ public class InteractPrompt : MonoBehaviour
             if (!hold)
                 textComponent.text = "Press '" + keyToPress + "' to " + action;
             else
-                textComponent.text = "Press '" + keyToPress + "' to " + action;
+                textComponent.text = "Hold '" + keyToPress + "' to " + action;
         }
         else
         {

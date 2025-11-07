@@ -12,15 +12,27 @@ public class ItemSpawner : NetworkBehaviour
 
         if (IsServer)
         {
-            SpawnItems();
+            StartCoroutine(DelayedSpawn());
         }
+    }
+
+    private System.Collections.IEnumerator DelayedSpawn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SpawnItems();
     }
 
     private void SpawnItems()
     {
+        Debug.Log($"[ItemSpawner] SpawnItems called. IsServer: {IsServer}");
+
         var spawnPoints = GetComponentsInChildren<SpawnPoint>();
+        Debug.Log($"[ItemSpawner] Found {spawnPoints.Length} spawn points");
+
         foreach (var sp in spawnPoints)
         {
+            Debug.Log($"[ItemSpawner] Processing spawn point: {sp.name}, chance: {sp.spawnChance}");
+
             if (Random.value <= sp.spawnChance)
             {
                 ItemData[] pool = null;

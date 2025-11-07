@@ -11,16 +11,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/NGO_Minimal_Setup/NGO_Setup.unity
     guid: 9ed12e642490a0045bffb764adf8aa08
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 3395280b8e679974880b29b8e4d26d44
   - enabled: 1
     path: Assets/Scenes/DefaultScene.unity
     guid: 8efbf0b07eb177a4ba3d3f5b8a48fa1c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/OutPost.unity
     guid: 3abc7d8b32275034b8ccd4e0622a0ef4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BootStrap.unity
     guid: a3bb6ce48e194eb40bb293c96eef052b
   m_configObjects:

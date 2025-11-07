@@ -19,8 +19,8 @@ public class ObjectSpawner : MonoBehaviour
         int objectMissedCount = 0;
         for (int i = 0; i < count; i++)
         {
-            float randomX = Random.Range(-500, 500);
-            float randomZ = Random.Range(-200, 200);
+            float randomX = Random.Range(-700, 700);
+            float randomZ = Random.Range(-300, 300);
             Vector3 spawnOrigin = new Vector3(randomX, 300f, randomZ);
             // Shoot ray down
             Ray ray = new Ray(spawnOrigin + Vector3.up * 500f, Vector3.down);
