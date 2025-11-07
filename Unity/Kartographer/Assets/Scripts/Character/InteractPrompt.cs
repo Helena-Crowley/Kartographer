@@ -17,12 +17,15 @@ public class InteractPrompt : MonoBehaviour
     /// Pass a key and action to show it, or leave blank to hide.
     /// </summary>
     /// 
-    public void ToggleInteractPrompt(string keyToPress = "", string action = "")
+    public void ToggleInteractPrompt(string keyToPress = "", string action = "", bool hold = false)
     {
         if (!string.IsNullOrEmpty(keyToPress) && !string.IsNullOrEmpty(action))
         {
             interactPrompt.SetActive(true);
-            textComponent.text = "Press '" + keyToPress + "' to " + action;
+            if (!hold)
+                textComponent.text = "Press '" + keyToPress + "' to " + action;
+            else
+                textComponent.text = "Press '" + keyToPress + "' to " + action;
         }
         else
         {
@@ -31,3 +34,5 @@ public class InteractPrompt : MonoBehaviour
         }
     }
 }
+
+

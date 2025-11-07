@@ -78,8 +78,8 @@ public class PlayerUIManager : MonoBehaviour
         scannerUI.scanningZoneText = scanningZoneText;
     }
 
-    // public void BindPlayer(FogPainter fogPainter)
-    // {
-    //     minimapFogController.minimapCamera = fogPainter.minimapCamera;
-    // }
+    public void BindPlayer(PauseManager pauseManager)
+    {
+        pauseManager.playerHUD = gameObject;
+    }
 }

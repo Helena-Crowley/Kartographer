@@ -7,6 +7,8 @@ public class PauseManager : NetworkBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
 
+    public GameObject playerHUD;
+
     private PlayerInput playerInput;
     private PlayerInputManager inputManager;
     private InputAction pauseAction;
@@ -24,6 +26,8 @@ public class PauseManager : NetworkBehaviour
 
         playerInput = GetComponent<PlayerInput>();
         inputManager = GetComponent<PlayerInputManager>();
+
+        PlayerUIManager.Instance.BindPlayer(this);
 
         // Ensure menu starts hidden
         if (pauseMenu != null) pauseMenu.SetActive(false);
@@ -51,6 +55,7 @@ public class PauseManager : NetworkBehaviour
         isPaused = !isPaused;
 
         if (pauseMenu != null) pauseMenu.SetActive(isPaused);
+        if (playerHUD != null) playerHUD.SetActive(!isPaused);
 
         if (isPaused)
         {

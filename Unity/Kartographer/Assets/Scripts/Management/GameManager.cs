@@ -18,7 +18,6 @@ public class GameManager : NetworkBehaviour
         }
 
         Instance = this;
-        if (transform.parent != null) transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 }

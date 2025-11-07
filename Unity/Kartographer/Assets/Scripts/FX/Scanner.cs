@@ -82,7 +82,11 @@ namespace LRS
 
         private void FixedUpdate()
         {
-            if (_vfxContainer == null) return;
+            if (_vfxContainer == null)
+            {
+                //Debug.Log("VFX contianer was null");
+                return;
+            }
             if (_vfxContainer.GetComponent<VFXContainer>().buildingScanned) return;
             if (!allowedToScan) return;
 

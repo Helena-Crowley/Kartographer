@@ -19,7 +19,7 @@ public class PlayerPickUp : NetworkBehaviour
 
     [SerializeField] Camera playerCam;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
         interactPrompt = GetComponent<InteractPrompt>();
         interactPrompt.ToggleInteractPrompt();

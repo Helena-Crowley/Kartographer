@@ -45,11 +45,10 @@ public class VFXContainer : MonoBehaviour
         }
         if (other.CompareTag("Player") && !isFading)
         {
-            ShowWelcomeText("Scannable Zone");
+            Debug.Log("That someone was a player");
 
-            scanner = other.GetComponentInChildren<Scanner>();
-            scanner._vfxContainer = gameObject; // assign building as VFX container
-            scanner.CreateNewVisualEffect();
+
+
 
             // Dynamically tell ScannerUI which building this is
             ScannerUI scannerUI = other.GetComponent<ScannerUI>();
@@ -57,11 +56,18 @@ public class VFXContainer : MonoBehaviour
             {
                 scannerUI.currentBuilding = gameObject;
                 scannerUI.vfxContainer = this;
+                scannableZoneText = scannerUI.scanningZoneText;
             }
             else
             {
                 Debug.LogWarning("NO SCANNERUI WAS BINDED");
             }
+
+            ShowWelcomeText("Scannable Zone");
+
+            scanner = other.GetComponentInChildren<Scanner>();
+            scanner._vfxContainer = gameObject; // assign building as VFX container
+            scanner.CreateNewVisualEffect();
         }
     }
 
