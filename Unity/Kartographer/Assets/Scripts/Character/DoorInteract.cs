@@ -109,8 +109,8 @@ public class DoorInteract : NetworkBehaviour
     private void PlayDoorSoundClientRpc(bool open)
     {
         if (open)
-            SoundManager.Instance.PlaySound(doorOpenClip, transform.position, .3f, true);
+            SoundManager.Instance.PlaySound(doorOpenClip, transform.position, "SFX", .3f, true);
         else
-            SoundManager.Instance.PlaySound(doorCloseClip, transform.position, .4f, false, 1);
+            SoundManager.Instance.PlaySound(doorCloseClip, transform.position, "SFX", .4f, false, 1);
     }
 }

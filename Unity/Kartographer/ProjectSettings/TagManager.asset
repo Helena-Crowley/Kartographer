@@ -11,6 +11,7 @@ TagManager:
   - Scrap
   - Building
   - Trailer
+  - Upgrade
   layers:
   - Default
   - TransparentFX

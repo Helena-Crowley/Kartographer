@@ -44,6 +44,7 @@ namespace LRS
         [SerializeField] private int _pointsPerScan = 1;
         [SerializeField] private float _range = 10f;
         [SerializeField] private int resolution = 50;
+        [SerializeField] private float minParticleDistance = 0.4f;
         [SerializeField] private InputActionReference toggleScannerAction;
         [SerializeField] private GameObject scannerGunGO;
         [SerializeField] private AudioClip scannerOnSound;
@@ -75,8 +76,8 @@ namespace LRS
             {
                 allowedToScan = !allowedToScan;
                 scannerGunGO.SetActive(allowedToScan);
-                if (allowedToScan) SoundManager.Instance.PlaySound2D(scannerOnSound, 0.5f);
-                if (!allowedToScan) SoundManager.Instance.PlaySound2D(scannerOffSound, 0.3f);
+                if (allowedToScan) SoundManager.Instance.PlaySound2D(scannerOnSound, "SFX", 0.5f);
+                if (!allowedToScan) SoundManager.Instance.PlaySound2D(scannerOffSound, "SFX", .3f);
             }
         }
 
@@ -129,6 +130,7 @@ namespace LRS
             foreach (var vfx in _vfxList)
                 if (vfx != null) Destroy(vfx.gameObject);
             _vfxList.Clear();
+            _createNewVFX = true;
         }
 
         public void ResetScan()
@@ -257,7 +259,7 @@ namespace LRS
                         if (_positionsList.Count < resolution * resolution)
                         {
                             bool tooClose = false;
-                            float minDistance = 0.5f;
+                            float minDistance = minParticleDistance;
 
                             foreach (var pos in _positionsList)
                             {
@@ -272,7 +274,7 @@ namespace LRS
                             {
                                 _positionsList.Add(hit.point);
                                 _particleAmount++;
-                                SoundManager.Instance.PlaySound2D(hitPointSFX, .2f);
+                                SoundManager.Instance.PlaySound2D(hitPointSFX, "SFX", .2f);
                             }
                         }
                         else
@@ -298,7 +300,8 @@ namespace LRS
             }
             else if (scannedPercentage >= 1f && isScanning)
             {
-                SoundManager.Instance.PlaySound2D(completeSound, .3f);
+                SoundManager.Instance.PlaySound2D(completeSound, "SFX", .3f);
+                ResetScan();
                 isScanning = false;
                 GetComponentInParent<ScannerUI>().ScanComplete();
             }

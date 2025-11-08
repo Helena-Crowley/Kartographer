@@ -7,7 +7,7 @@ public class Drone : MonoBehaviour
     public float sweepAngle = 45f;
     public float sweepSpeed = 1f;
     public Transform drone;
-    public float flySpeed = 5f;
+    public float flySpeed = 10f;
     public AudioClip scanSFX;
     public AudioClip flyAwaySFX;
 
@@ -45,7 +45,7 @@ public class Drone : MonoBehaviour
             // Play scan sound once
             if (!playedSound)
             {
-                SoundManager.Instance.PlaySound(scanSFX, transform.position, 0.35f);
+                SoundManager.Instance.PlaySound(scanSFX, transform.position, "SFX", 0.35f);
                 playedSound = true;
             }
 
@@ -63,8 +63,8 @@ public class Drone : MonoBehaviour
             if (sweepTimer >= 1f / sweepSpeed) // one full cycle
             {
                 scanning = false;
-                // Optionally play fly away sound here
-                SoundManager.Instance.PlaySound2D(flyAwaySFX, 0.25f);
+                GameManager.Instance.buildingsFound++;
+                SoundManager.Instance.PlaySound2D(flyAwaySFX, "SFX",0.25f);
             }
         }
         else

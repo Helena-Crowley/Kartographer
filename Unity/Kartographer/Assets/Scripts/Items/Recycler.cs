@@ -64,7 +64,7 @@ public class Recycler : MonoBehaviour
 
         // ✅ Play scrap destruction sound and remove object
         if (destroySoundEffect)
-            SoundManager.Instance.PlaySound(destroySoundEffect, other.transform.position, 0.5f, true);
+            SoundManager.Instance.PlaySound(destroySoundEffect, other.transform.position, "SFX", 0.5f, true);
 
         Destroy(other.gameObject, 0.5f);
     }
@@ -89,7 +89,7 @@ public class Recycler : MonoBehaviour
             {
                 float randomTime = Random.Range(.5f, 1f);
                 if (destroySoundEffect)
-                    SoundManager.Instance.PlaySound(destroySoundEffect, coin.transform.position, 0.3f, true);
+                    SoundManager.Instance.PlaySound(destroySoundEffect, coin.transform.position, "SFX", 0.3f, true);
                 Destroy(coin, randomTime);
             }
         }

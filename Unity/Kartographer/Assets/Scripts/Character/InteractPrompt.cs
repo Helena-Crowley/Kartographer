@@ -6,10 +6,13 @@ public class InteractPrompt : MonoBehaviour
     public GameObject interactPrompt;
     public TMP_Text textComponent;
 
+    private Color originalColor;
+
     private void Start()
     {
         PlayerUIManager.Instance.BindPlayer(this);
         interactPrompt.SetActive(false);
+        originalColor = textComponent.color;
     }
 
     /// <summary>
@@ -33,6 +36,31 @@ public class InteractPrompt : MonoBehaviour
             textComponent.text = "No key or action assigned.";
         }
     }
+
+    public void CustomPrompt(string message = "", Color? textColor = null)
+    {
+        Color colorToUse = textColor ?? Color.aliceBlue;
+        if (!string.IsNullOrEmpty(message))
+        {
+            interactPrompt.SetActive(true);
+            textComponent.color = colorToUse;
+            textComponent.text = message;
+        }
+        else
+        {
+            textComponent.color = originalColor;
+            interactPrompt.SetActive(false);
+            textComponent.text = "No key or action assigned.";
+        }
+    }
+
+    public void HidePrompt()
+    {
+        textComponent.color = originalColor; // stored somewhere globally
+        interactPrompt.SetActive(false);
+        textComponent.text = string.Empty;
+    }
+
 }
 
 

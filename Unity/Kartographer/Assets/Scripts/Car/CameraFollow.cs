@@ -6,6 +6,7 @@ public class CameraFollow : MonoBehaviour
     [Header("Target & Offset")]
     public Transform target;
     public Vector3 followOffset = new Vector3(0f, 5f, -10f);
+    [SerializeField] private LayerMask groundLayer;
 
     [Header("Input")]
     public InputActionReference lookAroundAction;
@@ -30,6 +31,9 @@ public class CameraFollow : MonoBehaviour
     private Transform cameraFirstPersonTransform;
     private Camera playerCam;
     private Vector3 tempTarget;
+    //private float groundDistance; // distance from camera to the ground to prevent clipping
+    private float rayLength = 2.5f;
+    private Vector3 tempLift;
 
     void Awake()
     {
@@ -43,7 +47,7 @@ public class CameraFollow : MonoBehaviour
         // Initialize camera behind car
         target = this.transform.root.transform;
         Debug.Log("CameraFollow target set to: " + target.name);
-        
+
         currentOffset = followOffset;
         playerCam.transform.position = target.position + followOffset;
         playerCam.transform.LookAt(target);
@@ -58,7 +62,7 @@ public class CameraFollow : MonoBehaviour
     {
         lookAroundAction.action.Disable();
         playerCam.transform.position = cameraFirstPersonTransform.position;
-        playerCam.transform.rotation = cameraFirstPersonTransform.rotation; 
+        playerCam.transform.rotation = cameraFirstPersonTransform.rotation;
     }
 
 
@@ -120,7 +124,6 @@ public class CameraFollow : MonoBehaviour
             // Follow mode: always behind the car
             desiredOffset = target.TransformDirection(followOffset);
         }
-
         // Smoothly interpolate offset
         currentOffset = Vector3.SmoothDamp(currentOffset, desiredOffset, ref velocity, transitionSmoothTime);
         playerCam.transform.position = target.position + currentOffset;

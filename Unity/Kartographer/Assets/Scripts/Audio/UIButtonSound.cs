@@ -11,12 +11,12 @@ public class UIButtonSound : MonoBehaviour, IPointerEnterHandler, IPointerClickH
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (hoverSound)
-            SoundManager.Instance.PlaySound2D(hoverSound, volume);
+            SoundManager.Instance.PlaySound2D(hoverSound, "SFX",volume);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (clickSound)
-            SoundManager.Instance.PlaySound2D(clickSound, volume);
+            SoundManager.Instance.PlaySound2D(clickSound, "SFX",volume);
     }
 }

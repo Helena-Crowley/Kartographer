@@ -18,6 +18,7 @@ public class GarageDoor : NetworkBehaviour
     private float requiredHoldTime = 3f; // seconds to complete
     private AudioSource audioSource;
     private bool canPlaySound = true;
+    private InteractPrompt interactPrompt;
 
     void Start() => percentageSlider.gameObject.SetActive(false);
 
@@ -28,9 +29,9 @@ public class GarageDoor : NetworkBehaviour
         localPlayer = other.gameObject;
         playerInTrigger = true;
 
-        var prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
-        if (prompt != null)
-            prompt.ToggleInteractPrompt("E", "begin", true);
+        interactPrompt = localPlayer.GetComponentInChildren<InteractPrompt>();
+        if (interactPrompt != null)
+            interactPrompt.ToggleInteractPrompt("E", "begin", true);
 
         ResetProgress();
     }
@@ -41,9 +42,9 @@ public class GarageDoor : NetworkBehaviour
 
         playerInTrigger = false;
 
-        var prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
-        if (prompt != null)
-            prompt.ToggleInteractPrompt();
+        interactPrompt = localPlayer.GetComponentInChildren<InteractPrompt>();
+        if (interactPrompt != null)
+            interactPrompt.ToggleInteractPrompt();
 
         localPlayer = null;
         ResetProgress();
@@ -57,7 +58,7 @@ public class GarageDoor : NetworkBehaviour
         {
             if (canPlaySound)
             {
-                audioSource = SoundManager.Instance.PlayLoopingSound(chargeUp, transform.position, .3f);
+                audioSource = SoundManager.Instance.PlayLoopingSound(chargeUp, transform.position, "SFX", .15f);
                 canPlaySound = false;
             }
             percentageSlider.gameObject.SetActive(true);
@@ -80,7 +81,7 @@ public class GarageDoor : NetworkBehaviour
                     MovePlayerServerRpc();
                 }
 
-
+                interactPrompt.ToggleInteractPrompt();
                 ResetProgress();
             }
         }

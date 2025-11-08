@@ -8,7 +8,8 @@ public class GameManager : NetworkBehaviour
     public static GameManager Instance { get; private set; }
 
     public int randomSeed;
-
+    public int buildingsFound = 0;
+    public int totalBuildings = 0;
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -393,7 +393,7 @@ public class CarMovement : NetworkBehaviour
         if (anyEmitting)
         {
             if (skidSource == null)
-                skidSource = SoundManager.Instance.PlayLoopingSound(slidingSoundEffect, transform.position, 0.75f);
+                skidSource = SoundManager.Instance.PlayLoopingSound(slidingSoundEffect, transform.position, "SFX", 0.75f);
             else if (!skidSource.isPlaying)
                 skidSource.Play();
             skidSource.transform.position = transform.position;

@@ -37,7 +37,6 @@ public class PickUppableItem : NetworkBehaviour
 
     private void Start()
     {
-        // On the server, we already have itemData from Initialize()
         if (IsServer)
             CreateMesh();
     }

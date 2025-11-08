@@ -44,8 +44,8 @@ public class ContainerDoors : NetworkBehaviour
         Quaternion door2EndRot = door2StartRot * Quaternion.Euler(0f, 0f, -openAngle);
 
         float elapsed = 0f;
-        SoundManager.Instance.PlaySound(doorSound, door1.transform.position, 0.4f, true);
-        SoundManager.Instance.PlaySound(doorSound, door2.transform.position, 0.4f, true);
+        SoundManager.Instance.PlaySound(doorSound, door1.transform.position, "SFX", 0.2f, true);
+        SoundManager.Instance.PlaySound(doorSound, door2.transform.position, "SFX", 0.2f, true);
         while (elapsed < openDuration)
         {
             elapsed += Time.deltaTime;

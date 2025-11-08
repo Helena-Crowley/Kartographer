@@ -1,27 +1,3 @@
-// using LRS;
-// using UnityEngine;
-
-// public class VFXContainer : MonoBehaviour
-// {
-//     private Scanner vfxScanner;
-
-//     private void OnTriggerEnter(Collider other)
-//     {
-//         if (other.gameObject.tag == "Player")
-//         {
-//             Debug.Log(other.gameObject.name + "alskdlaskd");
-//             vfxScanner = other.gameObject.GetComponentInChildren<Scanner>();
-//             vfxScanner._vfxContainer = gameObject;
-//             vfxScanner.CreateNewVisualEffect();
-//             vfxScanner.ApplyPositions();
-//             MapToggle mapToggle = other.gameObject.GetComponent<MapToggle>();
-//             //mapToggle.buildings = gameObject;
-
-//             Destroy(GetComponent<BoxCollider>());
-//         }
-//     }
-
-// }
 using System.Collections;
 using LRS;
 using TMPro;
@@ -37,8 +13,11 @@ public class VFXContainer : MonoBehaviour
 
     [HideInInspector] public bool buildingScanned = false;
 
+    void Start() => GameManager.Instance.totalBuildings++;
+
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag != "Player") return;
         if (buildingScanned)
         {
             return;
@@ -47,10 +26,6 @@ public class VFXContainer : MonoBehaviour
         {
             Debug.Log("That someone was a player");
 
-
-
-
-            // Dynamically tell ScannerUI which building this is
             ScannerUI scannerUI = other.GetComponent<ScannerUI>();
             if (scannerUI != null)
             {
@@ -66,6 +41,7 @@ public class VFXContainer : MonoBehaviour
             ShowWelcomeText("Scannable Zone");
 
             scanner = other.GetComponentInChildren<Scanner>();
+            scanner.isScanning = true;
             scanner._vfxContainer = gameObject; // assign building as VFX container
             scanner.CreateNewVisualEffect();
         }
@@ -73,6 +49,7 @@ public class VFXContainer : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.gameObject.tag != "Player") return;
         Scanner scanner = other.GetComponentInChildren<Scanner>();
         scanner._vfxContainer = null;
         scanner.ResetScan();
@@ -127,6 +104,7 @@ public class VFXContainer : MonoBehaviour
     public void MarkBuildingAsScanned()
     {
         buildingScanned = true;
+        //GameManager.Instance.buildingsFound++; moved to drone scan completion
         drone.droneScanning = true;
     }
 }

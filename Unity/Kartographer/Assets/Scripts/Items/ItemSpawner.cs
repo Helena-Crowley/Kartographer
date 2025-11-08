@@ -24,14 +24,14 @@ public class ItemSpawner : NetworkBehaviour
 
     private void SpawnItems()
     {
-        Debug.Log($"[ItemSpawner] SpawnItems called. IsServer: {IsServer}");
+       // Debug.Log($"[ItemSpawner] SpawnItems called. IsServer: {IsServer}");
 
         var spawnPoints = GetComponentsInChildren<SpawnPoint>();
-        Debug.Log($"[ItemSpawner] Found {spawnPoints.Length} spawn points");
+        //Debug.Log($"[ItemSpawner] Found {spawnPoints.Length} spawn points");
 
         foreach (var sp in spawnPoints)
         {
-            Debug.Log($"[ItemSpawner] Processing spawn point: {sp.name}, chance: {sp.spawnChance}");
+            //Debug.Log($"[ItemSpawner] Processing spawn point: {sp.name}, chance: {sp.spawnChance}");
 
             if (Random.value <= sp.spawnChance)
             {

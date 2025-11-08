@@ -16,9 +16,14 @@ public class OutPostTerminal : NetworkBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference interact;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip errorSound;
+
     private bool playerInTrigger = false;
     private Transform teleportDestination;
     private GameObject localPlayer;
+
+    private InteractPrompt prompt;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -27,7 +32,7 @@ public class OutPostTerminal : NetworkBehaviour
         localPlayer = other.gameObject;
         playerInTrigger = true;
 
-        var prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
+        prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
         if (prompt != null)
             prompt.ToggleInteractPrompt("E", "go to Outpost");
     }
@@ -38,9 +43,12 @@ public class OutPostTerminal : NetworkBehaviour
 
         playerInTrigger = false;
 
-        var prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
+        prompt = localPlayer.GetComponentInChildren<InteractPrompt>();
         if (prompt != null)
+        {
             prompt.ToggleInteractPrompt();
+            prompt.HidePrompt();
+        }
 
         localPlayer = null;
     }
@@ -49,7 +57,19 @@ public class OutPostTerminal : NetworkBehaviour
     {
         if (playerInTrigger && interact.action.WasPressedThisFrame())
         {
-            BeginTravel();
+            float percentFound = (float)GameManager.Instance.buildingsFound / (float)GameManager.Instance.totalBuildings;
+            if (percentFound >= .95f)
+                BeginTravel();
+            else if (percentFound == 0)
+            {
+                prompt.CustomPrompt($"No buildings found yet!", Color.red);
+                SoundManager.Instance.PlaySound(errorSound, transform.position, "SFX", 0.2f);
+            }
+            else
+            {
+                SoundManager.Instance.PlaySound(errorSound, transform.position, "SFX", 0.2f);
+                prompt.CustomPrompt($"Only found {percentFound * 100}%!", Color.red);
+            }
         }
     }
 

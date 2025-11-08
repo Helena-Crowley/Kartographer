@@ -19,6 +19,10 @@ public class PlayerPickUp : NetworkBehaviour
 
     [SerializeField] Camera playerCam;
 
+    [SerializeField] private Transform handHoldPoint;
+
+    private PickUppableItem heldItem;
+
     public override void OnNetworkSpawn()
     {
         interactPrompt = GetComponent<InteractPrompt>();
@@ -32,11 +36,26 @@ public class PlayerPickUp : NetworkBehaviour
 
         if (nearbyPickup != null && pickUpAction.action.WasPerformedThisFrame())
         {
-            interactPrompt.ToggleInteractPrompt();
-            nearbyPickup.OnPickup(gameObject);
-            nearbyPickup = null; // Clear reference after pickup
-            SoundManager.Instance.PlaySound(pickUpSoundEffect, transform.position, .4f, true, 2f);
+            if (nearbyPickup.CompareTag("Upgrade"))
+            {
+                Debug.Log("pickin up da upgrade");
+                heldItem = nearbyPickup;
+                //heldItem.OnPickup(gameObject);
+                heldItem.transform.SetParent(handHoldPoint);
+                heldItem.transform.localPosition = Vector3.zero;
+                heldItem.transform.localRotation = Quaternion.identity;
+                SoundManager.Instance.PlaySound(pickUpSoundEffect, transform.position, "SFX", .4f, true, 2f);
+            }
+            else
+            {
+                // Normal inventory pickup
+                interactPrompt.ToggleInteractPrompt();
+                nearbyPickup.OnPickup(gameObject);
+                nearbyPickup = null;
+                SoundManager.Instance.PlaySound(pickUpSoundEffect, transform.position, "SFX", .4f, true, 2f);
+            }
         }
+
         if (dropAction.action.WasPerformedThisFrame())
         {
             if (IsOwner)

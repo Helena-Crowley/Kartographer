@@ -69,6 +69,6 @@ public class DestructibleCactus : MonoBehaviour
     private IEnumerator PlayBreakSoundWithDelay(Vector3 pos)
     {
         yield return new WaitForSeconds(Random.Range(0f, 0.25f));
-        SoundManager.Instance.PlaySound(breakSound, pos, 0.3f, true);
+        SoundManager.Instance.PlaySound(breakSound, pos, "SFX", 0.3f, true);
     }
 }
