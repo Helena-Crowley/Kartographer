@@ -5881,7 +5881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1213114413148047707
 Transform:
   m_ObjectHideFlags: 0
@@ -6153,6 +6153,7 @@ GameObject:
   - component: {fileID: 6159500662734431361}
   - component: {fileID: 7619623996981853164}
   - component: {fileID: 415100304186541014}
+  - component: {fileID: 9060323419674182379}
   m_Layer: 0
   m_Name: 'Golf_Cart '
   m_TagString: Cart
@@ -6300,9 +6301,9 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1.99, y: 5.1995797, z: 10.674856}
+  m_Size: {x: 3.61, y: 5.1995797, z: 10.674856}
   m_Center: {x: 0.0000016963915, y: 3.7301953, z: 0.44843477}
 --- !u!114 &6485777694516826320
 MonoBehaviour:
@@ -6370,15 +6371,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.004131317
       value: 0.59752935
-      inSlope: 0.012350195
-      outSlope: 0.012350195
+      inSlope: -0.44040287
+      outSlope: -0.44040287
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.9025571
+      outWeight: 0.13999997
     - serializedVersion: 3
-      time: 0.9874878
-      value: 0.28369904
+      time: 1
+      value: 0.2
       inSlope: 0.007989331
       outSlope: 0.007989331
       tangentMode: 0
@@ -6431,8 +6432,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  appliedAcceleration: 4000
-  carMaxSpeed: 10
+  appliedAcceleration: 3000
+  carMaxSpeed: 6
   engineBrakingStrength: 3000
   driveAction: {fileID: 7101326695096568515, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   resetAction: {fileID: -5693920755668688470, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
@@ -6998,6 +6999,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrailerReconnect
   cartRigidbody: {fileID: 896872684056846838}
+--- !u!64 &9060323419674182379
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517077382940005212}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8356242651373540839, guid: e945a9437fde78948a45cee9278d2196, type: 3}
 --- !u!1 &5539088258944155364
 GameObject:
   m_ObjectHideFlags: 0

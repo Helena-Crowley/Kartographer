@@ -350,7 +350,12 @@ public class CarMovement : NetworkBehaviour
 
         normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / carMaxSpeed);
 
-        if (Mathf.Abs(accelInput) > 0.0f)
+        if (accelInput > 0.0f)
+        {
+            float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
+            carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
+        }
+        else if (accelInput < 0.0f)
         {
             float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
             carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
