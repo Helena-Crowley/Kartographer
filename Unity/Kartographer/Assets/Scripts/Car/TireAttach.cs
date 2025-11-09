@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class TireAttach : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private tireEmpty;
+    public void AttachTireMesh(GameObject tire)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        tire.transform.SetParent(tireEmpty.transform);
+        tire.transform.position = transform.position;
     }
 }
