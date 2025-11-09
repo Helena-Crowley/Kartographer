@@ -38,14 +38,21 @@ public class PlayerPickUp : NetworkBehaviour
         {
             if (nearbyPickup.CompareTag("Upgrade"))
             {
-                Debug.Log("pickin up da upgrade");
+                Debug.Log("Picking up upgrade");
                 heldItem = nearbyPickup;
-                //heldItem.OnPickup(gameObject);
+                GameObject pickedUpUpgrade = heldItem.gameObject;
+
+                AttachUpgrade attachUpgrade = GetComponent<AttachUpgrade>();
+                attachUpgrade.pickedUpTire = pickedUpUpgrade;
+
                 heldItem.transform.SetParent(handHoldPoint);
                 heldItem.transform.localPosition = Vector3.zero;
                 heldItem.transform.localRotation = Quaternion.identity;
+
+
                 SoundManager.Instance.PlaySound(pickUpSoundEffect, transform.position, "SFX", .4f, true, 2f);
             }
+
             else
             {
                 // Normal inventory pickup

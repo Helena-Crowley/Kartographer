@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
+using NUnit.Framework;
 
 /// \file CarMovement.cs
 /// \brief Handles car movement using basic phyics and empty game objects.
@@ -38,6 +39,7 @@ public class CarMovement : NetworkBehaviour
     public float springStrength;
     public float springDamper;
     private float suspensionRestDistance;
+    private float maxSuspensionExtension;
     public float gravityMultiplier;
 
     [Header("Steering")]
@@ -80,8 +82,11 @@ public class CarMovement : NetworkBehaviour
 
     private Vector3 lastPosition;
     private CartStats cartStats;
-    [HideInInspector]
-    public float totaldistance = 0f;
+    [HideInInspector] public float totaldistance = 0f;
+    [HideInInspector] public bool hasRearLeftTire;
+    [HideInInspector] public bool hasFrontLeftTire;
+    [HideInInspector] public bool hasRearRightTire;
+    [HideInInspector] public bool hasFrontRightTire;
     public bool isCharged = true;
     private PlayerInputManager inputManager;
     public GameObject driverSeat;
@@ -92,6 +97,7 @@ public class CarMovement : NetworkBehaviour
         lastPosition = transform.position;
         // DO NOT CHANGE SUSPENSION REST DIST FORMULA
         suspensionRestDistance = carTransform.position.y - frontLeftTireMesh.position.y + tireRadius;
+        maxSuspensionExtension = suspensionRestDistance * 1.5f;
         springStrength = springStrength * 10000;
         springDamper = springDamper * 100;
         inputManager = driverSeat.GetComponentInChildren<PlayerInputManager>();
@@ -129,10 +135,10 @@ public class CarMovement : NetworkBehaviour
 
         CheckUserInput();
 
-        PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
-        PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
-        PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
-        PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
+        if (hasFrontLeftTire) PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
+        if (hasFrontRightTire) PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
+        if (hasRearLeftTire) PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
+        if (hasRearRightTire) PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
 
         if (inputManager != null)
         {
@@ -211,7 +217,6 @@ public class CarMovement : NetworkBehaviour
         return hasInput;
     }
 
-
     [ServerRpc(RequireOwnership = false)]
     private void ResetCarServerRpc()
     {
@@ -229,13 +234,6 @@ public class CarMovement : NetworkBehaviour
 
         Debug.Log("Car Reset: Lifted above current position.");
     }
-
-    // [ServerRpc(RequireOwnership = false)]
-    // private void SendInputServerRpc(Vector2 input)
-    // {
-    //     inputVector = input;
-
-    // }
 
     private void PhysicsUpdateTire(Transform tireTransform, Transform tireMesh, Rigidbody carRigidBody)
     {
@@ -322,14 +320,16 @@ public class CarMovement : NetworkBehaviour
 
     private void ApplySuspension(Transform tireTransform, RaycastHit tireHit, int scale = 1)
     {
-        Vector3 springDirection = tireTransform.up;
+        //Vector3 springDirection = tireTransform.up;
+        Vector3 springDirection = Vector3.up;
         Vector3 tireWorldVelocity = GetWorldVelocity(carRigidBody, tireTransform);
 
         float offset = suspensionRestDistance - tireHit.distance;
+
         float velocityOnSpring = Vector3.Dot(springDirection, tireWorldVelocity);
         float suspensionForce = (offset * springStrength) - (velocityOnSpring * springDamper);
-
         carRigidBody.AddForceAtPosition(springDirection * suspensionForce, tireTransform.position * scale);
+
     }
 
     private void ApplySuspensionFromOverlap(Transform tireTransform, Vector3 closest, float fakeDistance, Vector3 normal, int scale = 1)
@@ -349,23 +349,25 @@ public class CarMovement : NetworkBehaviour
         Vector3 accelDir = tireTransform.forward;
 
         normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / carMaxSpeed);
-
-        if (accelInput > 0.0f)
+        if (carSpeed <= carMaxSpeed)
         {
-            float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
-            carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
-        }
-        else if (accelInput < 0.0f)
-        {
-            float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
-            carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
-        }
-        // engine brake if no input
-        else if (Mathf.Abs(carSpeed) > 0.1f)
-        {
-            float brakingMultiplier = Mathf.Clamp01(Mathf.Abs(carSpeed) / carMaxSpeed);
-            float brakingForce = -Mathf.Sign(carSpeed) * engineBrakingStrength * brakingMultiplier;
-            carRigidBody.AddForceAtPosition(accelDir * brakingForce, tireTransform.position);
+            if (accelInput > 0.0f)
+            {
+                float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
+                carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
+            }
+            else if (accelInput < 0.0f)
+            {
+                float availableTorque = powerCurve.Evaluate(normalizedSpeed) * accelInput;
+                carRigidBody.AddForceAtPosition(accelDir * availableTorque, tireTransform.position);
+            }
+            // engine brake if no input
+            else if (Mathf.Abs(carSpeed) > 0.1f)
+            {
+                float brakingMultiplier = Mathf.Clamp01(Mathf.Abs(carSpeed) / carMaxSpeed);
+                float brakingForce = -Mathf.Sign(carSpeed) * engineBrakingStrength * brakingMultiplier;
+                carRigidBody.AddForceAtPosition(accelDir * brakingForce, tireTransform.position);
+            }
         }
     }
 
@@ -417,7 +419,6 @@ public class CarMovement : NetworkBehaviour
         }
     }
 
-
     private void ApplySteering(float turnDirection, bool isTurning = false)
     {
         float steeringSpeed = 200f * tireRotationSpeed.Evaluate(normalizedSpeed);
@@ -447,4 +448,47 @@ public class CarMovement : NetworkBehaviour
         Vector3 velocity = rb.GetPointVelocity(objTransform.position);
         return velocity;
     }
+
+    public void ToggleWheel(TireAttach.WheelLocation wheelToToggle, Collider triggerCollider)
+    {
+        // When this collider is disabled, it means the tire was attached
+        if (!triggerCollider.enabled)
+        {
+            switch (wheelToToggle)
+            {
+                case TireAttach.WheelLocation.frontLeft:
+                    hasFrontLeftTire = true;
+                    break;
+                case TireAttach.WheelLocation.frontRight:
+                    hasFrontRightTire = true;
+                    break;
+                case TireAttach.WheelLocation.rearLeft:
+                    hasRearLeftTire = true;
+                    break;
+                case TireAttach.WheelLocation.rearRight:
+                    hasRearRightTire = true;
+                    break;
+            }
+        }
+        else
+        {
+            // Optional: handle removing a tire if collider is re-enabled
+            switch (wheelToToggle)
+            {
+                case TireAttach.WheelLocation.frontLeft:
+                    hasFrontLeftTire = false;
+                    break;
+                case TireAttach.WheelLocation.frontRight:
+                    hasFrontRightTire = false;
+                    break;
+                case TireAttach.WheelLocation.rearLeft:
+                    hasRearLeftTire = false;
+                    break;
+                case TireAttach.WheelLocation.rearRight:
+                    hasRearRightTire = false;
+                    break;
+            }
+        }
+    }
+
 }
