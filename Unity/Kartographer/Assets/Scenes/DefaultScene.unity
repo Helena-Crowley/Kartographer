@@ -2553,8 +2553,8 @@ GameObject:
   - component: {fileID: 165014075}
   - component: {fileID: 165014079}
   - component: {fileID: 165014078}
-  - component: {fileID: 165014077}
   - component: {fileID: 165014076}
+  - component: {fileID: 165014080}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (3)
   m_TagString: Upgrade
@@ -2599,22 +2599,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
---- !u!114 &165014077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165014074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9823dcf4bcaecd40a17e0dc593c6eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickUppableItem
-  ShowTopMostFoldoutHeaderGroup: 1
-  itemData: {fileID: 0}
-  itemId:
-    m_InternalValue: -1
 --- !u!23 &165014078
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2671,6 +2655,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165014074}
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!114 &165014080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165014074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887e5cc6b9ad4d34197d0da7107c1568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tire
+  dropDistance: 2
 --- !u!1 &176515450
 GameObject:
   m_ObjectHideFlags: 0
@@ -4957,8 +4954,8 @@ GameObject:
   - component: {fileID: 186554868}
   - component: {fileID: 186554872}
   - component: {fileID: 186554871}
-  - component: {fileID: 186554870}
   - component: {fileID: 186554869}
+  - component: {fileID: 186554873}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (1)
   m_TagString: Upgrade
@@ -5003,22 +5000,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
---- !u!114 &186554870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186554867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9823dcf4bcaecd40a17e0dc593c6eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickUppableItem
-  ShowTopMostFoldoutHeaderGroup: 1
-  itemData: {fileID: 0}
-  itemId:
-    m_InternalValue: -1
 --- !u!23 &186554871
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5075,6 +5056,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186554867}
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!114 &186554873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186554867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887e5cc6b9ad4d34197d0da7107c1568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tire
+  dropDistance: 2
 --- !u!1 &189621092
 GameObject:
   m_ObjectHideFlags: 0
@@ -8085,8 +8079,8 @@ GameObject:
   - component: {fileID: 558930942}
   - component: {fileID: 558930944}
   - component: {fileID: 558930943}
-  - component: {fileID: 558930945}
   - component: {fileID: 558930946}
+  - component: {fileID: 558930947}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left
   m_TagString: Upgrade
@@ -8166,22 +8160,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 558930941}
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
---- !u!114 &558930945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558930941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9823dcf4bcaecd40a17e0dc593c6eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickUppableItem
-  ShowTopMostFoldoutHeaderGroup: 1
-  itemData: {fileID: 0}
-  itemId:
-    m_InternalValue: -1
 --- !u!64 &558930946
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8204,6 +8182,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!114 &558930947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558930941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887e5cc6b9ad4d34197d0da7107c1568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tire
+  dropDistance: 2
 --- !u!1 &560788189
 GameObject:
   m_ObjectHideFlags: 0
@@ -23468,8 +23459,8 @@ GameObject:
   - component: {fileID: 1696128327}
   - component: {fileID: 1696128331}
   - component: {fileID: 1696128330}
-  - component: {fileID: 1696128329}
   - component: {fileID: 1696128328}
+  - component: {fileID: 1696128332}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (2)
   m_TagString: Upgrade
@@ -23514,22 +23505,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
---- !u!114 &1696128329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1696128326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9823dcf4bcaecd40a17e0dc593c6eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickUppableItem
-  ShowTopMostFoldoutHeaderGroup: 1
-  itemData: {fileID: 0}
-  itemId:
-    m_InternalValue: -1
 --- !u!23 &1696128330
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -23586,6 +23561,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696128326}
   m_Mesh: {fileID: 7741791407136845951, guid: e945a9437fde78948a45cee9278d2196, type: 3}
+--- !u!114 &1696128332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696128326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887e5cc6b9ad4d34197d0da7107c1568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tire
+  dropDistance: 2
 --- !u!1 &1696345990
 GameObject:
   m_ObjectHideFlags: 0
