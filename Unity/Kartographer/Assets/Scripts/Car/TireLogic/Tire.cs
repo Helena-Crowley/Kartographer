@@ -22,8 +22,9 @@ public class Tire : MonoBehaviour, IInteractable
         if (Physics.Raycast(transform.position + player.transform.forward * dropDistance, -Vector3.up, out RaycastHit hit))
         {
             transform.position = hit.point + new Vector3(0, tireWidth, 0);
-            GetComponent<MeshCollider>().isTrigger = false;
         }
+        GetComponent<MeshCollider>().isTrigger = false;
+
     }
 
     private void Start()

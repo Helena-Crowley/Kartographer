@@ -25,7 +25,7 @@ public class PlayerInteractor : MonoBehaviour
 
 
 
-    
+
     // Track whether we were showing a prompt last frame
     private bool wasShowingPrompt = false;
 
@@ -57,15 +57,22 @@ public class PlayerInteractor : MonoBehaviour
                 break;
             }
 
+            WheelSlot slot;
+
             // Wheel slot
-            if (holdingItem && hit.collider.TryGetComponent(out WheelSlot slot) && !slot.isOccupied)
+            if (holdingItem && hit.collider.TryGetComponent(out slot) && !slot.isOccupied)
             {
+                slot.CheckOccupiedStatus();
                 currentLookedAtSlot = slot;
                 currentLookedAtInteractable = null;
                 interactPrompt.ToggleInteractPrompt("Q", "Put On");
                 foundPromptTarget = true;
                 wasShowingPrompt = true;
                 break;
+            }
+            else if (holdingItem && hit.collider.TryGetComponent(out slot))
+            {
+                slot.CheckOccupiedStatus();
             }
         }
 
@@ -74,7 +81,7 @@ public class PlayerInteractor : MonoBehaviour
         {
             currentLookedAtInteractable = null;
             currentLookedAtSlot = null;
-            
+
             // Only call HidePrompt once when transitioning from showing to not showing
             if (wasShowingPrompt)
             {
@@ -93,11 +100,6 @@ public class PlayerInteractor : MonoBehaviour
             heldObject = (currentLookedAtInteractable as Component).gameObject;
             heldInteractable.Interact(this);
             holdingItem = true;
-
-            if (currentLookedAtSlot != null)
-            {
-                currentLookedAtSlot.isOccupied = false;
-            }
         }
 
         // Drop or place
@@ -109,7 +111,7 @@ public class PlayerInteractor : MonoBehaviour
                 heldObject.transform.position = currentLookedAtSlot.mountPoint.position;
                 heldObject.transform.rotation = currentLookedAtSlot.mountPoint.rotation;
 
-                heldObject.transform.parent = currentLookedAtSlot.transform; 
+                heldObject.transform.parent = currentLookedAtSlot.transform;
 
                 currentLookedAtSlot.isOccupied = true;
 

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using Unity.Netcode;
 using System.Collections.Generic;
 using Unity.Netcode.Components;
+using System.Collections;
+using TMPro;
 
 public class GarageDoor : NetworkBehaviour
 {
@@ -11,6 +13,8 @@ public class GarageDoor : NetworkBehaviour
     [SerializeField] private InputActionReference interact;
     [SerializeField] private AudioClip chargeUp;
     [SerializeField] private List<Transform> spawnPoints;
+    [SerializeField] private AudioClip teleportStartSound;
+    [SerializeField] private Image fadeImage;
 
     private GameObject localPlayer;
     private bool playerInTrigger = false;
@@ -19,6 +23,12 @@ public class GarageDoor : NetworkBehaviour
     private AudioSource audioSource;
     private bool canPlaySound = true;
     private InteractPrompt interactPrompt;
+
+    //Loading stuff
+    [SerializeField] private TMP_Text loadingText;
+    [SerializeField] private float typeSpeed;
+    [SerializeField] private float lineDelay;
+    [SerializeField] private AudioClip[] keyboardSounds;
 
     void Start() => percentageSlider.gameObject.SetActive(false);
 
@@ -73,7 +83,7 @@ public class GarageDoor : NetworkBehaviour
                 if (NetworkManager.Singleton.IsServer)
                 {
                     ulong clientId = localPlayer.GetComponent<NetworkObject>().OwnerClientId;
-                    SpawnPlayerAtRandom(clientId);
+                    StartCoroutine(TeleportSequence(clientId));
                     playerInTrigger = false;
                 }
                 else
@@ -105,7 +115,7 @@ public class GarageDoor : NetworkBehaviour
     private void MovePlayerServerRpc(ServerRpcParams rpcParams = default)
     {
         ulong clientId = rpcParams.Receive.SenderClientId;
-        SpawnPlayerAtRandom(clientId);
+        StartCoroutine(TeleportSequence(clientId));
     }
 
     private void SpawnPlayerAtRandom(ulong clientId)
@@ -151,6 +161,119 @@ public class GarageDoor : NetworkBehaviour
                 player.transform.SetPositionAndRotation(position, rotation);
         }
     }
+
+
+    private IEnumerator TeleportSequence(ulong clientId)
+    {
+        // Play pre-teleport sound
+        SoundManager.Instance.PlaySound2D(teleportStartSound, "SFX", 0.2f);
+        loadingText.enabled = true;
+        yield return new WaitForSeconds(0.5f);
+        // Fade to black
+        yield return FadeRoutine(true, 1f); // your fade method (fadeIn = true)
+        yield return TypeLines();
+
+        // Move the player (server-side)
+        if (IsServer)
+            SpawnPlayerAtRandom(clientId);
+        else
+            MovePlayerServerRpc();
+
+        // Wait a bit, then fade back in
+        yield return new WaitForSeconds(0.75f);
+        loadingText.enabled = false;
+        yield return FadeRoutine(false, 1f);
+    }
+
+    private IEnumerator FadeRoutine(bool fadeIn, float duration)
+    {
+        float time = 0;
+        Color start = fadeImage.color;
+        Color end = fadeImage.color;
+        end.a = fadeIn ? 1f : 0f;
+
+        while (time < duration)
+        {
+            fadeImage.color = Color.Lerp(start, end, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        fadeImage.color = end;
+    }
+
+    private IEnumerator TypeLines()
+    {
+        loadingText.text = "";
+        int rand = Random.Range(0, keyboardSounds.Length);
+        bool inColorTag = false;
+        int charCount = 0;
+        int soundFrequency = 7; //every n letters
+
+        foreach (string line in lines)
+        {
+            foreach (char c in line)
+            {
+                if (c == '!')
+                {
+                    if (!inColorTag)
+                    {
+                        loadingText.text += "<color=#960019>";
+                        inColorTag = true;
+                    }
+                    else
+                    {
+                        loadingText.text += "</color>";
+                        inColorTag = false;
+                    }
+                }
+                else
+                {
+                    loadingText.text += c;
+                    charCount++;
+
+                    if (charCount % soundFrequency == 0)
+                    {
+                        SoundManager.Instance.PlaySound2D(keyboardSounds[rand], "SFX", 0.07f, true);
+                    }
+
+                    yield return new WaitForSeconds(1f / typeSpeed);
+                }
+            }
+
+            loadingText.text += "\n";
+            yield return new WaitForSeconds(lineDelay);
+        }
+
+        if (inColorTag)
+            loadingText.text += "</color>";
+    }
+
+
+
+
+    //Loading Script
+
+    private string[] lines = new string[]
+    {
+        "// === Desert World Initialization Sequence ===",
+        "// Project: !GolfKart Odyssey!",
+        "// Environment: Arid Dunes [!Sector 7!]",
+        "",
+        "[BOOT] Starting terrain stream...",
+        "[OK] Loading sand dune topology mesh (LOD 0-3)",
+        "[OK] Applying heat haze shader variant (!DesertDay_01!)",
+        "",
+        "[BOOT] Initializing vehicle systems...",
+        "[OK] GolfKart_Desert edition loaded",
+        "[OK] Physics tuning: !TractionBoost=1.2! | !DriftControl=0.85!",
+        "[OK] Fuel system calibrated (max !15L!)",
+        "",
+        "[FINALIZE] Establishing world link...",
+        "[OK] World handshake successful",
+        "![FAILED] Player is NOT ready.!",
+        "",
+        ">>> ENTERING DESERT ZONE <<<"
+    };
 
 }
 
