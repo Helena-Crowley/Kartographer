@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,9 @@ public class PlayerInteractor : MonoBehaviour
     private WheelSlot currentLookedAtSlot;
     private GameObject heldObject;
     private IInteractable heldInteractable;
+
+
+
     
     // Track whether we were showing a prompt last frame
     private bool wasShowingPrompt = false;
@@ -89,6 +93,11 @@ public class PlayerInteractor : MonoBehaviour
             heldObject = (currentLookedAtInteractable as Component).gameObject;
             heldInteractable.Interact(this);
             holdingItem = true;
+
+            if (currentLookedAtSlot != null)
+            {
+                currentLookedAtSlot.isOccupied = false;
+            }
         }
 
         // Drop or place
@@ -99,12 +108,15 @@ public class PlayerInteractor : MonoBehaviour
                 // Snap to slot
                 heldObject.transform.position = currentLookedAtSlot.mountPoint.position;
                 heldObject.transform.rotation = currentLookedAtSlot.mountPoint.rotation;
-                heldObject.transform.SetParent(null);
+
+                heldObject.transform.parent = currentLookedAtSlot.transform; 
+
                 currentLookedAtSlot.isOccupied = true;
 
                 holdingItem = false;
                 heldInteractable = null;
                 heldObject = null;
+
             }
             else if (heldInteractable != null)
             {

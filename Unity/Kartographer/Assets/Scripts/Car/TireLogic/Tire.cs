@@ -12,6 +12,7 @@ public class Tire : MonoBehaviour, IInteractable
         Debug.Log("Movinf object to players hand");
         transform.SetParent(player.handPosition);
         transform.position = player.handPosition.position;
+        GetComponent<MeshCollider>().isTrigger = true;
     }
 
     //overriden function from iinteractable
@@ -21,6 +22,7 @@ public class Tire : MonoBehaviour, IInteractable
         if (Physics.Raycast(transform.position + player.transform.forward * dropDistance, -Vector3.up, out RaycastHit hit))
         {
             transform.position = hit.point + new Vector3(0, tireWidth, 0);
+            GetComponent<MeshCollider>().isTrigger = false;
         }
     }
 

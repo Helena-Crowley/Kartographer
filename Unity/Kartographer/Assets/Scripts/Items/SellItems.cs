@@ -1,62 +1,5 @@
-// using UnityEngine.InputSystem;
-// using UnityEngine;
-// using System;
-
-// public class SellItems : MonoBehaviour
-// {
-
-//     private GameObject localPlayer;
-//     private InteractPrompt interactPrompt;
-//     private InputActionMap playerMap;
-//     private PlayerInputManager inputManager;
-//     private InputAction interactAction;
-
-//     [HideInInspector]
-//     public bool sellItems;
-//     public int value;
-
-//     void OnTriggerEnter(Collider other)
-//     {
-//         if (other.tag == "Player")
-//         {
-//             localPlayer = other.gameObject;
-//             interactPrompt = localPlayer.GetComponent<InteractPrompt>();
-
-
-//             inputManager = localPlayer.GetComponent<PlayerInputManager>();
-//             playerMap = inputManager.controls.FindActionMap("Player", true);
-//             interactAction = playerMap.FindAction("Interact");
-
-//             interactPrompt.ToggleInteractPrompt("E", "sell items");
-//         }
-//     }
-
-//     void OnTriggerExit(Collider other)
-//     {
-//         if (other.gameObject == localPlayer)
-//         {
-//             interactPrompt.ToggleInteractPrompt();
-//             localPlayer = null;
-
-//         }
-//     }
-
-//     void Update()
-//     {
-//         if (interactAction != null)
-//         {
-//             if (interactAction.WasPressedThisFrame())
-//             {
-//                 sellItems = true;
-//             }
-//         }
-//         if (value == 0)
-//         {
-//             sellItems = false;
-//         }
-//     }
-// }
-
+// This script displays a prompt for selling items at the recycler and toggles a bool "sellItems" used in recycler.cs
+// sellItems = true when a player interacts with the recycler after depositing scrap
 using UnityEngine.InputSystem;
 using UnityEngine;
 
@@ -64,8 +7,7 @@ public class SellItems : MonoBehaviour
 {
     private GameObject localPlayer;
     private InteractPrompt interactPrompt;
-    private PlayerInputManager inputManager;
-    private InputAction interactAction;
+    [SerializeField] private InputActionReference interact;
 
     [HideInInspector] public bool sellItems;
     [HideInInspector] public PlayerWallet PlayerWalletRef;
@@ -77,9 +19,6 @@ public class SellItems : MonoBehaviour
             localPlayer = other.gameObject;
             interactPrompt = localPlayer.GetComponent<InteractPrompt>();
             PlayerWalletRef = localPlayer.GetComponent<PlayerWallet>();
-
-            inputManager = localPlayer.GetComponent<PlayerInputManager>();
-            InputAction interactAction = inputManager.PlayerInput.actions.FindActionMap("Player").FindAction("Interact");
 
             interactPrompt.ToggleInteractPrompt("E", "Sell Items");
         }
@@ -97,7 +36,7 @@ public class SellItems : MonoBehaviour
 
     void Update()
     {
-        if (interactAction != null && interactAction.WasPressedThisFrame())
+        if (interact.action.WasPressedThisFrame())
         {
             sellItems = true;
         }

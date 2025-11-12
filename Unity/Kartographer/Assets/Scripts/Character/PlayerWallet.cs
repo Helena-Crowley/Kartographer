@@ -4,7 +4,7 @@ using Unity.Netcode;
 
 public class PlayerWallet : NetworkBehaviour
 {
-    public TextMeshProUGUI moneyText;
+    public TMP_Text moneyText;
 
     // NetworkVariable: automatically syncs value between server and clients
     private NetworkVariable<int> money = new NetworkVariable<int>(
@@ -15,6 +15,7 @@ public class PlayerWallet : NetworkBehaviour
 
     private void Start()
     {
+        PlayerUIManager.Instance.BindPlayer(this);
         UpdateMoneyUI();
         money.OnValueChanged += OnMoneyChanged;
     }
@@ -34,7 +35,6 @@ public class PlayerWallet : NetworkBehaviour
     {
         if (!IsServer)
         {
-            // Clients can’t directly modify money — ask the server
             AddMoneyServerRpc(amount);
         }
         else
@@ -47,12 +47,15 @@ public class PlayerWallet : NetworkBehaviour
     [ServerRpc]
     private void AddMoneyServerRpc(int amount)
     {
+        Debug.Log("added money serverrpc");
         money.Value += amount;
     }
 
     private void UpdateMoneyUI()
     {
         if (moneyText != null)
+        {
             moneyText.text = "$" + money.Value;
+        }
     }
 }

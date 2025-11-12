@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 45505690}
   - component: {fileID: 45505689}
   m_Layer: 8
-  m_Name: PlayerDetector
+  m_Name: PlayerNearTrashTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -917,6 +917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc3fa762a918f544abadc64e987ed49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  interact: {fileID: 4034463528303536486, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   sellItems: 0
   PlayerWalletRef: {fileID: 0}
 --- !u!65 &45505690
@@ -938,8 +939,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1.79}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.7011783, y: 1, z: 1.7900001}
+  m_Center: {x: 0.0027983007, y: 0, z: 7.640653e-17}
 --- !u!1 &45981398
 GameObject:
   m_ObjectHideFlags: 0
@@ -7815,6 +7816,7 @@ MonoBehaviour:
   scannerSlider: {fileID: 2055058816}
   scannerCompletedText: {fileID: 599257113}
   scanningZoneText: {fileID: 636184436}
+  moneyText: {fileID: 1009464029}
 --- !u!114 &524136783
 MonoBehaviour:
   m_ObjectHideFlags: 0

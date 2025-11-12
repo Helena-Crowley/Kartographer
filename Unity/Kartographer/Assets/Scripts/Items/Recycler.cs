@@ -76,7 +76,9 @@ public class Recycler : MonoBehaviour
         {
             // Update player wallet
             if (sellItemsObject.PlayerWalletRef != null)
+            {
                 sellItemsObject.PlayerWalletRef.AddMoney(totalValue);
+            }
 
             Debug.Log($"Sold scrap for ${totalValue}");
 

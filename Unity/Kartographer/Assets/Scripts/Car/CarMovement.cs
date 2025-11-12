@@ -70,6 +70,7 @@ public class CarMovement : NetworkBehaviour
     [Header("---TESTING----")]
     private Camera playerCamera;
     public Vector3 cameraOffset;
+    public WheelSlot[] wheelSlots;
 
     [Header("Audio")]
     private CartAudio cartAudio;
@@ -135,10 +136,10 @@ public class CarMovement : NetworkBehaviour
 
         CheckUserInput();
 
-        if (hasFrontLeftTire) PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
-        if (hasFrontRightTire) PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
-        if (hasRearLeftTire) PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
-        if (hasRearRightTire) PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
+        if (wheelSlots[0].isOccupied) PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
+        if (wheelSlots[1].isOccupied) PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
+        if (wheelSlots[3].isOccupied) PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
+        if (wheelSlots[2].isOccupied) PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
 
         if (inputManager != null)
         {

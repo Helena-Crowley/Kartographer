@@ -31,6 +31,9 @@ public class PlayerUIManager : MonoBehaviour
     public TMP_Text scanningZoneText;
     // public MinimapFogController minimapFogController;
 
+    [Header("Money")]
+    public TMP_Text moneyText;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -81,5 +84,10 @@ public class PlayerUIManager : MonoBehaviour
     public void BindPlayer(PauseManager pauseManager)
     {
         pauseManager.playerHUD = gameObject;
+    }
+
+    public void BindPlayer(PlayerWallet playerWallet)
+    {
+        playerWallet.moneyText = moneyText;
     }
 }
