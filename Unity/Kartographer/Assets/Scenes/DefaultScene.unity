@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 23085255}
   - component: {fileID: 23085256}
   - component: {fileID: 23085257}
+  - component: {fileID: 23085258}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -697,6 +698,23 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   spawnPoints:
   - {fileID: 1037353897}
+  wendySpawner: {fileID: 23085258}
+--- !u!114 &23085258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23085250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034feeab377f972418dcea8f4bcf148d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WendySpawner
+  spawnDelayMin: 10
+  spawnDelayMax: 15
+  spawnDistanceFromPlayer: -30
+  wendyPrefab: {fileID: 8343088185128397090, guid: c7e3ad648b7afc840ad7842a42116c8d, type: 3}
 --- !u!1001 &37588475
 PrefabInstance:
   m_ObjectHideFlags: 0

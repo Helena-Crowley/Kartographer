@@ -90,9 +90,9 @@ public class CartInteraction : NetworkBehaviour
 
         if (playerInput.actions["Interact"].WasPressedThisFrame())
         {
-            if (playerStats.nearCart && !playerStats.inCart)
+            if (playerStats.nearCart && !playerStats.InCart)
                 EnterCart();
-            else if (playerStats.inCart)
+            else if (playerStats.InCart)
                 ExitCart();
         }
 
@@ -208,7 +208,7 @@ public class CartInteraction : NetworkBehaviour
             if (player.transform.position == seatPositions[0].position)
                 inputManager?.EnableCartInputMap();
 
-            playerStats.inCart = true;
+            playerStats.InCart = true;
             cameraManager.HandleCartStateChanged(true);
         }
         player.GetComponent<NetworkTransform>().enabled = false;
@@ -258,7 +258,7 @@ public class CartInteraction : NetworkBehaviour
             look.enabled = true;
             controller.enabled = true;
             cartFollow.enabled = false;
-            playerStats.inCart = false;
+            playerStats.InCart = false;
 
 
             inputManager?.DisableCartInputMap();

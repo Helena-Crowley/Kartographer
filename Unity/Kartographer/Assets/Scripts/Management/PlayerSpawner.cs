@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerSpawner : NetworkBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private WendySpawner wendySpawner;
 
     private void Awake()
     {
@@ -56,6 +57,9 @@ public class PlayerSpawner : NetworkBehaviour
                             TargetClientIds = new ulong[] { eventData.ClientId }
                         }
                     });
+
+                //send info to wendigo manager
+                wendySpawner.AddPlayer(playerObject.gameObject);
             }
         }
     }

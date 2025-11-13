@@ -163,7 +163,20 @@ public class PlayerObj : NetworkBehaviour
     private int maxHealth;
 
     [HideInInspector] public bool nearCart = false;
-    [HideInInspector] public bool inCart = false;
+
+    // inCart event
+    public event System.Action<bool> OnInCartChanged; 
+    private bool _inCart;
+    public bool InCart
+    {
+        get => _inCart;
+        set
+        {
+            if (_inCart == value) return; // no change
+            _inCart = value;
+            OnInCartChanged?.Invoke(_inCart); 
+        }
+    }
 
     // ================= LIFECYCLE =================
     public override void OnNetworkSpawn()
