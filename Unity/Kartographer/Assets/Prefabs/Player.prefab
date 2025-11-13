@@ -2293,7 +2293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1965846206
+  GlobalObjectIdHash: 533672282
   InScenePlacedSourceGlobalObjectIdHash: 4256120999
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2528,7 +2528,6 @@ MonoBehaviour:
     m_InternalValue: 100
   currentStamina: 0
   nearCart: 0
-  inCart: 0
 --- !u!114 &4357661112018826242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3055,12 +3054,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
   handPosition: {fileID: 8170753426775850286}
-  holdingItem: 0
-  interactDistance: 3
   cam: {fileID: 7304662913986384577}
+  interactPrompt: {fileID: 906960788021902218}
+  interactDistance: 3
   interactAction: {fileID: 8219511703600054389, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   dropAction: {fileID: -1125511150292163761, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
-  interactPrompt: {fileID: 906960788021902218}
+  holdingItem: 0
 --- !u!1 &2552898346324515920
 GameObject:
   m_ObjectHideFlags: 0
@@ -11644,7 +11643,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1535
+    m_Bits: 5631
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

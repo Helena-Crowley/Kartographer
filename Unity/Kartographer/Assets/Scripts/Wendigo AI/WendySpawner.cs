@@ -1,53 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 
 public class WendySpawner : MonoBehaviour
 {
     private List<GameObject> players = new List<GameObject>();
-    //wait until players have been in cart before can spawn
     private bool canSpawn = false;
+    private bool isSpawning = false;
 
     [SerializeField] private int spawnDelayMin = 10;
     [SerializeField] private int spawnDelayMax = 15;
-    private int spawnDelay;
 
     [SerializeField] private float spawnDistanceFromPlayer;
     [SerializeField] private GameObject wendyPrefab;
 
-    private Vector3 spawnPosition;
-    private Quaternion spawnRotation;
     private GameObject wendy;
 
     public void AddPlayer(GameObject player)
     {
         var playerObj = player.GetComponent<PlayerObj>();
-        players.Add(player);
+        if (!players.Contains(player))
+        {
+            players.Add(player);
+        }
+
         if (playerObj != null)
             playerObj.OnInCartChanged += HandleInCartChanged;
     }
 
-    // gets called if the bool "inCart" is changed
     private void HandleInCartChanged(bool inCart)
     {
         if (!inCart)
-            canSpawn = true;
-        else
-            canSpawn = false;
-    }
-
-    void Update()
-    {
-        if (canSpawn)
         {
-            StartCoroutine(SpawnWithDelay());
+            canSpawn = true;
+            if (!isSpawning && wendy == null)
+            {
+                StartCoroutine(SpawnWithDelay());
+            }
         }
-
+        else
+        {
+            canSpawn = false;
+        }
     }
-
 
     private void OnDestroy()
     {
@@ -60,33 +56,73 @@ public class WendySpawner : MonoBehaviour
 
     IEnumerator SpawnWithDelay()
     {
-        Debug.Log("trying to spawn wendy");
-        spawnDelay = Random.Range(spawnDelayMin, spawnDelayMax);
-        canSpawn = false;
+        isSpawning = true;
+        int spawnDelay = Random.Range(spawnDelayMin, spawnDelayMax);
+
+        Debug.Log($"Wendy will spawn in {spawnDelay} seconds");
         yield return new WaitForSeconds(spawnDelay);
-        SpawnWendy();
+
+        if (canSpawn && wendy == null)
+        {
+            SpawnWendy();
+        }
+
+        isSpawning = false;
     }
 
     void SpawnWendy()
     {
-        var index = Random.Range(0, players.Count-1);
-        var chosenOne = players[index];
+        if (players.Count == 0)
+        {
+            isSpawning = false;
+            return;
+        }
 
-        //change this to have a raycast down (dont spawn underground)
-        spawnPosition = chosenOne.transform.position;
-        spawnPosition.z += spawnDistanceFromPlayer;
-        spawnRotation = chosenOne.transform.rotation;
+        int index = Random.Range(0, players.Count);
+        GameObject chosenOne = players[index];
+
+        Vector3 spawnPosition = chosenOne.transform.position - chosenOne.transform.forward * spawnDistanceFromPlayer;
+
+        if (Physics.Raycast(spawnPosition + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 75f))
+        {
+            spawnPosition = hit.point;
+        }
+
+        Quaternion spawnRotation = Quaternion.LookRotation(chosenOne.transform.position - spawnPosition);
         wendy = Instantiate(wendyPrefab, spawnPosition, spawnRotation);
+
+        var wendyBehaviour = wendy.GetComponent<WendyBehaviour>();
+        if (wendyBehaviour != null)
+        {
+            wendyBehaviour.InitializePlayers(players);
+        }
+
         wendy.GetComponent<NetworkObject>().Spawn(true);
 
-        wendy.GetComponent<WendyBehaviour>().GetPlayers(players);
-        Debug.Log("wendy has been spawned");
+        Debug.Log("Wendy has been spawned");
     }
-    
+
     public void DespawnWendy()
     {
-        //play dissapear noise
-        Destroy(wendy);
-        canSpawn = true;
+        if (wendy != null)
+        {
+            // Play disappear effect/sound here
+            if (wendy.GetComponent<NetworkObject>() != null)
+            {
+                wendy.GetComponent<NetworkObject>().Despawn();
+            }
+            Destroy(wendy);
+            wendy = null;
+        }
+
+        if (canSpawn && !isSpawning)
+        {
+            StartCoroutine(SpawnWithDelay());
+        }
+    }
+
+    public List<GameObject> GetPlayerList()
+    {
+        return players;
     }
 }

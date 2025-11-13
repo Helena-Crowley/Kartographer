@@ -6428,7 +6428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2655085064
+  GlobalObjectIdHash: 2540960787
   InScenePlacedSourceGlobalObjectIdHash: 2540960787
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6471,7 +6471,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   tireRadius: 0.4
-  springStrength: 5
+  springStrength: 6
   springDamper: 25
   gravityMultiplier: 0.4
   tireMass: 25
@@ -6544,7 +6544,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   appliedAcceleration: 3000
-  carMaxSpeed: 12
+  carMaxSpeed: 15
   engineBrakingStrength: 3000
   driveAction: {fileID: 7101326695096568515, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   resetAction: {fileID: -5693920755668688470, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}

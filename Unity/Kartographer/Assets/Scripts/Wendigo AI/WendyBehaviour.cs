@@ -1,77 +1,201 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.Services.Lobbies.Models;
-using Unity.VisualScripting;
 using UnityEngine;
+using Unity.Netcode;
+using UnityEngine.AI;
 
-public class WendyBehaviour : MonoBehaviour
+public class WendyBehaviour : NetworkBehaviour
 {
     private WendySpawner wendySpawner;
     private List<GameObject> players = new List<GameObject>();
-    [Range(0, 180f)] public float viewAngle = 70f;
+
+    [Range(0, 180f)] public float viewAngle = 135f;
+    [SerializeField] private float viewDistance = 150f;
+    [SerializeField] private float chaseDistance = 75f;
     public LayerMask obstacleMask;
+
     private bool spotted = false;
-    [SerializeField] private int chanceOfChase;
+    [SerializeField] private int chanceOfChase = 50; // 0-100, higher = more likely to chase
+    [SerializeField] private float despawnTimer = 30f;
+
+    [SerializeField] private NavMeshAgent navAgent;
+    private GameObject playerToChase;
+
+    private float despawnCountdown;
+    private bool isDespawning = false;
+    private bool inRange = false;
+
+    [SerializeField] private AudioClip wendyScreechSound;
+    [SerializeField] private WendyAnimator animController;
+    [SerializeField] private float minVol = 0.1f;
+    [SerializeField] private float maxVol = 0.1f;
+    [SerializeField] private AudioClip[] footsteps;
+    [SerializeField] private AudioClip chaseMusic;
+
+    public void InitializePlayers(List<GameObject> playerList)
+    {
+        players = new List<GameObject>(playerList);
+        Debug.Log($"WendyBehaviour initialized with {players.Count} players");
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsServer)
+        {
+            wendySpawner = FindAnyObjectByType<WendySpawner>();
+
+            // Fallback if InitializePlayers wasn't called
+            if (players.Count == 0 && wendySpawner != null)
+            {
+                players = wendySpawner.GetPlayerList();
+                Debug.Log($"WendyBehaviour got {players.Count} players from spawner");
+            }
+
+            despawnCountdown = despawnTimer;
+        }
+    }
 
     void Update()
     {
-        if (CheckIfSeen() && !spotted)
+        if (!IsServer) return;
+
+        if (CheckIfPlayerSeesMe() && !spotted)
         {
             spotted = true;
-            //stop despawn timer
-            //wait a little before decide to run or disappear call only once
+            despawnCountdown = despawnTimer; // Reset timer
             StartCoroutine(FightOrFlight());
-
         }
-        else
+        else if (!spotted)
         {
-            //start despawn timer
+            despawnCountdown -= Time.deltaTime;
+            if (despawnCountdown <= 0 && !isDespawning)
+            {
+                isDespawning = true;
+                DespawnSelf();
+            }
         }
     }
 
-    private bool CheckIfSeen()
+    private bool CheckIfPlayerSeesMe()
     {
-        if (players.Count == 0) return false;
+        if (players == null || players.Count == 0)
+        {
+            return false;
+        }
+
         foreach (var player in players)
         {
-            Vector3 dirToEnemy = (transform.position - player.transform.position).normalized;
-            float distToEnemy = Vector3.Distance(player.transform.position, transform.position);
+            if (player == null)
+            {
+                Debug.LogWarning("Null player in list");
+                continue;
+            }
 
-            // within player's FOV cone
-            float angle = Vector3.Angle(player.transform.forward, dirToEnemy);
+            Vector3 dirFromPlayerToMe = (transform.position - player.transform.position).normalized;
+            float distToPlayer = Vector3.Distance(player.transform.position, transform.position);
+
+            if (distToPlayer > viewDistance)
+                continue;
+
+            float angle = Vector3.Angle(player.transform.forward, dirFromPlayerToMe);
+
             if (angle > viewAngle / 2)
-                return false;
+            {
+                Debug.Log($"Player {player.name} not looking at Wendy (angle too wide)");
+                continue;
+            }
 
-            // Line of sight check
-            if (Physics.Raycast(player.transform.position + Vector3.up * 1.8f, dirToEnemy, distToEnemy, obstacleMask))
-                return false;
-        }
+            // Line of sight check from player's eye position to Wendy
+            Vector3 playerEyePos = player.transform.position + Vector3.up * 1.8f;
+            Vector3 wendyCenter = transform.position + Vector3.up * 1f;
+            Vector3 dirToCheck = (wendyCenter - playerEyePos).normalized;
+            float distToCheck = Vector3.Distance(playerEyePos, wendyCenter);
 
+            Debug.DrawRay(playerEyePos, dirToCheck * distToCheck, Color.red, 0.1f);
+
+            if (Physics.Raycast(playerEyePos, dirToCheck, distToCheck, obstacleMask))
+            {
+                continue;
+            }
+
+            //Debug.Log($"Player {player.name} CAN SEE me!");
+            playerToChase = player;
             return true;
-        
-    }
-
-    public void GetPlayers(List<GameObject> playerList)
-    {
-        foreach (var player in playerList)
-        {
-            players.Add(player);
-            Debug.Log("added player " + player);
         }
+
+        return false;
     }
 
     IEnumerator FightOrFlight()
     {
-        float decisionTime = Random.Range(3, 6);
-        yield return new WaitForSeconds(decisionTime);
+
+        //float decisionTime = Random.Range(3f, 6f);
+
+        //yield return new WaitForSeconds(decisionTime);
+
         int randValue = Random.Range(0, 100);
+
         if (randValue >= chanceOfChase)
-            wendySpawner.DespawnWendy();
+        {
+            DespawnSelf();
+        }
         else
         {
-            //run at you
-            
+            if (playerToChase != null && navAgent != null)
+            {
+                SoundManager.Instance.PlaySound(viewDistance / 6, 5, wendyScreechSound, transform.position, "SFX", 0.2f);
+                animController.PlayChase();
+
+                yield return new WaitForSeconds(2f);
+
+                navAgent.enabled = true;
+                inRange = true;
+                SoundManager.Instance.PlayMusic(chaseMusic, "SFX", .15f, 2);
+                StartCoroutine(ChasePlayer());
+            }
         }
+    }
+
+    IEnumerator ChasePlayer()
+    {
+        while (playerToChase != null && navAgent != null && navAgent.enabled && inRange)
+        {
+            Debug.Log("chaseDistance" + chaseDistance);
+            if (Vector3.Distance(transform.position, playerToChase.transform.position) > chaseDistance) inRange = false;
+            navAgent.SetDestination(playerToChase.transform.position);
+            yield return new WaitForSeconds(0.5f);
+        }
+        SoundManager.Instance.StopMusic(2);
+        yield return new WaitForSeconds(2f);
+        wendySpawner.DespawnWendy();
+
+    }
+
+    private void DespawnSelf()
+    {
+        if (wendySpawner != null)
+        {
+            wendySpawner.DespawnWendy();
+        }
+        else
+        {
+            Debug.LogWarning("No spawner reference, destroying directly");
+            if (GetComponent<NetworkObject>() != null)
+            {
+                GetComponent<NetworkObject>().Despawn();
+            }
+            Destroy(gameObject);
+        }
+    }
+
+    public void PlayWendyFootstep()
+    {
+        // Pick random sound and volume
+        int i = Random.Range(0, footsteps.Length);
+        AudioClip randomSound = footsteps[i];
+        float volume = Random.Range(minVol, maxVol);
+
+        SoundManager.Instance.PlaySound(10, 60, randomSound, transform.position, "SFX", volume, true);
     }
 }

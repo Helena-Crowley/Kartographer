@@ -29,6 +29,7 @@ public class GarageDoor : NetworkBehaviour
     [SerializeField] private float typeSpeed;
     [SerializeField] private float lineDelay;
     [SerializeField] private AudioClip[] keyboardSounds;
+    [SerializeField] private GarageButton garageButton;
 
     void Start() => percentageSlider.gameObject.SetActive(false);
 
@@ -66,6 +67,9 @@ public class GarageDoor : NetworkBehaviour
 
         if (interact.action.IsPressed())
         {
+
+            garageButton.PressButton();
+
             if (canPlaySound)
             {
                 audioSource = SoundManager.Instance.PlayLoopingSound(chargeUp, transform.position, "SFX", .15f);
@@ -97,6 +101,7 @@ public class GarageDoor : NetworkBehaviour
         }
         else if (interact.action.WasReleasedThisFrame())
         {
+            garageButton.UnpressButton();
             ResetProgress();
         }
     }
