@@ -1,11 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
-using NUnit.Framework;
-
-/// \file CarMovement.cs
-/// \brief Handles car movement using basic phyics and empty game objects.
-/// \ingroup Vehicle
 
 public class CarMovement : NetworkBehaviour
 {
@@ -287,7 +282,6 @@ public class CarMovement : NetworkBehaviour
         if (hitGroundDown)
         {
             float carSpeed = Vector3.Dot(carTransform.forward, carRigidBody.linearVelocity);
-
             ApplySuspension(tireTransform, hitDown);
             ApplyAcceleration(tireTransform, carSpeed);
             ApplyTireGrip(tireTransform, carSpeed);
@@ -297,10 +291,10 @@ public class CarMovement : NetworkBehaviour
         {
             ApplySuspension(tireTransform, hitUp, 1);
         }
-        else
-        {
+        //else
+        //{
             carRigidBody.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
-        }
+        //}
 
         // Debug rays
         Debug.DrawLine(rayStart, rayStart + tireTransform.up * rayLength, Color.red);

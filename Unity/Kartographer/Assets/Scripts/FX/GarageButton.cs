@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class GarageButton : MonoBehaviour
 {
-    [SerializeField] private Vector3 buttonDepressedPos;
+    [SerializeField] private Vector3 buttonPressedPos;
     [SerializeField] private Vector3 buttonRestPos;
     [SerializeField] private Material buttonMaterial;
     [SerializeField] private float intensity = 1.75f;
+    [SerializeField] private AudioClip buttonPressed;
+    [SerializeField] private AudioClip buttonUnPressed;
 
     private bool isPressed = false;
     private Color baseColor;
@@ -13,6 +15,7 @@ public class GarageButton : MonoBehaviour
     void Start()
     {
         baseColor = buttonMaterial.color;
+        transform.localPosition = buttonRestPos;
     }
 
     public void PressButton()
@@ -20,19 +23,17 @@ public class GarageButton : MonoBehaviour
         if (isPressed) return;
 
         isPressed = true;
-        buttonMaterial.EnableKeyword("_EMISSION");
-
-        buttonMaterial.SetColor("_EmissionColor", baseColor);
-        transform.localPosition = buttonDepressedPos;
+        SoundManager.Instance.PlaySound(buttonPressed, transform.position, "SFX", 0.2f);
+        buttonMaterial.color = baseColor;
+        transform.localPosition = buttonPressedPos;
     }
 
     public void UnpressButton()
     {
+        if (!isPressed) return;
         isPressed = false;
         transform.localPosition = buttonRestPos;
-
-        buttonMaterial.EnableKeyword("_EMISSION");
-
-        buttonMaterial.SetColor("_EmissionColor", baseColor * intensity);
+        SoundManager.Instance.PlaySound(buttonUnPressed, transform.position, "SFX", 0.2f);
+        buttonMaterial.color = Color.limeGreen;
     }
 }

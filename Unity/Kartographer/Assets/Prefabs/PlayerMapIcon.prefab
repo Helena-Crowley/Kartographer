@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9021680854860143716}
   - component: {fileID: 1204413651685934713}
   m_Layer: 0
-  m_Name: GolfBallIcon
+  m_Name: PlayerMapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 176c213d60dbed245b40e9ac1cf8ef1f, type: 3}
+  m_Sprite: {fileID: 1068409847, guid: 23c02b951c1c2264e828d37c7c043b12, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0

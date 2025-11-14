@@ -6,16 +6,20 @@ public class MouseLook : NetworkBehaviour
 {
     [Header("References")]
     public Transform playerCamera;
+    [SerializeField] private Transform playerHead;
 
     [Header("Settings")]
     public float mouseSensitivity = 2f;
     public float upLimit = 70f;
     public float downLimit = -45f;
 
+    [SerializeField] private float headYawLimit = 45f;
+    private float headYaw = 0f;
     private float cameraPitch = 0f;
     private PlayerInput playerInput;
 
-    void Start () {
+    void Start()
+    {
         if (IsOwner)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -27,9 +31,9 @@ public class MouseLook : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (!IsOwner) return; // only local player controls camera
+        if (!IsOwner) return;
 
         Vector2 look = playerInput.actions["Look"].ReadValue<Vector2>();
 
@@ -37,13 +41,35 @@ public class MouseLook : NetworkBehaviour
         float mouseY = look.y * mouseSensitivity;
 
         // Horizontal rotation
-        transform.Rotate(Vector3.up * mouseX);
+        //transform.Rotate(Vector3.up * mouseX);
+
+        headYaw += mouseX;
+
+        if (headYaw > headYawLimit)
+        {
+            float excess = headYaw - headYawLimit;
+            transform.Rotate(Vector3.up * excess);
+            headYaw = headYawLimit;
+        }
+        else if (headYaw < -headYawLimit)
+        {
+            float excess = headYaw + headYawLimit;
+            transform.Rotate(Vector3.up * excess);
+            headYaw = -headYawLimit;
+        }
+
 
         // Vertical rotation
         cameraPitch -= mouseY;
         cameraPitch = Mathf.Clamp(cameraPitch, downLimit, upLimit);
 
         if (playerCamera != null)
-            playerCamera.localEulerAngles = Vector3.right * cameraPitch;
+            //playerCamera.localEulerAngles = Vector3.right * cameraPitch;
+            playerCamera.localRotation = Quaternion.Euler(cameraPitch, headYaw, 0f);
+
+        if (playerHead != null)
+            //playerHead.localEulerAngles = Vector3.right * cameraPitch;
+            playerHead.localRotation = Quaternion.Euler(cameraPitch, headYaw, 0f);
     }
+
 }

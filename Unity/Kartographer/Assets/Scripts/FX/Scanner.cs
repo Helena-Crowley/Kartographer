@@ -14,9 +14,15 @@ namespace LRS
     [RequireComponent(typeof(LineRenderer))]
     public class Scanner : MonoBehaviour
     {
+        //SFX for hits
         public float scannedPercentage = 0f;
         public AudioClip hitPointSFX;
         public AudioClip completeSound;
+
+        [SerializeField] private AudioSource hitPointAudioSource;
+
+        private int hitsPerSound = 3;
+        private int hitCounter = 0;
 
 
         private InputAction _fire;
@@ -274,7 +280,15 @@ namespace LRS
                             {
                                 _positionsList.Add(hit.point);
                                 _particleAmount++;
-                                SoundManager.Instance.PlaySound2D(hitPointSFX, "SFX", .2f);
+                                //SoundManager.Instance.PlaySound2D(hitPointSFX, "SFX", .2f);\
+                                //fix below
+
+                                hitCounter++;
+                                if (hitCounter >= hitsPerSound)
+                                {
+                                    hitPointAudioSource.PlayOneShot(hitPointSFX, 0.2f);
+                                    hitCounter = 0;
+                                }
                             }
                         }
                         else

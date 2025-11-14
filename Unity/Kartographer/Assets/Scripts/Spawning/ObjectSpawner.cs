@@ -3,30 +3,33 @@ using UnityEngine.InputSystem;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public GameObject[] objects; //Likely an array of building prefabs
-    public int[] amounts; //How many of each to spawn
-    public LayerMask terrainLayer; // Assign the "Ground" Layer here
+    public GameObject[] objects; //what to spawn
+    public int[] amounts; //how many to spawn
+    public LayerMask terrainLayer;
     public float yOffset = 0f; //adjust in case we have origin offsets to account for
 
-    public GameObject parentObject; // Parent object to hold spawned objects
+    public GameObject parentObject; // hold spawned objects in hierarchy
 
-    [SerializeField] private InputActionReference spawnAction;
+    [SerializeField] private GameObject terrain;
+    private float minX;
+    private float maxX;
+    private float minZ;
+    private float maxZ;
 
-    void SpawnObject(GameObject objectToSpawn, int count) // Spawn buildings at completely random points on terrain
+    //[SerializeField] private InputActionReference spawnAction;
+
+    void SpawnObject(GameObject objectToSpawn, int count)
     {
-        // Example: Randomly find a location and raycast down
-        //entire building spawnpoint (no corner ref)
         int objectMissedCount = 0;
         for (int i = 0; i < count; i++)
         {
-            float randomX = Random.Range(-700, 700);
-            float randomZ = Random.Range(-300, 300);
+            float randomX = Random.Range(minX, maxX);
+            float randomZ = Random.Range(minZ, maxZ);
             Vector3 spawnOrigin = new Vector3(randomX, 300f, randomZ);
-            // Shoot ray down
+
             Ray ray = new Ray(spawnOrigin + Vector3.up * 500f, Vector3.down);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, terrainLayer))
             {
-                //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 2f);
                 Quaternion rotation = Quaternion.LookRotation(Vector3.up, Vector3.up);
 
                 GameObject spawnedObject = Instantiate(objectToSpawn, hit.point, rotation);
@@ -34,7 +37,6 @@ public class ObjectSpawner : MonoBehaviour
 
                 foreach (Renderer rend in spawnedObject.GetComponentsInChildren<Renderer>())
                 {
-                    // Forces all child renderers to use the shared material asset instead of making a unique instance
                     rend.sharedMaterial = rend.sharedMaterial;
                 }
 
@@ -55,6 +57,15 @@ public class ObjectSpawner : MonoBehaviour
     void Start()
     {
 
+        Renderer terrainRenderer = terrain.GetComponent<Renderer>();
+
+        minX = terrainRenderer.bounds.center.x - terrainRenderer.bounds.extents.x;
+        maxX = terrainRenderer.bounds.center.x + terrainRenderer.bounds.extents.x;
+
+        minZ = terrainRenderer.bounds.center.z - terrainRenderer.bounds.extents.z;
+        maxZ = terrainRenderer.bounds.center.z + terrainRenderer.bounds.extents.z;
+
+
         if (GameManager.Instance.randomSeed == 0)
         {
             GameManager.Instance.randomSeed = System.DateTime.Now.Millisecond;
@@ -67,6 +78,5 @@ public class ObjectSpawner : MonoBehaviour
         Debug.Log($"Random Seed: {GameManager.Instance.randomSeed}");
 
     }
-
 
 }

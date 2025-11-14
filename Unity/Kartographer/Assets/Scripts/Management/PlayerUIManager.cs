@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using LRS;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +37,7 @@ public class PlayerUIManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -67,11 +66,11 @@ public class PlayerUIManager : MonoBehaviour
         iconGenerator.offHandIcon = offHandIcon;
     }
 
-    public void BindPlayer(DistanceText distanceTextScript)
-    {
-        distanceTextScript.distanceText = distanceText;
-        distanceTextScript.stormTransform = stormTransform;
-    }
+    // public void BindPlayer(DistanceText distanceTextScript)
+    // {
+    //     distanceTextScript.distanceText = distanceText;
+    //     distanceTextScript.stormTransform = stormTransform;
+    // }
 
     public void BindPlayer(ScannerUI scannerUI)
     {

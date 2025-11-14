@@ -1041,6 +1041,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Honk",
+                    "type": "Button",
+                    "id": "2f3788ae-08e0-4ff9-b3ba-01001a683276",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1228,6 +1237,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7cd0b8b8-372d-44da-8619-473977eb350d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Honk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

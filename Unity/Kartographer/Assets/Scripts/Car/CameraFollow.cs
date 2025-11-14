@@ -32,7 +32,7 @@ public class CameraFollow : MonoBehaviour
     private Camera playerCam;
     private Vector3 tempTarget;
     //private float groundDistance; // distance from camera to the ground to prevent clipping
-    private float rayLength = 2.5f;
+    //private float rayLength = 2.5f;
     private Vector3 tempLift;
 
     void Awake()

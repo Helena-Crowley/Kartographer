@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(AudioSource))]
 public class CartAudio : MonoBehaviour
@@ -8,6 +9,7 @@ public class CartAudio : MonoBehaviour
     [Header("Cart SFX")]
     [SerializeField] private AudioClip windSound;
     [SerializeField] private AudioClip tickSound;
+    [SerializeField] private AudioClip honkSound;
     [SerializeField] private AudioClip[] suspensionSqueak;
 
 
@@ -17,6 +19,7 @@ public class CartAudio : MonoBehaviour
     [SerializeField] private float pitchSmooth = 5f;
     [SerializeField] private float stopPitchSpeed = 5f;
     [SerializeField] private float stopThreshold = 0.03f;
+    [SerializeField] private InputActionReference honkAction;
 
     private AudioSource golfCartAudioSource;
 
@@ -39,6 +42,14 @@ public class CartAudio : MonoBehaviour
         golfCartAudioSource = gameObject.AddComponent<AudioSource>();
         golfCartAudioSource.spatialBlend = 1f;
         golfCartAudioSource.volume = .1f;
+    }
+
+    void Update()
+    {
+        if (honkAction.action.WasPressedThisFrame())
+        {
+            SoundManager.Instance.PlaySound(honkSound, transform.position, "SFX", .2f);
+        }
     }
 
     public void PlaySpeedDependentSound(float normalizedSpeed)

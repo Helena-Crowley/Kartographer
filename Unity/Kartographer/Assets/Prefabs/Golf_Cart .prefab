@@ -6428,7 +6428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2540960787
+  GlobalObjectIdHash: 2655085064
   InScenePlacedSourceGlobalObjectIdHash: 2540960787
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6471,9 +6471,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   tireRadius: 0.4
-  springStrength: 6
-  springDamper: 25
-  gravityMultiplier: 0.4
+  springStrength: 2
+  springDamper: 1.5
+  gravityMultiplier: 0.9
   tireMass: 25
   tireGripFactor01: 0.9
   tireRotationSpeed:
@@ -6891,6 +6891,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CartAudio
   windSound: {fileID: 0}
   tickSound: {fileID: 8300000, guid: 121f0dc0efb4b8a4cb6ce24a76bc4871, type: 3}
+  honkSound: {fileID: 8300000, guid: 502787a85b42a1042977cd8fd57ba21b, type: 3}
   suspensionSqueak: []
   engineA: {fileID: 174703711764387731}
   engineB: {fileID: 4482687149118346300}
@@ -6921,6 +6922,7 @@ MonoBehaviour:
   pitchSmooth: 5
   stopPitchSpeed: 15
   stopThreshold: 0.04
+  honkAction: {fileID: -4110704702583581886, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
 --- !u!82 &1891453265943967204
 AudioSource:
   m_ObjectHideFlags: 0

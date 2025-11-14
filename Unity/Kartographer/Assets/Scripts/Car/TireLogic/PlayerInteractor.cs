@@ -23,6 +23,8 @@ public class PlayerInteractor : MonoBehaviour
     private GameObject heldObject;
     private IInteractable heldInteractable;
 
+    [SerializeField] private AudioClip attachSound;
+
 
 
 
@@ -112,6 +114,9 @@ public class PlayerInteractor : MonoBehaviour
                 heldObject.transform.rotation = currentLookedAtSlot.mountPoint.rotation;
 
                 heldObject.transform.parent = currentLookedAtSlot.transform;
+
+                SoundManager.Instance.PlaySound(attachSound, currentLookedAtSlot.transform.position, "SFX", .2f, true);
+
 
                 currentLookedAtSlot.isOccupied = true;
 

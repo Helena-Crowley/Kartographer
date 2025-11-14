@@ -10,6 +10,7 @@ public class WheelSlot : MonoBehaviour
         if (GetComponentInChildren<Tire>() != null)
         {
             isOccupied = true;
+            Debug.Log("Played attach sound");
         }
         else
         {

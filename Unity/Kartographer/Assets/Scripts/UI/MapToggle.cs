@@ -14,10 +14,6 @@ public class MapToggle : NetworkBehaviour
     public GameObject iconPrefab; // Prefab for the icons
     public GameObject playerIcon;
 
-    [Header("Level Bounds")]
-    public Vector3 levelMin = new Vector3(-50, 0, -50);
-    public Vector3 levelMax = new Vector3(50, 0, 50);
-
     // Internal tracking
     private bool mapEnabled = false;
     public List<GameObject> buildings = new List<GameObject>();
@@ -52,6 +48,13 @@ public class MapToggle : NetworkBehaviour
             }
         }
         playerIcon.transform.localPosition = GetIconLocalPosition(transform.position);
+
+        Vector3 playerForward = transform.forward;
+
+        Vector3 localForward = map.transform.InverseTransformDirection(playerForward);
+
+        Vector3 projectedForward = new Vector3(localForward.x, 0, localForward.z).normalized;
+        playerIcon.transform.localRotation = Quaternion.LookRotation(projectedForward, playerIcon.transform.up);
     }
 
     public void OnBuildingScanned(GameObject building)
@@ -68,26 +71,24 @@ public class MapToggle : NetworkBehaviour
 
     private Vector3 GetIconLocalPosition(Vector3 worldPos)
     {
-        // Normalize positions to 0–1
+        Vector3 levelMin = GameManager.Instance.worldCenter - new Vector3(GameManager.Instance.worldXWidth, 0, GameManager.Instance.worldZWidth);
+        Vector3 levelMax = GameManager.Instance.worldCenter + new Vector3(GameManager.Instance.worldXWidth, 0, GameManager.Instance.worldZWidth);
+
         float normalizedX = Mathf.InverseLerp(levelMin.x, levelMax.x, worldPos.x);
         float normalizedZ = Mathf.InverseLerp(levelMin.z, levelMax.z, worldPos.z);
 
-        // Get map dimensions in local space
-        float localX = 0f;
-        float localZ = 0f;
-
         MeshRenderer mapRenderer = map.GetComponent<MeshRenderer>();
-        if (mapRenderer != null)
-        {
-            float mapWidth = mapRenderer.bounds.size.x / map.transform.lossyScale.x;
-            float mapDepth = mapRenderer.bounds.size.z / map.transform.lossyScale.z;
-            localX = (normalizedX - 0.5f) * mapWidth;
-            localZ = (normalizedZ - 0.5f) * mapDepth;
-        }
+        float mapWidth = mapRenderer.bounds.extents.x / map.transform.lossyScale.x;
+        float mapDepth = mapRenderer.bounds.extents.z / map.transform.lossyScale.z;
 
-        float iconHeight = 0.1f; // floating slightly above map
-        return new Vector3(localX, iconHeight, localZ);
+        return new Vector3(
+            (normalizedX - 0.5f) * mapWidth,
+            0.1f,
+            (normalizedZ - 0.5f) * mapDepth
+        );
     }
+
+
 
 
 }

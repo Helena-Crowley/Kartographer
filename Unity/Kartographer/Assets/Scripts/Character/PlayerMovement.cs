@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -63,7 +64,7 @@ public class PlayerMovement : NetworkBehaviour
         bool jumpPressed = jumpAction.action.WasPressedThisFrame();
 
         // --- Movement ---
-        Vector3 moveDir = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
+        Vector3 moveDir = (playerCamera.transform.forward * moveInput.y + playerCamera.transform.right * moveInput.x).normalized;
         float speed = isRunning ? runSpeed : walkSpeed;
         isWalking = (speed == walkSpeed);
 

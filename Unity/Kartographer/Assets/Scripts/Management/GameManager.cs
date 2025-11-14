@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
 using Unity.Netcode;
 
 public class GameManager : NetworkBehaviour
@@ -10,6 +8,12 @@ public class GameManager : NetworkBehaviour
     public int randomSeed;
     public int buildingsFound = 0;
     public int totalBuildings = 0;
+    public float worldXWidth;
+    public float worldZWidth;
+    public Vector3 worldCenter;
+
+    [SerializeField] private Renderer terrainRenderer;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -19,6 +23,11 @@ public class GameManager : NetworkBehaviour
         }
 
         Instance = this;
+
+        worldXWidth = terrainRenderer.bounds.extents.x;
+        worldZWidth = terrainRenderer.bounds.extents.z;
+        worldCenter = terrainRenderer.bounds.center;
+
         DontDestroyOnLoad(gameObject);
     }
 }

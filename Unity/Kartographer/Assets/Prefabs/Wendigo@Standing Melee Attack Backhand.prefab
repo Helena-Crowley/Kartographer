@@ -2426,6 +2426,7 @@ GameObject:
   - component: {fileID: 8362725431511108560}
   - component: {fileID: -8597368441735532633}
   - component: {fileID: 5080923110417727902}
+  - component: {fileID: -7336534830374513106}
   m_Layer: 0
   m_Name: Wendigo@Standing Melee Attack Backhand
   m_TagString: Untagged
@@ -2612,3 +2613,18 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9eb64f44a61d2a445927e99493e4c472, type: 3}
   - {fileID: 8300000, guid: e9851d596e2370741bb1cffbbe4d4aec, type: 3}
   chaseMusic: {fileID: 8300000, guid: b8f5994157de74a499a6a6c99ea02d96, type: 3}
+--- !u!114 &-7336534830374513106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137340202026250287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 0}

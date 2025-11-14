@@ -10,7 +10,7 @@ public class PlayerSpawner : NetworkBehaviour
     {
         if (NetworkManager.Singleton == null)
         {
-            Debug.LogError("NetworkManager.Singleton is null!");
+            //Debug.LogError("NetworkManager.Singleton is null!");
             return;
         }
 
