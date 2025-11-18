@@ -16,7 +16,7 @@ public class Tire : MonoBehaviour, IInteractable
         transform.position = player.handPosition.position;
         GetComponent<MeshCollider>().isTrigger = true;
 
-        SoundManager.Instance.PlaySound(pickUpSound, transform.position, "SFX", 0.2f, true);
+        SoundManager.Instance.PlaySound(pickUpSound, transform.position, "SFX", 0.05f, true);
     }
 
     //overriden function from iinteractable

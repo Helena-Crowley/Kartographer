@@ -147,6 +147,8 @@ public class PlayerObj : NetworkBehaviour
     public HealthBar healthBar;
     public StaminaBar staminaBar;
 
+    [SerializeField] private AudioClip impactSFX;
+
     // ================= NETWORKED VARIABLES =================
     // NetworkVariables automatically sync between server and all clients.
     // - Default value: 100
@@ -166,7 +168,7 @@ public class PlayerObj : NetworkBehaviour
     [HideInInspector] public bool nearCart = false;
 
     // inCart event
-    public event System.Action<bool> OnInCartChanged; 
+    public event System.Action<bool> OnInCartChanged;
     private bool _inCart;
     public bool InCart
     {
@@ -175,7 +177,7 @@ public class PlayerObj : NetworkBehaviour
         {
             if (_inCart == value) return; // no change
             _inCart = value;
-            OnInCartChanged?.Invoke(_inCart); 
+            OnInCartChanged?.Invoke(_inCart);
         }
     }
 
@@ -238,6 +240,9 @@ public class PlayerObj : NetworkBehaviour
     /// </summary>
     public void TakeDamage(int dmg)
     {
+        //dmg sfx
+        SoundManager.Instance.PlaySound2D(impactSFX, "SFX", 0.15f, true);
+        //screen red
         // If we're the server, we can modify the NetworkVariable directly.
         if (IsServer)
         {
@@ -294,6 +299,8 @@ public class PlayerObj : NetworkBehaviour
 
     void KillPlayer()
     {
+        //death sfx
+        //death screen
         Debug.Log("player died");
         int index = Random.Range(0, GameManager.Instance.outpostSpawnPoints.Length);
         Vector3 newPosition = GameManager.Instance.outpostSpawnPoints[index].position;

@@ -2614,6 +2614,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e9851d596e2370741bb1cffbbe4d4aec, type: 3}
   chaseMusic: {fileID: 8300000, guid: b8f5994157de74a499a6a6c99ea02d96, type: 3}
   attackDistance: 7
+  attackWoosh: {fileID: 8300000, guid: ca1b9a6e56514944e8993cc55cda756a, type: 3}
 --- !u!114 &-7336534830374513106
 MonoBehaviour:
   m_ObjectHideFlags: 0

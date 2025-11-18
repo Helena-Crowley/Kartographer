@@ -9,7 +9,7 @@ public class SellItems : MonoBehaviour
     private InteractPrompt interactPrompt;
     [SerializeField] private InputActionReference interact;
 
-    [HideInInspector] public bool sellItems;
+    [HideInInspector] public bool sellItems = false;
     [HideInInspector] public PlayerWallet PlayerWalletRef;
 
     void OnTriggerEnter(Collider other)

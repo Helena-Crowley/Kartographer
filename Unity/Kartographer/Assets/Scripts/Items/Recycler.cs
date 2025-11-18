@@ -39,6 +39,7 @@ public class Recycler : MonoBehaviour
 
         // Add item value
         totalValue += item.itemData.value;
+        Debug.Log("added item value");
         amountText.text = "$" + totalValue;
 
         for (int i = 0; i < item.itemData.value; i++)
@@ -62,7 +63,6 @@ public class Recycler : MonoBehaviour
             }
         }
 
-        // ✅ Play scrap destruction sound and remove object
         if (destroySoundEffect)
             SoundManager.Instance.PlaySound(destroySoundEffect, other.transform.position, "SFX", 0.5f, true);
 
@@ -90,8 +90,7 @@ public class Recycler : MonoBehaviour
             foreach (GameObject coin in coins)
             {
                 float randomTime = Random.Range(.5f, 1f);
-                if (destroySoundEffect)
-                    SoundManager.Instance.PlaySound(destroySoundEffect, coin.transform.position, "SFX", 0.3f, true);
+                SoundManager.Instance.PlaySound(destroySoundEffect, coin.transform.position, "SFX", 0.3f, true);
                 Destroy(coin, randomTime);
             }
         }

@@ -33,6 +33,7 @@ public class WendyBehaviour : NetworkBehaviour
     [SerializeField] private AudioClip[] footsteps;
     [SerializeField] private AudioClip chaseMusic;
     [SerializeField] private float attackDistance;
+    [SerializeField] private AudioClip attackWoosh;
 
     public void InitializePlayers(List<GameObject> playerList)
     {
@@ -181,6 +182,8 @@ public class WendyBehaviour : NetworkBehaviour
         navAgent.SetDestination(transform.position);
         //playu hit animatiohn
         animController.StartAttack();
+        SoundManager.Instance.PlaySound(attackWoosh, transform.position, "SFX", 0.5f, true);
+        yield return new WaitForSeconds(0.5f);
         playerToChase.GetComponent<PlayerObj>().TakeDamage(15);
         yield return new WaitForSeconds(2.267f);//change to animation time
         animController.StopAttack();

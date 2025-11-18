@@ -2563,6 +2563,7 @@ MonoBehaviour:
   mouseSensitivity: 0.05
   upLimit: 70
   downLimit: -45
+  headYawLimit: 45
 --- !u!136 &5633303042295144700
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2610,12 +2611,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   playerId: 0
+  isAlive: 1
   moveSpeed: 5
   jumpHeight: 1
   staminaDrainRate: 15
   staminaDrainSpeed: 11
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
+  impactSFX: {fileID: 8300000, guid: 453ed76371c2c1148ae5ed2b246850d0, type: 3}
   currentHealth:
     m_InternalValue: 100
   currentStamina: 0

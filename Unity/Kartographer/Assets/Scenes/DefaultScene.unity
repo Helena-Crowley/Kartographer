@@ -6662,7 +6662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayNightCycle
   globalVolume: {fileID: 619353446}
   directionalLight: {fileID: 640501550}
-  dayLengthSeconds: 180
+  dayLengthSeconds: 300
   lightIntensityCurve:
     serializedVersion: 2
     m_Curve:

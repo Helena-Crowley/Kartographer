@@ -451,6 +451,7 @@ public class GarageDoor : NetworkBehaviour
 
     private IEnumerator ServerTeleportEveryoneSequence()
     {
+        yield return new WaitForSeconds(1);
         foreach (var clientPair in NetworkManager.Singleton.ConnectedClients)
         {
             ulong clientId = clientPair.Key;
@@ -492,10 +493,12 @@ public class GarageDoor : NetworkBehaviour
     // ----- Client UI / Effects -----
     private IEnumerator ClientTeleportSequence()
     {
+        percentageSlider.gameObject.SetActive(false);
+        playerInTrigger = false;
         radioAudio.enabled = false;
         SoundManager.Instance.PlaySound2D(teleportStartSound, "SFX", 0.2f);
         loadingText.enabled = true;
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
         SoundManager.Instance.PlayMusic(radioStatic, "SFX", 0.1f, 1);
         yield return FadeRoutine(true, 1f);
@@ -504,9 +507,10 @@ public class GarageDoor : NetworkBehaviour
 
         loadingText.enabled = false;
         SoundManager.Instance.StopMusic(1.25f);
+        dayNightCycleGO.SetActive(true);
         yield return FadeRoutine(false, 1f);
 
-        dayNightCycleGO.SetActive(true);
+        
     }
 
     private IEnumerator FadeRoutine(bool fadeIn, float duration)
@@ -549,7 +553,7 @@ public class GarageDoor : NetworkBehaviour
                     if (charCount % soundFrequency == 0)
                         SoundManager.Instance.PlaySound2D(keyboardSounds[rand], "SFX", 0.07f, true);
 
-                    yield return new WaitForSeconds(1f / 75f); // typeSpeed
+                    yield return new WaitForSeconds(1f / 85f); // typeSpeed
                 }
             }
             loadingText.text += "\n";

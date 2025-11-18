@@ -6428,7 +6428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2655085064
+  GlobalObjectIdHash: 2540960787
   InScenePlacedSourceGlobalObjectIdHash: 2540960787
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6471,9 +6471,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   tireRadius: 0.4
-  springStrength: 2
-  springDamper: 1.5
-  gravityMultiplier: 0.9
+  springStrength: 6
+  springDamper: 25
+  gravityMultiplier: 0.4
   tireMass: 25
   tireGripFactor01: 0.9
   tireRotationSpeed:
