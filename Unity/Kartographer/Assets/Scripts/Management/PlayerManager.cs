@@ -6,7 +6,7 @@ public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    private Dictionary<ulong, PlayerObj> playersInGame = new();
+    public Dictionary<ulong, PlayerObj> playersInGame = new();
 
     private void Awake()
     {
@@ -14,10 +14,11 @@ public class PlayerManager : NetworkBehaviour
         else Destroy(gameObject);
     }
 
-    public void RegisterPlayer(PlayerObj player)
+    public void RegisterPlayer(NetworkObject player)
     {
         if (!IsServer) return; // Only the server tracks the list
-        playersInGame[player.OwnerClientId] = player;
+        playersInGame[player.OwnerClientId] = player.GetComponent<PlayerObj>();
+        Debug.Log("player registered");
     }
 
     public void UnregisterPlayer(PlayerObj player)

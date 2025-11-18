@@ -34,4 +34,15 @@ public class WendyAnimator : MonoBehaviour
     {
         animator.SetTrigger("Despawn");
     }
+
+    public void StartAttack()
+    {
+        animator.SetBool("isAttacking", true);
+    }
+
+    public void StopAttack()
+    {
+        animator.SetBool("isAttacking", false);
+    }
+
 }

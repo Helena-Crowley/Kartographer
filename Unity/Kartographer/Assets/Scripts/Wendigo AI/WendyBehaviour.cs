@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class WendyBehaviour : NetworkBehaviour
 {
@@ -31,6 +32,7 @@ public class WendyBehaviour : NetworkBehaviour
     [SerializeField] private float maxVol = 0.1f;
     [SerializeField] private AudioClip[] footsteps;
     [SerializeField] private AudioClip chaseMusic;
+    [SerializeField] private float attackDistance;
 
     public void InitializePlayers(List<GameObject> playerList)
     {
@@ -148,11 +150,8 @@ public class WendyBehaviour : NetworkBehaviour
                 animController.PlayChase();
 
                 yield return new WaitForSeconds(2f);
-
-                navAgent.enabled = true;
-                inRange = true;
                 SoundManager.Instance.PlayMusic(chaseMusic, "SFX", .15f, 2);
-                StartCoroutine(ChasePlayer());
+                StartChasing();
             }
         }
     }
@@ -163,12 +162,29 @@ public class WendyBehaviour : NetworkBehaviour
         {
             Debug.Log("chaseDistance" + chaseDistance);
             if (Vector3.Distance(transform.position, playerToChase.transform.position) > chaseDistance) inRange = false;
+            if (Vector3.Distance(transform.position, playerToChase.transform.position) <= attackDistance)
+            {
+                StartCoroutine(AttackPlayer());
+                yield break;
+            }
             navAgent.SetDestination(playerToChase.transform.position);
             yield return new WaitForSeconds(0.5f);
         }
         SoundManager.Instance.StopMusic(2);
         yield return new WaitForSeconds(2f);
         wendySpawner.DespawnWendy();
+
+    }
+
+    IEnumerator AttackPlayer()
+    {
+        navAgent.SetDestination(transform.position);
+        //playu hit animatiohn
+        animController.StartAttack();
+        playerToChase.GetComponent<PlayerObj>().TakeDamage(15);
+        yield return new WaitForSeconds(2.267f);//change to animation time
+        animController.StopAttack();
+        StartChasing();
 
     }
 
@@ -197,5 +213,12 @@ public class WendyBehaviour : NetworkBehaviour
         float volume = Random.Range(minVol, maxVol);
 
         SoundManager.Instance.PlaySound(10, 60, randomSound, transform.position, "SFX", volume, true);
+    }
+
+    private void StartChasing()
+    {
+        navAgent.enabled = true;
+        inRange = true;
+        StartCoroutine(ChasePlayer());
     }
 }

@@ -60,6 +60,8 @@ public class PlayerSpawner : NetworkBehaviour
 
                 //send info to wendigo manager
                 wendySpawner.AddPlayer(playerObject.gameObject);
+                Debug.Log(playerObject.name);
+                PlayerManager.Instance.RegisterPlayer(playerObject);
             }
         }
     }

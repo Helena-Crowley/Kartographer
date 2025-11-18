@@ -17,7 +17,7 @@ public class DayNightCycle : MonoBehaviour
     private bool warned = false;
 
     //Temperature
-    private float minTemperature = -29f;
+    public float minTemperature = -29f;
     private float maxTemperature;
     public float currentTemperature;
 

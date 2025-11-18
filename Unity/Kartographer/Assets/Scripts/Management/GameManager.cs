@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.Animations;
 
 public class GameManager : NetworkBehaviour
 {
@@ -11,6 +12,8 @@ public class GameManager : NetworkBehaviour
     public float worldXWidth;
     public float worldZWidth;
     public Vector3 worldCenter;
+
+    public Transform[] outpostSpawnPoints;
 
     [SerializeField] private Renderer terrainRenderer;
 

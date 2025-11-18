@@ -11,5 +11,13 @@ public class TemperatureDamage : MonoBehaviour
     void Update()
     {
         temperatureText.text = dayNightCycle.currentTemperature.ToString("F0") + "\u00B0C";
+        if (dayNightCycle.currentTemperature < dayNightCycle.minTemperature + 17)
+        {
+            //and if players are not in outpost
+            foreach (PlayerObj player in PlayerManager.Instance.playersInGame.Values)
+            player.TakeDamage(100);
+        }
     }
+
+
 }

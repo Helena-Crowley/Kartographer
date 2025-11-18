@@ -2613,6 +2613,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9eb64f44a61d2a445927e99493e4c472, type: 3}
   - {fileID: 8300000, guid: e9851d596e2370741bb1cffbbe4d4aec, type: 3}
   chaseMusic: {fileID: 8300000, guid: b8f5994157de74a499a6a6c99ea02d96, type: 3}
+  attackDistance: 7
 --- !u!114 &-7336534830374513106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2626,5 +2627,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 0}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -499022955
+    DestinationState: 629534904
+    TransitionDuration: 0.25
+    TriggerNameHash: 1463555229
+    TransitionIndex: 0
+  m_Animator: {fileID: 8362725431511108560}

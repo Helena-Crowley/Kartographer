@@ -549,7 +549,7 @@ public class GarageDoor : NetworkBehaviour
                     if (charCount % soundFrequency == 0)
                         SoundManager.Instance.PlaySound2D(keyboardSounds[rand], "SFX", 0.07f, true);
 
-                    yield return new WaitForSeconds(1f / 20f); // typeSpeed
+                    yield return new WaitForSeconds(1f / 75f); // typeSpeed
                 }
             }
             loadingText.text += "\n";

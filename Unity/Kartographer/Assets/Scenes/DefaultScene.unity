@@ -747,6 +747,7 @@ GameObject:
   - component: {fileID: 23085256}
   - component: {fileID: 23085257}
   - component: {fileID: 23085258}
+  - component: {fileID: 23085259}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -865,6 +866,19 @@ MonoBehaviour:
   spawnDelayMax: 15
   spawnDistanceFromPlayer: 50
   wendyPrefab: {fileID: 9137340202026250287, guid: c342ab92accbab441bfc7b8466834d62, type: 3}
+--- !u!114 &23085259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23085250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c93a3b32910e54fbff2657c3288bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1001 &37588475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1555,6 +1569,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76072255}
   m_CullTransparentMesh: 1
+--- !u!1 &83711964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 83711965}
+  m_Layer: 8
+  m_Name: OutPostSpawnPoints (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &83711965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83711964}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.06, y: -23.33, z: 3.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1438375598}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &99362590
 GameObject:
   m_ObjectHideFlags: 0
@@ -5728,6 +5773,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 894152936100732267, guid: 07076d4d210bddd499dd6676940c94c1, type: 3}
   m_PrefabInstance: {fileID: 405191360}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &411110972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 411110973}
+  m_Layer: 8
+  m_Name: OutPostSpawnPoints (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &411110973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411110972}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.24, y: -23.33, z: 3.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1438375598}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &433767767
 GameObject:
   m_ObjectHideFlags: 0
@@ -6639,6 +6715,7 @@ MonoBehaviour:
   endLightRotation: {x: 16, y: 225, z: 0}
   startTemperature: 40
   warningVoice: {fileID: 8300000, guid: 6d965530c0dfa304faddc7d004a3c119, type: 3}
+  minTemperature: -29
   currentTemperature: 0
 --- !u!114 &562765398
 MonoBehaviour:
@@ -8227,6 +8304,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 650590355}
   m_CullTransparentMesh: 1
+--- !u!1 &655805864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 655805865}
+  m_Layer: 8
+  m_Name: OutPostSpawnPoints (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &655805865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655805864}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.28, y: -23.33, z: 3.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1438375598}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &670317411
 GameObject:
   m_ObjectHideFlags: 0
@@ -15539,6 +15647,11 @@ MonoBehaviour:
   worldXWidth: 0
   worldZWidth: 0
   worldCenter: {x: 0, y: 0, z: 0}
+  outpostSpawnPoints:
+  - {fileID: 2145320230}
+  - {fileID: 83711965}
+  - {fileID: 411110973}
+  - {fileID: 655805865}
   terrainRenderer: {fileID: 1417132781}
 --- !u!114 &1192949197
 MonoBehaviour:
@@ -19564,6 +19677,9 @@ Transform:
   - {fileID: 1546097078}
   - {fileID: 310376596}
   - {fileID: 2145320230}
+  - {fileID: 83711965}
+  - {fileID: 411110973}
+  - {fileID: 655805865}
   - {fileID: 970125624}
   - {fileID: 543450653523082134}
   m_Father: {fileID: 0}
@@ -27204,7 +27320,7 @@ Transform:
   m_GameObject: {fileID: 2145320229}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.202, y: -23.6, z: -3.809}
+  m_LocalPosition: {x: 5.07, y: -23.33, z: 3.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

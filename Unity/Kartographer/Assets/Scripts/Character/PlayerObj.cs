@@ -135,6 +135,7 @@ public class PlayerObj : NetworkBehaviour
     public float walletAmount = 0f;
     public ItemData[] inventoryItems = new ItemData[5];
     public ulong playerId;
+    public bool isAlive = true;//might need to be a networked variable
 
     // Movement & stat tuning
     public float moveSpeed = 5f;
@@ -189,6 +190,7 @@ public class PlayerObj : NetworkBehaviour
         maxHealth = health;
         maxStamina = stamina;
         currentStamina = stamina;
+        isAlive = true;
 
         // Listen for changes in the NetworkVariable (synced across all clients)
         currentHealth.OnValueChanged += OnHealthChanged;
@@ -248,6 +250,12 @@ public class PlayerObj : NetworkBehaviour
             // Instead, we send an RPC to the server to perform the change.
             TakeDamageServerRpc(dmg);
         }
+
+        if (isAlive && currentHealth.Value <= 0)
+        {
+            isAlive = false;
+            KillPlayer();
+        }
     }
 
     // This ServerRpc is executed *on the server* when called from any client.
@@ -283,4 +291,14 @@ public class PlayerObj : NetworkBehaviour
         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
         staminaBar.UpdateStaminaBar(currentStamina);
     }
+
+    void KillPlayer()
+    {
+        Debug.Log("player died");
+        int index = Random.Range(0, GameManager.Instance.outpostSpawnPoints.Length);
+        Vector3 newPosition = GameManager.Instance.outpostSpawnPoints[index].position;
+        GetComponent<NetworkObject>().transform.position = newPosition;
+    }
 }
+
+//set up gamemanager spawn pts 
