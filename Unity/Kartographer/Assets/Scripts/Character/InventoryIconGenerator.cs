@@ -58,4 +58,13 @@ public class InventoryIconGenerator : MonoBehaviour
         inventorySlots[slotIndex].sprite = offHandIcon;
         inventorySlots[slotIndex].color = new Color(1, 1, 1, 1); // make transparent
     }
+
+    public void ResetInventoryIcons()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            inventorySlots[i].sprite = offHandIcon;
+            inventorySlots[i].color = new Color(1, 1, 1, 1);
+        }
+    }
 }

@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OutPostTerminal
   ShowTopMostFoldoutHeaderGroup: 1
+  testing: 0
   loadingScreen: {fileID: 1888669969377196549}
   loadingBar: {fileID: 8511392945435948440}
   spawnPoints: {fileID: 11400000, guid: 631ede04635c08048a2c2636b2f38906, type: 2}
@@ -541,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3397836168
+  GlobalObjectIdHash: 4251547197
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1

@@ -40,6 +40,17 @@ public class DayNightCycle : MonoBehaviour
     private int initialLightIntensity = 500;
     private int endLightIntensity = 0;
 
+
+    // Original values
+    private float originalT;
+    private float originalCurrentTemperature;
+    private float originalHDRIRotation;
+    private float originalExposure;
+    private Quaternion originalLightRotation;
+    private float originalLightIntensity;
+    private float originalLightTemperature;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,7 +58,39 @@ public class DayNightCycle : MonoBehaviour
         maxTemperature = startTemperature;
         currentTemperature = maxTemperature;
 
+        originalT = t;
+        originalCurrentTemperature = currentTemperature;
+
         if (volumeProfile.TryGet<HDRISky>(out HDRISky sky))
+        {
+            hdriSky = sky;
+            originalHDRIRotation = hdriSky.rotation.value;
+        }
+        else
+        {
+            Debug.LogError("No HDRI Sky override found in the Volume.");
+        }
+
+        if (volumeProfile.TryGet<Exposure>(out Exposure exp))
+        {
+            exposure = exp;
+            originalExposure = exposure.fixedExposure.value;
+        }
+        else
+        {
+            Debug.LogError("No exposure override found in the Volume.");
+        }
+
+        // Directional Light
+        originalLightRotation = directionalLight.transform.rotation;
+        originalLightIntensity = directionalLight.intensity;
+        originalLightTemperature = directionalLight.colorTemperature;
+
+        volumeProfile = globalVolume.profile;
+        maxTemperature = startTemperature;
+        currentTemperature = maxTemperature;
+
+        if (volumeProfile.TryGet<HDRISky>(out sky))
         {
             hdriSky = sky;
         }
@@ -56,7 +99,7 @@ public class DayNightCycle : MonoBehaviour
             Debug.LogError("No HDRI Sky override found in the Volume.");
         }
 
-        if (volumeProfile.TryGet<Exposure>(out Exposure exp))
+        if (volumeProfile.TryGet<Exposure>(out exp))
         {
             exposure = exp;
         }
@@ -110,4 +153,26 @@ public class DayNightCycle : MonoBehaviour
             SoundManager.Instance.PlaySound2D(warningVoice, "SFX", .15f);
         }
     }
+
+    public void ResetDayNightCycle()
+    {
+        t = originalT;
+        currentTemperature = originalCurrentTemperature;
+
+        if (hdriSky != null)
+            hdriSky.rotation.value = originalHDRIRotation;
+
+        if (exposure != null)
+            exposure.fixedExposure.value = originalExposure;
+
+        if (directionalLight != null)
+        {
+            directionalLight.transform.rotation = originalLightRotation;
+            directionalLight.intensity = originalLightIntensity;
+            directionalLight.colorTemperature = originalLightTemperature;
+        }
+
+        warned = false; // reset warning trigger
+    }
+
 }

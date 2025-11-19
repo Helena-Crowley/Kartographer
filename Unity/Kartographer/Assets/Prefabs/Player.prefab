@@ -2337,6 +2337,7 @@ GameObject:
   - component: {fileID: 110251132995169303}
   - component: {fileID: 4923665034963816336}
   - component: {fileID: 5086616555950292770}
+  - component: {fileID: 7927216298239804465}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -2602,26 +2603,27 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   health: 100
   stamina: 100
-  distanceFromStorm: 0
-  walletAmount: 0
-  inventoryItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   playerId: 0
-  isAlive: 1
+  dmgScreen: {fileID: 0}
   moveSpeed: 5
   jumpHeight: 1
   staminaDrainRate: 15
   staminaDrainSpeed: 11
+  playerCamera: {fileID: 8703522531464277155}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
   impactSFX: {fileID: 8300000, guid: 453ed76371c2c1148ae5ed2b246850d0, type: 3}
+  terminalTyper: {fileID: 7927216298239804465}
+  outputText: {fileID: 0}
+  deathBGImage: {fileID: 0}
   currentHealth:
     m_InternalValue: 100
   currentStamina: 0
+  walletAmount: 0
+  isAlive: 1
+  inOutpost: 1
+  playerInventory: {fileID: 8482279993524727816}
+  iconGenerator: {fileID: 8887283055430289878}
   nearCart: 0
 --- !u!114 &4357661112018826242
 MonoBehaviour:
@@ -2878,6 +2880,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWallet
   ShowTopMostFoldoutHeaderGroup: 1
   moneyText: {fileID: 0}
+  money:
+    m_InternalValue: 0
 --- !u!114 &6647965804132111819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3120,6 +3124,29 @@ MonoBehaviour:
   dropAction: {fileID: -1125511150292163761, guid: 039cfa288b49bdb4ab9a8a7f9fd7f613, type: 3}
   holdingItem: 0
   attachSound: {fileID: 8300000, guid: 8e766026653e5be4bbf8b9b379ab6029, type: 3}
+--- !u!114 &7927216298239804465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2538848329134641862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df383c9225af8754f91df48c7a3c3b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TerminalTyper
+  keyboardSounds:
+  - {fileID: 8300000, guid: ab9d8d0528040b1488b8dfca78dcae95, type: 3}
+  - {fileID: 8300000, guid: e43b43033ecad6b47bdd3632e95695ce, type: 3}
+  - {fileID: 8300000, guid: bb63e8967b9888f42b12f119422167b9, type: 3}
+  - {fileID: 8300000, guid: c3012f4815f960b46a96f13c3a6b5f4a, type: 3}
+  - {fileID: 8300000, guid: 6a1f311d3a2aa0e43bd4add0997a6932, type: 3}
+  - {fileID: 8300000, guid: d35ec3e2cd4814b4da4a249b0213b425, type: 3}
+  typeSpeed: 40
+  lineDelay: 0.1
+  soundFrequency: 7
+  soundVolume: 0.1
 --- !u!1 &2552898346324515920
 GameObject:
   m_ObjectHideFlags: 0

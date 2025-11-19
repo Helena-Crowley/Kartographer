@@ -2428,7 +2428,7 @@ GameObject:
   - component: {fileID: 5080923110417727902}
   - component: {fileID: -7336534830374513106}
   m_Layer: 0
-  m_Name: Wendigo@Standing Melee Attack Backhand
+  m_Name: WendyEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2600,9 +2600,10 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 1032
-  chanceOfChase: 75
+  chanceOfChase: 100
   despawnTimer: 30
   navAgent: {fileID: 6950020027019164207}
+  playerToChase: {fileID: 0}
   wendyScreechSound: {fileID: 8300000, guid: ce3048c8f5b4df843b18f94a2cbbe641, type: 3}
   animController: {fileID: -8597368441735532633}
   minVol: 0.3
@@ -2634,6 +2635,6 @@ MonoBehaviour:
     OriginatingState: -499022955
     DestinationState: 629534904
     TransitionDuration: 0.25
-    TriggerNameHash: 1463555229
+    TriggerNameHash: 629534904
     TransitionIndex: 0
   m_Animator: {fileID: 8362725431511108560}

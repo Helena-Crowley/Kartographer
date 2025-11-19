@@ -20,7 +20,7 @@ public class CartInteraction : NetworkBehaviour
     private PlayerInput playerInput;
 
     // private int playersInCart = 0;
-    private List<ulong?> playerIds = new List<ulong?> {null, null, null, null};
+    private List<ulong?> playerIds = new List<ulong?> { null, null, null, null };
 
     public Transform[] seatPositions; //0 = driver seat
 
@@ -101,7 +101,7 @@ public class CartInteraction : NetworkBehaviour
     void EnterCart() => EnterCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
 
 
-    void ExitCart() => ExitCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
+    public void ExitCart() => ExitCartServerRpc(localPlayer.GetComponent<NetworkObject>().OwnerClientId);
 
     [ServerRpc(RequireOwnership = false)]
     void EnterCartServerRpc(ulong playerId)
@@ -275,6 +275,31 @@ public class CartInteraction : NetworkBehaviour
         NetworkObject carNetObj = GetComponent<NetworkObject>();
         carNetObj.ChangeOwnership(clientId);
     }
+
+    public void KickEveryoneOut()
+    {
+        if (!IsServer)
+        {
+            Debug.LogWarning("KickEveryoneOut called on a client — ignored.");
+            return;
+        }
+
+        // Make a copy of all occupied player IDs
+        List<ulong> occupiedIds = new List<ulong>();
+        foreach (var id in playerIds)
+        {
+            if (id.HasValue)
+                occupiedIds.Add(id.Value);
+        }
+
+        // Call ExitCartServerRpc for each player
+        foreach (ulong playerId in occupiedIds)
+        {
+            ExitCartServerRpc(playerId);
+        }
+    }
+
+
 
 
 

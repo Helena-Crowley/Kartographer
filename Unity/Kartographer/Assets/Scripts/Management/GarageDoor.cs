@@ -179,7 +179,7 @@
 //     private IEnumerator TeleportSequence(ulong clientId)
 //     {
 //         radioAudio.enabled = false;
-        
+
 //         SoundManager.Instance.PlaySound2D(teleportStartSound, "SFX", 0.2f);
 //         loadingText.enabled = true;
 //         yield return new WaitForSeconds(0.5f);
@@ -343,15 +343,17 @@ public class GarageDoor : NetworkBehaviour
         "[OK] Loading sand dune topology mesh (LOD 0-3)",
         "[OK] Applying heat haze shader variant (!DesertDay_01!)",
         "",
-        "[BOOT] Initializing vehicle systems...",
-        "[OK] GolfKart_Desert edition loaded",
+        "[BOOT] Initializing control systems...",
+        "[I] GolfKart_Desert edition loaded",
         "[OK] Physics tuning: !TractionBoost=1.2! | !DriftControl=0.85!",
         "[OK] Fuel system calibrated (max !15L!)",
         "",
-        "[FINALIZE] Establishing world link...",
-        "[OK] World handshake successful",
-        "![FAILED] Player is NOT ready.!",
+        "[BOOT] Initializing control systems...",
+        "![I] Opens Scanner Gun!",
+        "![M] Opens Map!",
+        "![Q] Drop Item!",
         "",
+        "!>>> FIND 4 BUILDINGS TO LEAVE <<<!",
         ">>> ENTERING DESERT ZONE <<<"
     };
 
@@ -390,6 +392,7 @@ public class GarageDoor : NetworkBehaviour
     private void Update()
     {
         if (!playerInTrigger) return;
+        if (!localPlayer.GetComponent<PlayerObj>().isAlive) return;
 
         if (interact.action.IsPressed())
         {
@@ -455,6 +458,8 @@ public class GarageDoor : NetworkBehaviour
         foreach (var clientPair in NetworkManager.Singleton.ConnectedClients)
         {
             ulong clientId = clientPair.Key;
+            var client = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayerObj>();
+            client.inOutpost = false;
             SpawnPlayerAtRandom(clientId);
         }
         yield return null;
@@ -503,14 +508,14 @@ public class GarageDoor : NetworkBehaviour
         SoundManager.Instance.PlayMusic(radioStatic, "SFX", 0.1f, 1);
         yield return FadeRoutine(true, 1f);
         yield return TypeLines();
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(2f);
 
         loadingText.enabled = false;
         SoundManager.Instance.StopMusic(1.25f);
         dayNightCycleGO.SetActive(true);
         yield return FadeRoutine(false, 1f);
 
-        
+
     }
 
     private IEnumerator FadeRoutine(bool fadeIn, float duration)

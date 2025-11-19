@@ -1,147 +1,29 @@
-// using UnityEngine;
-// using Unity.Netcode;
-// using UnityEngine.InputSystem;
-
-// public class PlayerObj : NetworkBehaviour
-// {
-//     [Header("Player Stats")]
-//     public int health = 100;
-//     public int stamina = 100;
-//     public float distanceFromStorm = 0f;
-//     public float walletAmount = 0f;
-//     public ItemData[] inventoryItems = new ItemData[5];
-//     public ulong playerId;
-
-//     public float moveSpeed = 5f;
-//     public float jumpHeight = 1f;
-//     public float staminaDrainRate = 5f;
-//     public int staminaDrainSpeed = 10;
-
-//     [Header("UI References")]
-//     public HealthBar healthBar;
-//     public StaminaBar staminaBar;
-
-//     //================ Networked Variables ==================
-//     public NetworkVariable<int> currentHealth = new(
-//         100,
-//         NetworkVariableReadPermission.Everyone,       // everyone can read
-//         NetworkVariableWritePermission.Server         // only server can write
-//     );
-
-//     //================ Local Variables ==================
-//     [HideInInspector] public float currentStamina;
-//     private float maxStamina;
-//     private int maxHealth;
-
-//     [HideInInspector] public bool nearCart = false;
-//     [HideInInspector] public bool inCart = false;
-
-//     //======================================================
-//     public override void OnNetworkSpawn()
-//     {
-//         playerId = OwnerClientId;
-//         maxHealth = health;
-//         maxStamina = stamina;
-//         currentStamina = stamina;
-
-//         currentHealth.OnValueChanged += OnHealthChanged;
-
-//         if (IsOwner)
-//         {
-//             Debug.Log($"Binding UI for local player {OwnerClientId}");
-//             PlayerUIManager.Instance.BindPlayer(this);
-
-//             // Force initial update after binding
-//             if (healthBar != null)
-//                 healthBar.UpdateHealthBar(currentHealth.Value);
-//             if (staminaBar != null)
-//                 staminaBar.UpdateStaminaBar(currentStamina);
-//         }
-//     }
-
-//     private void OnHealthChanged(int oldVal, int newVal)
-//     {
-//         Debug.Log($"[{(IsOwner ? "LOCAL" : "REMOTE")}] Player {OwnerClientId}: Health {oldVal} → {newVal}");
-
-//         // Update health UI for everyone, not just owner
-//         if (healthBar != null)
-//             healthBar.UpdateHealthBar(newVal);
-//     }
-
-//     private void OnDestroy()
-//     {
-//         currentHealth.OnValueChanged -= OnHealthChanged;
-//     }
-
-//     //======================================================
-//     /* ------------------ HEALTH ------------------ */
-
-//     /// <summary>
-//     /// Call this from any script to apply damage.
-//     /// Handles server/client logic automatically.
-//     /// </summary>
-//     public void TakeDamage(int dmg)
-//     {
-//         if (IsServer)
-//         {
-//             currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
-//             Debug.Log($"Server applied {dmg} damage to Player {OwnerClientId}");
-//         }
-//         else
-//         {
-//             TakeDamageServerRpc(dmg);
-//         }
-//     }
-
-//     [ServerRpc(RequireOwnership = false)]
-//     private void TakeDamageServerRpc(int dmg)
-//     {
-//         currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
-//         Debug.Log($"Server applied {dmg} damage via RPC to Player {OwnerClientId}");
-//     }
-
-//     //======================================================
-//     /* ------------------ STAMINA ------------------ */
-
-//     public void DrainStamina()
-//     {
-//         if (!IsOwner) return;
-
-//         currentStamina -= staminaDrainRate * Time.deltaTime;
-//         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-//         staminaBar.UpdateStaminaBar(currentStamina);
-//     }
-
-//     public void RegainStamina()
-//     {
-//         if (!IsOwner) return;
-
-//         currentStamina += (staminaDrainRate / 2) * Time.deltaTime;
-//         currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-//         staminaBar.UpdateStaminaBar(currentStamina);
-//     }
-// }
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerObj : NetworkBehaviour
 {
     // ================= PLAYER STATS =================
     [Header("Player Stats")]
-    public int health = 100;
-    public int stamina = 100;
-    public float distanceFromStorm = 0f;
-    public float walletAmount = 0f;
-    public ItemData[] inventoryItems = new ItemData[5];
+    [SerializeField] private int health = 100;
+    [SerializeField] private int stamina = 100;
+
+
+    //public ItemData[] inventoryItems = new ItemData[5];
     public ulong playerId;
-    public bool isAlive = true;//might need to be a networked variable
+
+    public DamageVignette dmgScreen;
 
     // Movement & stat tuning
     public float moveSpeed = 5f;
     public float jumpHeight = 1f;
     public float staminaDrainRate = 5f;
     public int staminaDrainSpeed = 10;
+    public Camera playerCamera;
 
     [Header("UI References")]
     public HealthBar healthBar;
@@ -149,19 +31,31 @@ public class PlayerObj : NetworkBehaviour
 
     [SerializeField] private AudioClip impactSFX;
 
-    // ================= NETWORKED VARIABLES =================
-    // NetworkVariables automatically sync between server and all clients.
-    // - Default value: 100
-    // - Readable by everyone
-    // - Writable only by the server
+
+    [SerializeField] private TerminalTyper terminalTyper;
+    public TMP_Text outputText;
+    public Image deathBGImage;
+    private string[] deathScript = new string[]
+    {
+        "// === System Shutdown ===",
+        "[FAIL] Player was too bad...",
+        "![ERROR] Connection failed!",
+        ">>> YOU DIED <<<"
+    };
+
+
     public NetworkVariable<int> currentHealth = new(
         100,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-
-    // ================= LOCAL VARIABLES =================
     [HideInInspector] public float currentStamina;
+    public int walletAmount = 0;
+    public bool isAlive = true;//might need to be a networked variable
+    public bool inOutpost = true;
+    public Inventory playerInventory;
+    public InventoryIconGenerator iconGenerator;
+
     private float maxStamina;
     private int maxHealth;
 
@@ -181,30 +75,21 @@ public class PlayerObj : NetworkBehaviour
         }
     }
 
-    // ================= LIFECYCLE =================
     public override void OnNetworkSpawn()
     {
-        // This runs automatically when the object is spawned on the network
-        // (either by the server or as part of a network scene).
-        // All clients that have this object will execute this method.
 
-        playerId = OwnerClientId;  // Each networked object knows who owns it.
+        playerId = OwnerClientId;
         maxHealth = health;
         maxStamina = stamina;
         currentStamina = stamina;
         isAlive = true;
 
-        // Listen for changes in the NetworkVariable (synced across all clients)
         currentHealth.OnValueChanged += OnHealthChanged;
 
-        // If this script is running on the local player's instance
-        // (the client that owns this PlayerObj), then bind its UI elements.
         if (IsOwner)
         {
-            //Debug.Log($"Binding UI for local player {OwnerClientId}");
             PlayerUIManager.Instance.BindPlayer(this);
 
-            // Initialize UI with current values
             if (healthBar != null)
                 healthBar.UpdateHealthBar(currentHealth.Value);
             if (staminaBar != null)
@@ -212,38 +97,25 @@ public class PlayerObj : NetworkBehaviour
         }
     }
 
-    // Called automatically when the health NetworkVariable changes
-    // on *any* client (local or remote).
     private void OnHealthChanged(int oldVal, int newVal)
     {
-        //Debug.Log($"[{(IsOwner ? "LOCAL" : "REMOTE")}] Player {OwnerClientId}: Health {oldVal} → {newVal}");
-
-        // Update health bar on all clients (each instance has its own UI ref)
         if (healthBar != null)
             healthBar.UpdateHealthBar(newVal);
     }
 
     public override void OnDestroy()
     {
-        // Always unsubscribe from events to avoid leaks when object despawns
         currentHealth.OnValueChanged -= OnHealthChanged;
 
         base.OnDestroy();
     }
 
-    // ======================================================
-    /* ------------------ HEALTH SYSTEM ------------------ */
-
-    /// <summary>
-    /// Call this method from *any* script or object to apply damage.
-    /// Handles both client → server and server-side logic automatically.
-    /// </summary>
     public void TakeDamage(int dmg)
     {
+        dmgScreen.StartCoroutine(dmgScreen.ShowDMG());
         //dmg sfx
         SoundManager.Instance.PlaySound2D(impactSFX, "SFX", 0.15f, true);
         //screen red
-        // If we're the server, we can modify the NetworkVariable directly.
         if (IsServer)
         {
             currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
@@ -251,8 +123,7 @@ public class PlayerObj : NetworkBehaviour
         }
         else
         {
-            // If we're a client, we can't write to currentHealth directly.
-            // Instead, we send an RPC to the server to perform the change.
+
             TakeDamageServerRpc(dmg);
         }
 
@@ -263,24 +134,16 @@ public class PlayerObj : NetworkBehaviour
         }
     }
 
-    // This ServerRpc is executed *on the server* when called from any client.
-    // [RequireOwnership = false] allows other clients (not just the owner)
-    // to damage this player — useful for PvP, hazards, etc.
+
     [ServerRpc(RequireOwnership = false)]
     private void TakeDamageServerRpc(int dmg)
     {
-        // The server safely updates the authoritative NetworkVariable.
         currentHealth.Value = Mathf.Clamp(currentHealth.Value - dmg, 0, maxHealth);
         //Debug.Log($"Server applied {dmg} damage via RPC to Player {OwnerClientId}");
     }
 
-    // ======================================================
-    /* ------------------ STAMINA SYSTEM ------------------ */
-
     public void DrainStamina()
     {
-        // Stamina is local-only here (not a NetworkVariable),
-        // so only update it for the player that owns this instance.
         if (!IsOwner) return;
 
         currentStamina -= staminaDrainRate * Time.deltaTime;
@@ -301,11 +164,60 @@ public class PlayerObj : NetworkBehaviour
     {
         //death sfx
         //death screen
+        StartCoroutine(terminalTyper.TypeLines(outputText, deathScript, deathBGImage));
         Debug.Log("player died");
+        SoundManager.Instance.StopMusic();
+
+        isAlive = false; //you are now in death state
+        if (PlayerManager.Instance.CheckAllPlayersStatus()) return;
+        ResetPlayer();
+    }
+
+    public void MovePlayerToOutpost()
+    {
         int index = Random.Range(0, GameManager.Instance.outpostSpawnPoints.Length);
         Vector3 newPosition = GameManager.Instance.outpostSpawnPoints[index].position;
         GetComponent<NetworkObject>().transform.position = newPosition;
     }
-}
 
-//set up gamemanager spawn pts 
+    public int GetWalletAmount()
+    {
+        walletAmount = GetComponent<PlayerWallet>().money.Value;
+        return walletAmount;
+    }
+
+    public bool SetWalletAmount(int amount)
+    {
+        walletAmount = amount;
+        GetComponent<PlayerWallet>().money.Value = walletAmount;
+
+        return true;
+    }
+
+    public void SetHealth(int amount)
+    {
+        currentHealth.Value = amount;
+    }
+
+    public void SetStamina(float amount)
+    {
+        currentStamina = amount;
+    }
+
+    public void ResetPlayer() //called when ONE player dies
+    {
+        Debug.Log("Resetting Player");
+        SetWalletAmount(0);
+        SetHealth(health);
+        SetStamina(stamina);
+        iconGenerator.ResetInventoryIcons();
+        playerInventory.ResetInventory();
+
+        //isAlive = true; //depends on what a "dead" player means
+        inOutpost = true;
+
+        MovePlayerToOutpost();
+
+        Debug.Log("Finished Resetting Player");
+    }
+}

@@ -37,4 +37,9 @@ public class Inventory : MonoBehaviour
             return items[items.Count - 1]; // return the last added item
         return null;
     }
+
+    public void ResetInventory()
+    {
+        items.Clear();
+    }
 }

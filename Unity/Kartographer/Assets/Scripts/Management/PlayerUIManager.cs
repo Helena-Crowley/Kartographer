@@ -10,6 +10,9 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject playerHUD;
     public HealthBar healthBar;
     public StaminaBar staminaBar;
+    public DamageVignette damageVignette;
+    public TMP_Text outputText;
+    public Image BGImage; 
 
     [Header("InteractPrompt")]
     public GameObject interactGO;
@@ -48,6 +51,9 @@ public class PlayerUIManager : MonoBehaviour
 
         player.healthBar = healthBar;
         player.staminaBar = staminaBar;
+        player.dmgScreen = damageVignette;
+        player.deathBGImage = BGImage;
+        player.outputText = outputText;
 
         // Initialize UI
         healthBar.UpdateHealthBar(player.currentHealth.Value);

@@ -7,11 +7,12 @@ public class PlayerWallet : NetworkBehaviour
     public TMP_Text moneyText;
 
     // NetworkVariable: automatically syncs value between server and clients
-    private NetworkVariable<int> money = new NetworkVariable<int>(
+    public NetworkVariable<int> money = new NetworkVariable<int>(
         0, 
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Server
     );
+
 
     private void Start()
     {

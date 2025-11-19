@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class OutPostTerminal : NetworkBehaviour
 {
+    public bool testing = false;
+
     [Header("Loading Screen UI")]
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider loadingBar;
@@ -58,7 +60,7 @@ public class OutPostTerminal : NetworkBehaviour
         if (playerInTrigger && interact.action.WasPressedThisFrame())
         {
             float percentFound = (float)GameManager.Instance.buildingsFound / (float)GameManager.Instance.totalBuildings;
-            if (percentFound >= .95f)
+            if (percentFound >= .4f || testing)
                 BeginTravel();
             else if (percentFound == 0)
             {
@@ -77,6 +79,7 @@ public class OutPostTerminal : NetworkBehaviour
     {
         if (IsOwner)
         {
+            localPlayer.GetComponent<PlayerObj>().inOutpost = true;
             int index = Random.Range(0, spawnPoints.positions.Length);
             Vector3 newPosition = spawnPoints.positions[index];
             Debug.Log($"index = {index}");

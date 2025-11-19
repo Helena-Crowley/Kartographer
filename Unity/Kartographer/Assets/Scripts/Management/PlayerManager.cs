@@ -6,7 +6,16 @@ public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
+    public class PlayerData
+    {
+        public PlayerObj playerObj; //currentHealth, currentStamina, isAlive, inOutpost, walletAmount, iconGenerator, playerInventory
+    }
+
     public Dictionary<ulong, PlayerObj> playersInGame = new();
+    [SerializeField] private ItemSpawner itemSpawner;
+    [SerializeField] private WendySpawner wendySpawner;
+    [SerializeField] private CartSpawner cartSpawner;
+    [SerializeField] private DayNightCycle dayNightCycle;
 
     private void Awake()
     {
@@ -27,14 +36,58 @@ public class PlayerManager : NetworkBehaviour
         playersInGame.Remove(player.OwnerClientId);
     }
 
-    // Letting everyone (including you) know you took damage (Step2)
-    // public void TakeDamage(ulong clientId, int damage)
-    // {
-    //     if (!IsServer) return;
+    public void ResetGame() // call when ALL players have died to reset
+    {
+        cartSpawner.cartInteraction.KickEveryoneOut();
 
-    //     if (playersInGame.TryGetValue(clientId, out PlayerObj player))
-    //     {
-    //         player.ApplyDamage(damage);
-    //     }
-    // }
+        dayNightCycle.ResetDayNightCycle();
+        foreach (ItemSpawner itemSpawner in GameManager.Instance.itemSpawners)
+        {
+            itemSpawner.ResetItems();
+        }
+
+        foreach (var kvp in playersInGame)
+        {
+            PlayerObj player = kvp.Value;
+            if (player != null)
+            {
+                player.ResetPlayer();
+                player.isAlive = true;
+            }
+        }
+
+        wendySpawner.canSpawn = false;
+        wendySpawner.DespawnWendy();
+
+        cartSpawner.ResetCart();
+
+    }
+
+    public bool CheckAllPlayersStatus()
+    {
+        bool allDead = true;
+
+        foreach (var kvp in playersInGame)
+        {
+            PlayerObj player = kvp.Value;
+            if (player != null && player.isAlive)
+            {
+                allDead = false; // At least one player is alive
+                break;
+            }
+        }
+
+        if (allDead)
+        {
+            Debug.Log("All players dead. Resetting game...");
+            ResetGame();
+            return true;
+        }
+        else
+        {
+            Debug.Log("Some players are still alive. No reset.");
+            return false;
+        }
+    }
+
 }

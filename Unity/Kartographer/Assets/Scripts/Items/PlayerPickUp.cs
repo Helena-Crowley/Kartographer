@@ -8,8 +8,10 @@ public class PlayerPickUp : NetworkBehaviour
     public InputActionReference pickUpAction;
     public InputActionReference dropAction;
     private InteractPrompt interactPrompt;
+    
     public Inventory playerInventory;
     public InventoryIconGenerator iconGenerator;
+    
     public GameObject pickupPrefab;
     public AudioClip dropSoundEffect;
     public AudioClip pickUpSoundEffect;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,12 +7,15 @@ public class ItemSpawner : NetworkBehaviour
     public ItemDatabase database;
     public GameObject itemPrefab;
 
+    private List<GameObject> itemsInLevel = new List<GameObject>();
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
         if (IsServer)
         {
+            GameManager.Instance.RegisterItemSpawner(this);
             StartCoroutine(DelayedSpawn());
         }
     }
@@ -53,6 +57,7 @@ public class ItemSpawner : NetworkBehaviour
                     if (prefab != null)
                     {
                         var spawnedItem = Instantiate(itemPrefab, sp.transform.position, sp.transform.rotation);
+                        itemsInLevel.Add(spawnedItem);
                         var netObj = spawnedItem.GetComponent<NetworkObject>();
                         var pickup = spawnedItem.GetComponent<PickUppableItem>();
 
@@ -75,5 +80,15 @@ public class ItemSpawner : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public void ResetItems()
+    {
+        foreach (var item in itemsInLevel)
+        {
+            Destroy(item);
+        }
+        itemsInLevel.Clear();
+        SpawnItems();
     }
 }

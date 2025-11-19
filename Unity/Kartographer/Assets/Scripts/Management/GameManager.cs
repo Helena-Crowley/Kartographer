@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Animations;
+using System.Collections.Generic;
 
 public class GameManager : NetworkBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : NetworkBehaviour
     public float worldXWidth;
     public float worldZWidth;
     public Vector3 worldCenter;
+
+    public List<ItemSpawner> itemSpawners = new List<ItemSpawner>();
 
     public Transform[] outpostSpawnPoints;
 
@@ -32,5 +35,10 @@ public class GameManager : NetworkBehaviour
         worldCenter = terrainRenderer.bounds.center;
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void RegisterItemSpawner(ItemSpawner itemSpawner)
+    {
+        itemSpawners.Add(itemSpawner);
     }
 }

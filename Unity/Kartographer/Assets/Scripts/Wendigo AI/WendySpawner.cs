@@ -6,7 +6,7 @@ using UnityEngine;
 public class WendySpawner : MonoBehaviour
 {
     private List<GameObject> players = new List<GameObject>();
-    private bool canSpawn = false;
+    [HideInInspector] public bool canSpawn = false;
     private bool isSpawning = false;
 
     [SerializeField] private int spawnDelayMin = 10;
@@ -106,6 +106,7 @@ public class WendySpawner : MonoBehaviour
     {
         if (wendy != null)
         {
+            wendy.GetComponent<WendyBehaviour>().playerToChase = null;
             // Play disappear effect/sound here
             if (wendy.GetComponent<NetworkObject>() != null)
             {

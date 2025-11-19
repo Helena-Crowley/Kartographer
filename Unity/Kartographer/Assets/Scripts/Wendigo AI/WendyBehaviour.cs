@@ -20,7 +20,7 @@ public class WendyBehaviour : NetworkBehaviour
     [SerializeField] private float despawnTimer = 30f;
 
     [SerializeField] private NavMeshAgent navAgent;
-    private GameObject playerToChase;
+    public GameObject playerToChase;
 
     private float despawnCountdown;
     private bool isDespawning = false;
@@ -65,6 +65,7 @@ public class WendyBehaviour : NetworkBehaviour
 
         if (CheckIfPlayerSeesMe() && !spotted)
         {
+            Debug.Log("I've been spotted and am checking fight or flight");
             spotted = true;
             despawnCountdown = despawnTimer; // Reset timer
             StartCoroutine(FightOrFlight());
@@ -82,13 +83,15 @@ public class WendyBehaviour : NetworkBehaviour
 
     private bool CheckIfPlayerSeesMe()
     {
+
         if (players == null || players.Count == 0)
         {
             return false;
         }
-
+        Debug.Log("Checking if seen");
         foreach (var player in players)
         {
+            Debug.Log("Checking polayers views");
             if (player == null)
             {
                 Debug.LogWarning("Null player in list");
@@ -101,7 +104,7 @@ public class WendyBehaviour : NetworkBehaviour
             if (distToPlayer > viewDistance)
                 continue;
 
-            float angle = Vector3.Angle(player.transform.forward, dirFromPlayerToMe);
+            float angle = Vector3.Angle(player.GetComponent<PlayerObj>().playerCamera.transform.forward, dirFromPlayerToMe);
 
             if (angle > viewAngle / 2)
             {
@@ -109,8 +112,10 @@ public class WendyBehaviour : NetworkBehaviour
                 continue;
             }
 
+            Debug.Log("still checking");
             // Line of sight check from player's eye position to Wendy
             Vector3 playerEyePos = player.transform.position + Vector3.up * 1.8f;
+            //Vector3 playerEyePos = player.GetComponent<PlayerObj>().playerCamera.transform.position;
             Vector3 wendyCenter = transform.position + Vector3.up * 1f;
             Vector3 dirToCheck = (wendyCenter - playerEyePos).normalized;
             float distToCheck = Vector3.Distance(playerEyePos, wendyCenter);
@@ -122,7 +127,7 @@ public class WendyBehaviour : NetworkBehaviour
                 continue;
             }
 
-            //Debug.Log($"Player {player.name} CAN SEE me!");
+            Debug.Log($"Player {player.name} CAN SEE me!");
             playerToChase = player;
             return true;
         }
@@ -132,7 +137,7 @@ public class WendyBehaviour : NetworkBehaviour
 
     IEnumerator FightOrFlight()
     {
-
+        Debug.Log("WENDY SPAWNED AND IS DECIDING IF SHE WANTS TO EAT OR RUN");
         //float decisionTime = Random.Range(3f, 6f);
 
         //yield return new WaitForSeconds(decisionTime);
@@ -148,9 +153,11 @@ public class WendyBehaviour : NetworkBehaviour
             if (playerToChase != null && navAgent != null)
             {
                 SoundManager.Instance.PlaySound(viewDistance / 6, 5, wendyScreechSound, transform.position, "SFX", 0.2f);
-                animController.PlayChase();
 
-                yield return new WaitForSeconds(2f);
+                navAgent.enabled = false;
+                animController.PlayScream();
+                yield return new WaitForSeconds(2.83f);
+                //animController.PlayChase();
                 SoundManager.Instance.PlayMusic(chaseMusic, "SFX", .15f, 2);
                 StartChasing();
             }
@@ -161,7 +168,7 @@ public class WendyBehaviour : NetworkBehaviour
     {
         while (playerToChase != null && navAgent != null && navAgent.enabled && inRange)
         {
-            Debug.Log("chaseDistance" + chaseDistance);
+            //Debug.Log("chaseDistance" + chaseDistance);
             if (Vector3.Distance(transform.position, playerToChase.transform.position) > chaseDistance) inRange = false;
             if (Vector3.Distance(transform.position, playerToChase.transform.position) <= attackDistance)
             {
@@ -181,14 +188,18 @@ public class WendyBehaviour : NetworkBehaviour
     {
         navAgent.SetDestination(transform.position);
         //playu hit animatiohn
-        animController.StartAttack();
+        animController.PlayAttack();
         SoundManager.Instance.PlaySound(attackWoosh, transform.position, "SFX", 0.5f, true);
-        yield return new WaitForSeconds(0.5f);
-        playerToChase.GetComponent<PlayerObj>().TakeDamage(15);
         yield return new WaitForSeconds(2.267f);//change to animation time
-        animController.StopAttack();
         StartChasing();
+        yield break;
 
+    }
+
+    public void DamagePlayer()
+    {
+        if (Vector3.Distance(transform.position, playerToChase.transform.position) >= attackDistance) return;
+        playerToChase.GetComponent<PlayerObj>().TakeDamage(15);
     }
 
     private void DespawnSelf()
@@ -220,6 +231,7 @@ public class WendyBehaviour : NetworkBehaviour
 
     private void StartChasing()
     {
+        animController.PlayChase();
         navAgent.enabled = true;
         inRange = true;
         StartCoroutine(ChasePlayer());
