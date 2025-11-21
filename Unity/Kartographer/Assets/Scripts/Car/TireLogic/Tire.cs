@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class Tire : MonoBehaviour, IInteractable
@@ -5,6 +6,7 @@ public class Tire : MonoBehaviour, IInteractable
     [SerializeField] private float dropDistance;
     [SerializeField] private AudioClip pickUpSound;
     [SerializeField] private AudioClip dropSound;
+    [SerializeField] private NetworkObject networkObject;
 
     private float tireWidth;
 
@@ -12,6 +14,7 @@ public class Tire : MonoBehaviour, IInteractable
     public void Interact(PlayerInteractor player)
     {
         Debug.Log("Movinf object to players hand");
+        //networkObject.enabled = false;
         transform.SetParent(player.handPosition);
         transform.position = player.handPosition.position;
         GetComponent<MeshCollider>().isTrigger = true;
@@ -23,6 +26,7 @@ public class Tire : MonoBehaviour, IInteractable
     public void Drop(PlayerInteractor player)
     {
         transform.SetParent(null);
+        //networkObject.enabled = true;
         if (Physics.Raycast(transform.position + player.transform.forward * dropDistance, -Vector3.up, out RaycastHit hit))
         {
             transform.position = hit.point + new Vector3(0, tireWidth, 0);

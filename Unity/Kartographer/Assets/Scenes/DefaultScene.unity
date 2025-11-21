@@ -3180,6 +3180,7 @@ GameObject:
   - component: {fileID: 165014078}
   - component: {fileID: 165014076}
   - component: {fileID: 165014080}
+  - component: {fileID: 165014081}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (3)
   m_TagString: Upgrade
@@ -3295,6 +3296,32 @@ MonoBehaviour:
   dropDistance: 2
   pickUpSound: {fileID: 8300000, guid: 5157e51c907600841ab0f713e1707be0, type: 3}
   dropSound: {fileID: 8300000, guid: e0d646871b0ac064dbae3d00c165e74b, type: 3}
+  networkObject: {fileID: 165014081}
+--- !u!114 &165014081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165014074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 750126453
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &176515450
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,6 +3623,7 @@ GameObject:
   - component: {fileID: 186554871}
   - component: {fileID: 186554869}
   - component: {fileID: 186554873}
+  - component: {fileID: 186554874}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (1)
   m_TagString: Upgrade
@@ -3711,6 +3739,32 @@ MonoBehaviour:
   dropDistance: 2
   pickUpSound: {fileID: 8300000, guid: 5157e51c907600841ab0f713e1707be0, type: 3}
   dropSound: {fileID: 8300000, guid: e0d646871b0ac064dbae3d00c165e74b, type: 3}
+  networkObject: {fileID: 186554874}
+--- !u!114 &186554874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186554867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3340231540
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &189621092
 GameObject:
   m_ObjectHideFlags: 0
@@ -9132,6 +9186,7 @@ GameObject:
   - component: {fileID: 558930943}
   - component: {fileID: 558930946}
   - component: {fileID: 558930947}
+  - component: {fileID: 558930948}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left
   m_TagString: Upgrade
@@ -9247,6 +9302,32 @@ MonoBehaviour:
   dropDistance: 2
   pickUpSound: {fileID: 8300000, guid: 5157e51c907600841ab0f713e1707be0, type: 3}
   dropSound: {fileID: 8300000, guid: e0d646871b0ac064dbae3d00c165e74b, type: 3}
+  networkObject: {fileID: 558930948}
+--- !u!114 &558930948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558930941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3659448103
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &560788189
 GameObject:
   m_ObjectHideFlags: 0
@@ -30590,6 +30671,7 @@ GameObject:
   - component: {fileID: 1696128330}
   - component: {fileID: 1696128328}
   - component: {fileID: 1696128332}
+  - component: {fileID: 1696128333}
   m_Layer: 7
   m_Name: Cart_Wheel_Back_Left (2)
   m_TagString: Upgrade
@@ -30705,6 +30787,32 @@ MonoBehaviour:
   dropDistance: 2
   pickUpSound: {fileID: 8300000, guid: 5157e51c907600841ab0f713e1707be0, type: 3}
   dropSound: {fileID: 8300000, guid: e0d646871b0ac064dbae3d00c165e74b, type: 3}
+  networkObject: {fileID: 1696128333}
+--- !u!114 &1696128333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696128326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2140050283
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1707612993
 GameObject:
   m_ObjectHideFlags: 0

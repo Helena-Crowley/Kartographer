@@ -131,10 +131,10 @@ public class CarMovement : NetworkBehaviour
 
         CheckUserInput();
 
-        if (wheelSlots[0].isOccupied) PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
-        if (wheelSlots[1].isOccupied) PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
-        if (wheelSlots[3].isOccupied) PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
-        if (wheelSlots[2].isOccupied) PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
+        if (wheelSlots[0].isOccupied.Value) PhysicsUpdateTire(frontLeftTire, frontLeftTireMesh, carRigidBody);
+        if (wheelSlots[1].isOccupied.Value) PhysicsUpdateTire(frontRightTire, frontRightTireMesh, carRigidBody);
+        if (wheelSlots[3].isOccupied.Value) PhysicsUpdateTire(rearLeftTire, rearLeftTireMesh, carRigidBody);
+        if (wheelSlots[2].isOccupied.Value) PhysicsUpdateTire(rearRightTire, rearRightTireMesh, carRigidBody);
 
         if (inputManager != null)
         {

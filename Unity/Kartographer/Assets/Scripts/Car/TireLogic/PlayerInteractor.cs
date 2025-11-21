@@ -62,7 +62,7 @@ public class PlayerInteractor : MonoBehaviour
             WheelSlot slot;
 
             // Wheel slot
-            if (holdingItem && hit.collider.TryGetComponent(out slot) && !slot.isOccupied)
+            if (holdingItem && hit.collider.TryGetComponent(out slot) && !slot.isOccupied.Value)
             {
                 slot.CheckOccupiedStatus();
                 currentLookedAtSlot = slot;
@@ -118,7 +118,7 @@ public class PlayerInteractor : MonoBehaviour
                 SoundManager.Instance.PlaySound(attachSound, currentLookedAtSlot.transform.position, "SFX", .2f, true);
 
 
-                currentLookedAtSlot.isOccupied = true;
+                currentLookedAtSlot.isOccupied.Value = true;
 
                 holdingItem = false;
                 heldInteractable = null;
